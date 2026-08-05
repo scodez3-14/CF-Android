@@ -5,16 +5,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = CodeforcesRed,
+    primary = CodeforcesAccent,
     onPrimary = CfTextPrimary,
-    primaryContainer = CfRedDark,
+    primaryContainer = CfAccentDark,
     onPrimaryContainer = CfTextPrimary,
-    secondary = CfRedLight,
+    secondary = CfAccentLight,
     onSecondary = CfTextPrimary,
     background = CfBackground,
     onBackground = CfTextPrimary,
@@ -28,7 +28,6 @@ private val DarkColorScheme = darkColorScheme(
 
 @Composable
 fun CodeforcesTheme(content: @Composable () -> Unit) {
-    val colorScheme = DarkColorScheme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -38,7 +37,7 @@ fun CodeforcesTheme(content: @Composable () -> Unit) {
         }
     }
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = DarkColorScheme,
         typography = AppTypography,
         content = content
     )

@@ -45,11 +45,11 @@ fun ContestListScreen(
             TabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = CfSurface,
-                contentColor = CodeforcesRed,
+                contentColor = CodeforcesAccent,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                        color = CodeforcesRed
+                        color = CodeforcesAccent
                     )
                 }
             ) {
@@ -63,7 +63,7 @@ fun ContestListScreen(
             }
             if (state.isLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = CodeforcesRed)
+                    CircularProgressIndicator(color = CodeforcesAccent)
                 }
                 return@Column
             }
@@ -96,7 +96,7 @@ fun ContestListCard(contest: ContestDto, isUpcoming: Boolean, onClick: () -> Uni
             Icon(
                 Icons.Rounded.EmojiEvents,
                 contentDescription = null,
-                tint = if (isUpcoming) CodeforcesRed else CfTextSecondary,
+                tint = if (isUpcoming) CodeforcesAccent else CfTextSecondary,
                 modifier = Modifier.size(32.dp)
             )
             Column(modifier = Modifier.weight(1f)) {

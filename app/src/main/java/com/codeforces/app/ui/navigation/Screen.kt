@@ -16,6 +16,9 @@ sealed class Screen(val route: String) {
     object Standings : Screen("standings/{contestId}") {
         fun createRoute(contestId: Int) = "standings/$contestId"
     }
+    object Editorial : Screen("editorial/{contestId}/{name}") {
+        fun createRoute(contestId: Int, name: String) = "editorial/$contestId/${Uri.encode(name)}"
+    }
     object Profile : Screen("profile/{handle}") {
         fun createRoute(handle: String) = "profile/$handle"
     }
@@ -29,4 +32,6 @@ sealed class Screen(val route: String) {
         fun createRoute(handle: String) = "blog/$handle"
     }
     object Settings : Screen("settings")
+    object Login : Screen("login")
+    object WebLogin : Screen("web_login")
 }

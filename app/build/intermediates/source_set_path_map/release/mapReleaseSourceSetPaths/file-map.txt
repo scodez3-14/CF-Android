@@ -1,0 +1,68 @@
+com.codeforces.app-lifecycle-runtime-compose-release-0 /home/santu/.gradle/caches/9.0-milestone-1/transforms/00f7c28fbc9f956337fd63150151a8dc/transformed/lifecycle-runtime-compose-release/res
+com.codeforces.app-hilt-navigation-compose-1.2.0-1 /home/santu/.gradle/caches/9.0-milestone-1/transforms/019e32ad58d823087231cf2b75e5a543/transformed/hilt-navigation-compose-1.2.0/res
+com.codeforces.app-core-1.13.1-2 /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/res
+com.codeforces.app-appcompat-1.7.0-3 /home/santu/.gradle/caches/9.0-milestone-1/transforms/04b3879cfba9f2603a1d27e1a786eb0f/transformed/appcompat-1.7.0/res
+com.codeforces.app-navigation-common-ktx-2.7.7-4 /home/santu/.gradle/caches/9.0-milestone-1/transforms/07d5b4d2d8903fa8ca912a06fd858e89/transformed/navigation-common-ktx-2.7.7/res
+com.codeforces.app-ui-release-5 /home/santu/.gradle/caches/9.0-milestone-1/transforms/09ca7f3c98261afd80f3a7aba115ac43/transformed/ui-release/res
+com.codeforces.app-lifecycle-livedata-2.8.3-6 /home/santu/.gradle/caches/9.0-milestone-1/transforms/0e67a1f52cd8e8002db012f1c645c82a/transformed/lifecycle-livedata-2.8.3/res
+com.codeforces.app-sqlite-2.4.0-7 /home/santu/.gradle/caches/9.0-milestone-1/transforms/1bcb263009bd46845fbab0f64fbf0e8d/transformed/sqlite-2.4.0/res
+com.codeforces.app-savedstate-ktx-1.2.1-8 /home/santu/.gradle/caches/9.0-milestone-1/transforms/1c8ab7d94e05a14465f9414e63acae2f/transformed/savedstate-ktx-1.2.1/res
+com.codeforces.app-hilt-navigation-1.2.0-9 /home/santu/.gradle/caches/9.0-milestone-1/transforms/250d7deafb135ccdac137b3797705cdc/transformed/hilt-navigation-1.2.0/res
+com.codeforces.app-lifecycle-viewmodel-savedstate-2.8.3-10 /home/santu/.gradle/caches/9.0-milestone-1/transforms/275801a9ecfcfa75210c4113ef6f0a70/transformed/lifecycle-viewmodel-savedstate-2.8.3/res
+com.codeforces.app-datastore-preferences-release-11 /home/santu/.gradle/caches/9.0-milestone-1/transforms/2a5583a59b88455c27561370ca8202ae/transformed/datastore-preferences-release/res
+com.codeforces.app-lifecycle-livedata-core-ktx-2.8.3-12 /home/santu/.gradle/caches/9.0-milestone-1/transforms/2b78b38981955f7de669af9561ba7556/transformed/lifecycle-livedata-core-ktx-2.8.3/res
+com.codeforces.app-customview-poolingcontainer-1.0.0-13 /home/santu/.gradle/caches/9.0-milestone-1/transforms/2e1f64fbd009afa400e1cdfa092088dc/transformed/customview-poolingcontainer-1.0.0/res
+com.codeforces.app-navigation-runtime-2.7.7-14 /home/santu/.gradle/caches/9.0-milestone-1/transforms/2fcb7514775b68bc768755f8c6aa3fdd/transformed/navigation-runtime-2.7.7/res
+com.codeforces.app-profileinstaller-1.3.1-15 /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/res
+com.codeforces.app-savedstate-1.2.1-16 /home/santu/.gradle/caches/9.0-milestone-1/transforms/331f7fe8e83426231f9277240c0a0477/transformed/savedstate-1.2.1/res
+com.codeforces.app-ui-graphics-release-17 /home/santu/.gradle/caches/9.0-milestone-1/transforms/3b7e3955f6524b2b4ddfbe08477858ba/transformed/ui-graphics-release/res
+com.codeforces.app-core-runtime-2.2.0-18 /home/santu/.gradle/caches/9.0-milestone-1/transforms/3ee1d1cc78394c7ce111725a6f332f0e/transformed/core-runtime-2.2.0/res
+com.codeforces.app-room-runtime-2.6.1-19 /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/res
+com.codeforces.app-ui-util-release-20 /home/santu/.gradle/caches/9.0-milestone-1/transforms/4c45c41156507511247c8ce3e7d675e6/transformed/ui-util-release/res
+com.codeforces.app-lifecycle-runtime-ktx-release-21 /home/santu/.gradle/caches/9.0-milestone-1/transforms/52ca7b0de58ffe182149e918025697d2/transformed/lifecycle-runtime-ktx-release/res
+com.codeforces.app-annotation-experimental-1.4.0-22 /home/santu/.gradle/caches/9.0-milestone-1/transforms/53dfe35a4d637d2634aae0d607c586a4/transformed/annotation-experimental-1.4.0/res
+com.codeforces.app-material3-release-23 /home/santu/.gradle/caches/9.0-milestone-1/transforms/551ebbd0d3b0face0b974abe47c7d952/transformed/material3-release/res
+com.codeforces.app-runtime-release-24 /home/santu/.gradle/caches/9.0-milestone-1/transforms/55925b9b8510d097ee58580b3324075b/transformed/runtime-release/res
+com.codeforces.app-ui-unit-release-25 /home/santu/.gradle/caches/9.0-milestone-1/transforms/5607c439ca446a435258c27c3b145358/transformed/ui-unit-release/res
+com.codeforces.app-lifecycle-livedata-core-2.8.3-26 /home/santu/.gradle/caches/9.0-milestone-1/transforms/626f19cfae989e87d51ea836a509be6e/transformed/lifecycle-livedata-core-2.8.3/res
+com.codeforces.app-ui-tooling-preview-release-27 /home/santu/.gradle/caches/9.0-milestone-1/transforms/63aaf98969946da840637b2f75b373fe/transformed/ui-tooling-preview-release/res
+com.codeforces.app-lifecycle-viewmodel-release-28 /home/santu/.gradle/caches/9.0-milestone-1/transforms/67c7351c77a0802ed3869a46d47e4b04/transformed/lifecycle-viewmodel-release/res
+com.codeforces.app-room-ktx-2.6.1-29 /home/santu/.gradle/caches/9.0-milestone-1/transforms/6be35b17e69084977df0770ee550ae18/transformed/room-ktx-2.6.1/res
+com.codeforces.app-material-ripple-release-30 /home/santu/.gradle/caches/9.0-milestone-1/transforms/6fbb83440b4254f178f5fe3c557d4bb2/transformed/material-ripple-release/res
+com.codeforces.app-runtime-saveable-release-31 /home/santu/.gradle/caches/9.0-milestone-1/transforms/72860bf62ac4652ff8d2cd5aa9453afa/transformed/runtime-saveable-release/res
+com.codeforces.app-lifecycle-viewmodel-compose-release-32 /home/santu/.gradle/caches/9.0-milestone-1/transforms/751df82b016c11396b32f432f10af54b/transformed/lifecycle-viewmodel-compose-release/res
+com.codeforces.app-activity-1.9.0-33 /home/santu/.gradle/caches/9.0-milestone-1/transforms/766b1473a531ed0b8b51cbd132dc416e/transformed/activity-1.9.0/res
+com.codeforces.app-core-splashscreen-1.0.1-34 /home/santu/.gradle/caches/9.0-milestone-1/transforms/76c476f542ded8d8df0283ed5f1ad81c/transformed/core-splashscreen-1.0.1/res
+com.codeforces.app-animation-core-release-35 /home/santu/.gradle/caches/9.0-milestone-1/transforms/885b556346aa686ae6b23394d8b1891f/transformed/animation-core-release/res
+com.codeforces.app-navigation-runtime-ktx-2.7.7-36 /home/santu/.gradle/caches/9.0-milestone-1/transforms/8990c75770066c2edc6d5dc7117b7e8c/transformed/navigation-runtime-ktx-2.7.7/res
+com.codeforces.app-coil-base-2.7.0-37 /home/santu/.gradle/caches/9.0-milestone-1/transforms/8a2577dc559278738dfcc3b7aebc776e/transformed/coil-base-2.7.0/res
+com.codeforces.app-foundation-release-38 /home/santu/.gradle/caches/9.0-milestone-1/transforms/8d1c53529e108f02ebf87b07697bb3cf/transformed/foundation-release/res
+com.codeforces.app-emoji2-views-helper-1.3.0-39 /home/santu/.gradle/caches/9.0-milestone-1/transforms/9ae07ae7c532ddf59f173f3a78fbad19/transformed/emoji2-views-helper-1.3.0/res
+com.codeforces.app-lifecycle-process-2.8.3-40 /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/res
+com.codeforces.app-animation-release-41 /home/santu/.gradle/caches/9.0-milestone-1/transforms/aae54daa76f43d1df975798339018289/transformed/animation-release/res
+com.codeforces.app-material-icons-core-release-42 /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0b438997d9214c40733c3dfb63afee2/transformed/material-icons-core-release/res
+com.codeforces.app-navigation-compose-2.7.7-43 /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0ed55c1ebf11e8b18bcf402b48e8d5d/transformed/navigation-compose-2.7.7/res
+com.codeforces.app-datastore-release-44 /home/santu/.gradle/caches/9.0-milestone-1/transforms/b15ef033b8486643d8ae7e2bfadcbbd6/transformed/datastore-release/res
+com.codeforces.app-activity-ktx-1.9.0-45 /home/santu/.gradle/caches/9.0-milestone-1/transforms/b1db5ca6e6162c0387f998c28ed2cdf0/transformed/activity-ktx-1.9.0/res
+com.codeforces.app-activity-compose-1.9.0-46 /home/santu/.gradle/caches/9.0-milestone-1/transforms/b3de731b8a182f87c49754790471d9c2/transformed/activity-compose-1.9.0/res
+com.codeforces.app-fragment-1.5.4-47 /home/santu/.gradle/caches/9.0-milestone-1/transforms/c64c9972692b7d9f65c0a4a4776c94f0/transformed/fragment-1.5.4/res
+com.codeforces.app-sqlite-framework-2.4.0-48 /home/santu/.gradle/caches/9.0-milestone-1/transforms/c6ee55f82bada5384bf4ce247a82af36/transformed/sqlite-framework-2.4.0/res
+com.codeforces.app-ui-text-release-49 /home/santu/.gradle/caches/9.0-milestone-1/transforms/c85b01f2037bd90155b56a1bf1ba3ab4/transformed/ui-text-release/res
+com.codeforces.app-lifecycle-runtime-release-50 /home/santu/.gradle/caches/9.0-milestone-1/transforms/d50460fdad03964b80b156bc776709bb/transformed/lifecycle-runtime-release/res
+com.codeforces.app-foundation-layout-release-51 /home/santu/.gradle/caches/9.0-milestone-1/transforms/d6baa6a3b83c2ab65e2ed6e759b5d581/transformed/foundation-layout-release/res
+com.codeforces.app-material-icons-extended-release-52 /home/santu/.gradle/caches/9.0-milestone-1/transforms/da5d23180caa4f20292c7a3789d1d47a/transformed/material-icons-extended-release/res
+com.codeforces.app-ui-geometry-release-53 /home/santu/.gradle/caches/9.0-milestone-1/transforms/dffec604046a70905ee488eee86d8e4b/transformed/ui-geometry-release/res
+com.codeforces.app-core-ktx-1.13.1-54 /home/santu/.gradle/caches/9.0-milestone-1/transforms/e116d761814aba695fef155dca147b06/transformed/core-ktx-1.13.1/res
+com.codeforces.app-datastore-core-release-55 /home/santu/.gradle/caches/9.0-milestone-1/transforms/e811e2fbd7ec04c7d092830e82170e1c/transformed/datastore-core-release/res
+com.codeforces.app-lifecycle-viewmodel-ktx-2.8.3-56 /home/santu/.gradle/caches/9.0-milestone-1/transforms/ef32c6d950b7bfef532f9c1d70209062/transformed/lifecycle-viewmodel-ktx-2.8.3/res
+com.codeforces.app-emoji2-1.3.0-57 /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/res
+com.codeforces.app-appcompat-resources-1.7.0-58 /home/santu/.gradle/caches/9.0-milestone-1/transforms/f4749bf80b5813569a91a4242a9945ed/transformed/appcompat-resources-1.7.0/res
+com.codeforces.app-startup-runtime-1.1.1-59 /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/res
+com.codeforces.app-navigation-common-2.7.7-60 /home/santu/.gradle/caches/9.0-milestone-1/transforms/feb71d29526bfbecb30a38e8d62d0e89/transformed/navigation-common-2.7.7/res
+com.codeforces.app-pngs-61 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/generated/res/pngs/release
+com.codeforces.app-resValues-62 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/generated/res/resValues/release
+com.codeforces.app-packageReleaseResources-63 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/intermediates/incremental/release/packageReleaseResources/merged.dir
+com.codeforces.app-packageReleaseResources-64 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/intermediates/incremental/release/packageReleaseResources/stripped.dir
+com.codeforces.app-release-65 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/intermediates/merged_res/release/mergeReleaseResources
+com.codeforces.app-main-66 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/res
+com.codeforces.app-release-67 /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/release/res

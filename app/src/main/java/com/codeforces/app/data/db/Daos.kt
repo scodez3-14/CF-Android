@@ -20,6 +20,9 @@ interface ProblemDao {
     @Query("SELECT * FROM cached_problems ORDER BY rating ASC")
     fun getAllProblems(): Flow<List<CachedProblemEntity>>
 
+    @Query("SELECT * FROM cached_problems ORDER BY rating ASC")
+    suspend fun getAllProblemsOnce(): List<CachedProblemEntity>
+
     @Query("SELECT * FROM cached_problems WHERE rating BETWEEN :minRating AND :maxRating ORDER BY rating ASC")
     fun getProblemsByRating(minRating: Int, maxRating: Int): Flow<List<CachedProblemEntity>>
 
@@ -37,6 +40,9 @@ interface ProblemDao {
 interface ContestDao {
     @Query("SELECT * FROM cached_contests ORDER BY startTimeSeconds DESC")
     fun getAllContests(): Flow<List<CachedContestEntity>>
+
+    @Query("SELECT * FROM cached_contests ORDER BY startTimeSeconds DESC")
+    suspend fun getAllContestsOnce(): List<CachedContestEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertContests(contests: List<CachedContestEntity>)

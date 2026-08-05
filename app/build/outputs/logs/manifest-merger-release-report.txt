@@ -1,0 +1,434 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
+MERGED from [androidx.hilt:hilt-navigation-compose:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/019e32ad58d823087231cf2b75e5a543/transformed/hilt-navigation-compose-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.hilt:hilt-navigation:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/250d7deafb135ccdac137b3797705cdc/transformed/hilt-navigation-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-common:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/feb71d29526bfbecb30a38e8d62d0e89/transformed/navigation-common-2.7.7/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2fcb7514775b68bc768755f8c6aa3fdd/transformed/navigation-runtime-2.7.7/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/07d5b4d2d8903fa8ca912a06fd858e89/transformed/navigation-common-ktx-2.7.7/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8990c75770066c2edc6d5dc7117b7e8c/transformed/navigation-runtime-ktx-2.7.7/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.navigation:navigation-compose:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0ed55c1ebf11e8b18bcf402b48e8d5d/transformed/navigation-compose-2.7.7/AndroidManifest.xml:2:1-7:12
+MERGED from [com.patrykandpatrick.vico:compose-m3:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e78a5e47555e8962c6a74843032d2cbd/transformed/compose-m3-1.15.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.patrykandpatrick.vico:compose:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8e8ec8a921def2d1512d9ebcf7e5e608/transformed/compose-1.15.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material3:material3-android:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/551ebbd0d3b0face0b974abe47c7d952/transformed/material3-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-compose:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b3de731b8a182f87c49754790471d9c2/transformed/activity-compose-1.9.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.dagger:hilt-android:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b96e904083c72aca4806c97210258643/transformed/hilt-android-2.51.1/AndroidManifest.xml:16:1-19:12
+MERGED from [io.coil-kt:coil-compose:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c4636e613b4b51bc8284148ba0ba1fd7/transformed/coil-compose-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/95e7feea91213769999874e45e14a6c7/transformed/coil-compose-base-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/51350f9f9ce2fd1d22fa140983902c41/transformed/coil-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8a2577dc559278738dfcc3b7aebc776e/transformed/coil-base-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f4749bf80b5813569a91a4242a9945ed/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/04b3879cfba9f2603a1d27e1a786eb0f/transformed/appcompat-1.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0b438997d9214c40733c3dfb63afee2/transformed/material-icons-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/da5d23180caa4f20292c7a3789d1d47a/transformed/material-icons-extended-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6fbb83440b4254f178f5fe3c557d4bb2/transformed/material-ripple-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/885b556346aa686ae6b23394d8b1891f/transformed/animation-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/aae54daa76f43d1df975798339018289/transformed/animation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d6baa6a3b83c2ab65e2ed6e759b5d581/transformed/foundation-layout-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8d1c53529e108f02ebf87b07697bb3cf/transformed/foundation-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/4c45c41156507511247c8ce3e7d675e6/transformed/ui-util-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5607c439ca446a435258c27c3b145358/transformed/ui-unit-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/dffec604046a70905ee488eee86d8e4b/transformed/ui-geometry-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/63aaf98969946da840637b2f75b373fe/transformed/ui-tooling-preview-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3b7e3955f6524b2b4ddfbe08477858ba/transformed/ui-graphics-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c85b01f2037bd90155b56a1bf1ba3ab4/transformed/ui-text-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9ae07ae7c532ddf59f173f3a78fbad19/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.fragment:fragment:1.5.4] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c64c9972692b7d9f65c0a4a4776c94f0/transformed/fragment-1.5.4/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.loader:loader:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0ed7f975669695843c1abd994e7fb431/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2b78b38981955f7de669af9561ba7556/transformed/lifecycle-livedata-core-ktx-2.8.3/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0e67a1f52cd8e8002db012f1c645c82a/transformed/lifecycle-livedata-2.8.3/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/88bba6647067157e95030294324fe343/transformed/lifecycle-viewmodel-2.8.3/AndroidManifest.xml:2:1-5:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/67c7351c77a0802ed3869a46d47e4b04/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1c8ab7d94e05a14465f9414e63acae2f/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/331f7fe8e83426231f9277240c0a0477/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d50460fdad03964b80b156bc776709bb/transformed/lifecycle-runtime-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/626f19cfae989e87d51ea836a509be6e/transformed/lifecycle-livedata-core-2.8.3/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/ef32c6d950b7bfef532f9c1d70209062/transformed/lifecycle-viewmodel-ktx-2.8.3/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/275801a9ecfcfa75210c4113ef6f0a70/transformed/lifecycle-viewmodel-savedstate-2.8.3/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/00f7c28fbc9f956337fd63150151a8dc/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/52ca7b0de58ffe182149e918025697d2/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/751df82b016c11396b32f432f10af54b/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3758980ed2c863d3d14601b8d8c73a71/transformed/accompanist-drawablepainter-0.32.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.compose.ui:ui-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/09ca7f3c98261afd80f3a7aba115ac43/transformed/ui-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-ktx:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b1db5ca6e6162c0387f998c28ed2cdf0/transformed/activity-ktx-1.9.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/766b1473a531ed0b8b51cbd132dc416e/transformed/activity-1.9.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.autofill:autofill:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f8e0d1c22722a963a3ebd1d1eadf5640/transformed/autofill-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/98749306e15280d16798987455630876/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5c52a249557443691c3dec79922017e1/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2f6503c8287980c781a1815219886d55/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/79495e11f0facacf03c2cbc128960b35/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5adc5dddafd87e80aa70177499aef013/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2e1f64fbd009afa400e1cdfa092088dc/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e116d761814aba695fef155dca147b06/transformed/core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core-splashscreen:1.0.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/76c476f542ded8d8df0283ed5f1ad81c/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.room:room-ktx:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6be35b17e69084977df0770ee550ae18/transformed/room-ktx-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.datastore:datastore-core-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e811e2fbd7ec04c7d092830e82170e1c/transformed/datastore-core-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.datastore:datastore-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b15ef033b8486643d8ae7e2bfadcbbd6/transformed/datastore-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2a5583a59b88455c27561370ca8202ae/transformed/datastore-preferences-release/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/72860bf62ac4652ff8d2cd5aa9453afa/transformed/runtime-saveable-release/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/55925b9b8510d097ee58580b3324075b/transformed/runtime-release/AndroidManifest.xml:2:1-7:12
+MERGED from [com.patrykandpatrick.vico:core:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b34afdff859ce9faec3b89d8796ca15c/transformed/core-1.15.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c6ee55f82bada5384bf4ce247a82af36/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1bcb263009bd46845fbab0f64fbf0e8d/transformed/sqlite-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/53dfe35a4d637d2634aae0d607c586a4/transformed/annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3ee1d1cc78394c7ce111725a6f332f0e/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8b4fc7ff14003a5a6b7c091ea4d7f795/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e79ba751d31088a1e096c0922b314087/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f943dd8b276ef74a095e536fe7915fa9/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0f9a2c1cd3a862fbc7bdcb22edfa39bc/transformed/exifinterface-1.3.7/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b189271cecb49b31ece579ffb508e505/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/847263d6bdebb5ec6337f1c21e540764/transformed/dagger-lint-aar-2.51.1/AndroidManifest.xml:16:1-19:12
+	package
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:22-76
+application
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-27:19
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-27:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e79ba751d31088a1e096c0922b314087/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e79ba751d31088a1e096c0922b314087/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:13:9-35
+	android:label
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:11:9-41
+	android:roundIcon
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:12:9-54
+	android:icon
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:9-43
+	android:allowBackup
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:9:9-35
+	android:theme
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:14:9-51
+	android:usesCleartextTraffic
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:15:9-45
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:9-38
+activity#com.codeforces.app.MainActivity
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:17:9-25:20
+	android:exported
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:19:13-36
+	android:theme
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:20:13-68
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:18:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:21:13-24:29
+action#android.intent.action.MAIN
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:17-69
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:17-77
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:27-74
+uses-sdk
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+MERGED from [androidx.hilt:hilt-navigation-compose:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/019e32ad58d823087231cf2b75e5a543/transformed/hilt-navigation-compose-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation-compose:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/019e32ad58d823087231cf2b75e5a543/transformed/hilt-navigation-compose-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/250d7deafb135ccdac137b3797705cdc/transformed/hilt-navigation-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.hilt:hilt-navigation:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/250d7deafb135ccdac137b3797705cdc/transformed/hilt-navigation-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-common:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/feb71d29526bfbecb30a38e8d62d0e89/transformed/navigation-common-2.7.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/feb71d29526bfbecb30a38e8d62d0e89/transformed/navigation-common-2.7.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2fcb7514775b68bc768755f8c6aa3fdd/transformed/navigation-runtime-2.7.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-runtime:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2fcb7514775b68bc768755f8c6aa3fdd/transformed/navigation-runtime-2.7.7/AndroidManifest.xml:20:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/07d5b4d2d8903fa8ca912a06fd858e89/transformed/navigation-common-ktx-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/07d5b4d2d8903fa8ca912a06fd858e89/transformed/navigation-common-ktx-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8990c75770066c2edc6d5dc7117b7e8c/transformed/navigation-runtime-ktx-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-runtime-ktx:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8990c75770066c2edc6d5dc7117b7e8c/transformed/navigation-runtime-ktx-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0ed55c1ebf11e8b18bcf402b48e8d5d/transformed/navigation-compose-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [androidx.navigation:navigation-compose:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0ed55c1ebf11e8b18bcf402b48e8d5d/transformed/navigation-compose-2.7.7/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:compose-m3:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e78a5e47555e8962c6a74843032d2cbd/transformed/compose-m3-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:compose-m3:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e78a5e47555e8962c6a74843032d2cbd/transformed/compose-m3-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:compose:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8e8ec8a921def2d1512d9ebcf7e5e608/transformed/compose-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:compose:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8e8ec8a921def2d1512d9ebcf7e5e608/transformed/compose-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material3:material3-android:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/551ebbd0d3b0face0b974abe47c7d952/transformed/material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/551ebbd0d3b0face0b974abe47c7d952/transformed/material3-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-compose:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b3de731b8a182f87c49754790471d9c2/transformed/activity-compose-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b3de731b8a182f87c49754790471d9c2/transformed/activity-compose-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.dagger:hilt-android:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b96e904083c72aca4806c97210258643/transformed/hilt-android-2.51.1/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:hilt-android:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b96e904083c72aca4806c97210258643/transformed/hilt-android-2.51.1/AndroidManifest.xml:18:3-42
+MERGED from [io.coil-kt:coil-compose:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c4636e613b4b51bc8284148ba0ba1fd7/transformed/coil-compose-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c4636e613b4b51bc8284148ba0ba1fd7/transformed/coil-compose-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/95e7feea91213769999874e45e14a6c7/transformed/coil-compose-base-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/95e7feea91213769999874e45e14a6c7/transformed/coil-compose-base-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/51350f9f9ce2fd1d22fa140983902c41/transformed/coil-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/51350f9f9ce2fd1d22fa140983902c41/transformed/coil-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8a2577dc559278738dfcc3b7aebc776e/transformed/coil-base-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8a2577dc559278738dfcc3b7aebc776e/transformed/coil-base-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f4749bf80b5813569a91a4242a9945ed/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f4749bf80b5813569a91a4242a9945ed/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/04b3879cfba9f2603a1d27e1a786eb0f/transformed/appcompat-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat:1.7.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/04b3879cfba9f2603a1d27e1a786eb0f/transformed/appcompat-1.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0b438997d9214c40733c3dfb63afee2/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b0b438997d9214c40733c3dfb63afee2/transformed/material-icons-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/da5d23180caa4f20292c7a3789d1d47a/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/da5d23180caa4f20292c7a3789d1d47a/transformed/material-icons-extended-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6fbb83440b4254f178f5fe3c557d4bb2/transformed/material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6fbb83440b4254f178f5fe3c557d4bb2/transformed/material-ripple-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/885b556346aa686ae6b23394d8b1891f/transformed/animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/885b556346aa686ae6b23394d8b1891f/transformed/animation-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/aae54daa76f43d1df975798339018289/transformed/animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/aae54daa76f43d1df975798339018289/transformed/animation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d6baa6a3b83c2ab65e2ed6e759b5d581/transformed/foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d6baa6a3b83c2ab65e2ed6e759b5d581/transformed/foundation-layout-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8d1c53529e108f02ebf87b07697bb3cf/transformed/foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8d1c53529e108f02ebf87b07697bb3cf/transformed/foundation-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/4c45c41156507511247c8ce3e7d675e6/transformed/ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/4c45c41156507511247c8ce3e7d675e6/transformed/ui-util-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5607c439ca446a435258c27c3b145358/transformed/ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5607c439ca446a435258c27c3b145358/transformed/ui-unit-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/dffec604046a70905ee488eee86d8e4b/transformed/ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/dffec604046a70905ee488eee86d8e4b/transformed/ui-geometry-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/63aaf98969946da840637b2f75b373fe/transformed/ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/63aaf98969946da840637b2f75b373fe/transformed/ui-tooling-preview-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3b7e3955f6524b2b4ddfbe08477858ba/transformed/ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3b7e3955f6524b2b4ddfbe08477858ba/transformed/ui-graphics-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c85b01f2037bd90155b56a1bf1ba3ab4/transformed/ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c85b01f2037bd90155b56a1bf1ba3ab4/transformed/ui-text-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9ae07ae7c532ddf59f173f3a78fbad19/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9ae07ae7c532ddf59f173f3a78fbad19/transformed/emoji2-views-helper-1.3.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.fragment:fragment:1.5.4] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c64c9972692b7d9f65c0a4a4776c94f0/transformed/fragment-1.5.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.4] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c64c9972692b7d9f65c0a4a4776c94f0/transformed/fragment-1.5.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.loader:loader:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0ed7f975669695843c1abd994e7fb431/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0ed7f975669695843c1abd994e7fb431/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2b78b38981955f7de669af9561ba7556/transformed/lifecycle-livedata-core-ktx-2.8.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2b78b38981955f7de669af9561ba7556/transformed/lifecycle-livedata-core-ktx-2.8.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0e67a1f52cd8e8002db012f1c645c82a/transformed/lifecycle-livedata-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0e67a1f52cd8e8002db012f1c645c82a/transformed/lifecycle-livedata-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/88bba6647067157e95030294324fe343/transformed/lifecycle-viewmodel-2.8.3/AndroidManifest.xml:4:5-43
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/88bba6647067157e95030294324fe343/transformed/lifecycle-viewmodel-2.8.3/AndroidManifest.xml:4:5-43
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/67c7351c77a0802ed3869a46d47e4b04/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/67c7351c77a0802ed3869a46d47e4b04/transformed/lifecycle-viewmodel-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1c8ab7d94e05a14465f9414e63acae2f/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1c8ab7d94e05a14465f9414e63acae2f/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/331f7fe8e83426231f9277240c0a0477/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/331f7fe8e83426231f9277240c0a0477/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d50460fdad03964b80b156bc776709bb/transformed/lifecycle-runtime-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/d50460fdad03964b80b156bc776709bb/transformed/lifecycle-runtime-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/626f19cfae989e87d51ea836a509be6e/transformed/lifecycle-livedata-core-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/626f19cfae989e87d51ea836a509be6e/transformed/lifecycle-livedata-core-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/ef32c6d950b7bfef532f9c1d70209062/transformed/lifecycle-viewmodel-ktx-2.8.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/ef32c6d950b7bfef532f9c1d70209062/transformed/lifecycle-viewmodel-ktx-2.8.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/275801a9ecfcfa75210c4113ef6f0a70/transformed/lifecycle-viewmodel-savedstate-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/275801a9ecfcfa75210c4113ef6f0a70/transformed/lifecycle-viewmodel-savedstate-2.8.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/00f7c28fbc9f956337fd63150151a8dc/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/00f7c28fbc9f956337fd63150151a8dc/transformed/lifecycle-runtime-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/52ca7b0de58ffe182149e918025697d2/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/52ca7b0de58ffe182149e918025697d2/transformed/lifecycle-runtime-ktx-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/751df82b016c11396b32f432f10af54b/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/751df82b016c11396b32f432f10af54b/transformed/lifecycle-viewmodel-compose-release/AndroidManifest.xml:5:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3758980ed2c863d3d14601b8d8c73a71/transformed/accompanist-drawablepainter-0.32.0/AndroidManifest.xml:21:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3758980ed2c863d3d14601b8d8c73a71/transformed/accompanist-drawablepainter-0.32.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.compose.ui:ui-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/09ca7f3c98261afd80f3a7aba115ac43/transformed/ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/09ca7f3c98261afd80f3a7aba115ac43/transformed/ui-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b1db5ca6e6162c0387f998c28ed2cdf0/transformed/activity-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b1db5ca6e6162c0387f998c28ed2cdf0/transformed/activity-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/766b1473a531ed0b8b51cbd132dc416e/transformed/activity-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.9.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/766b1473a531ed0b8b51cbd132dc416e/transformed/activity-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f8e0d1c22722a963a3ebd1d1eadf5640/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f8e0d1c22722a963a3ebd1d1eadf5640/transformed/autofill-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/98749306e15280d16798987455630876/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/98749306e15280d16798987455630876/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5c52a249557443691c3dec79922017e1/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5c52a249557443691c3dec79922017e1/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2f6503c8287980c781a1815219886d55/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2f6503c8287980c781a1815219886d55/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/79495e11f0facacf03c2cbc128960b35/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/79495e11f0facacf03c2cbc128960b35/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5adc5dddafd87e80aa70177499aef013/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/5adc5dddafd87e80aa70177499aef013/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2e1f64fbd009afa400e1cdfa092088dc/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2e1f64fbd009afa400e1cdfa092088dc/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e116d761814aba695fef155dca147b06/transformed/core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e116d761814aba695fef155dca147b06/transformed/core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-splashscreen:1.0.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/76c476f542ded8d8df0283ed5f1ad81c/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-splashscreen:1.0.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/76c476f542ded8d8df0283ed5f1ad81c/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6be35b17e69084977df0770ee550ae18/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/6be35b17e69084977df0770ee550ae18/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-core-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e811e2fbd7ec04c7d092830e82170e1c/transformed/datastore-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.datastore:datastore-core-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e811e2fbd7ec04c7d092830e82170e1c/transformed/datastore-core-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.datastore:datastore-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b15ef033b8486643d8ae7e2bfadcbbd6/transformed/datastore-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b15ef033b8486643d8ae7e2bfadcbbd6/transformed/datastore-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2a5583a59b88455c27561370ca8202ae/transformed/datastore-preferences-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/2a5583a59b88455c27561370ca8202ae/transformed/datastore-preferences-release/AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/72860bf62ac4652ff8d2cd5aa9453afa/transformed/runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/72860bf62ac4652ff8d2cd5aa9453afa/transformed/runtime-saveable-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/55925b9b8510d097ee58580b3324075b/transformed/runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.6.8] /home/santu/.gradle/caches/9.0-milestone-1/transforms/55925b9b8510d097ee58580b3324075b/transformed/runtime-release/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:core:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b34afdff859ce9faec3b89d8796ca15c/transformed/core-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [com.patrykandpatrick.vico:core:1.15.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b34afdff859ce9faec3b89d8796ca15c/transformed/core-1.15.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c6ee55f82bada5384bf4ce247a82af36/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/c6ee55f82bada5384bf4ce247a82af36/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1bcb263009bd46845fbab0f64fbf0e8d/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/1bcb263009bd46845fbab0f64fbf0e8d/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/53dfe35a4d637d2634aae0d607c586a4/transformed/annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/53dfe35a4d637d2634aae0d607c586a4/transformed/annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3ee1d1cc78394c7ce111725a6f332f0e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/3ee1d1cc78394c7ce111725a6f332f0e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8b4fc7ff14003a5a6b7c091ea4d7f795/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/8b4fc7ff14003a5a6b7c091ea4d7f795/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e79ba751d31088a1e096c0922b314087/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/e79ba751d31088a1e096c0922b314087/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f943dd8b276ef74a095e536fe7915fa9/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f943dd8b276ef74a095e536fe7915fa9/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0f9a2c1cd3a862fbc7bdcb22edfa39bc/transformed/exifinterface-1.3.7/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/0f9a2c1cd3a862fbc7bdcb22edfa39bc/transformed/exifinterface-1.3.7/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b189271cecb49b31ece579ffb508e505/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/b189271cecb49b31ece579ffb508e505/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/847263d6bdebb5ec6337f1c21e540764/transformed/dagger-lint-aar-2.51.1/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:dagger-lint-aar:2.51.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/847263d6bdebb5ec6337f1c21e540764/transformed/dagger-lint-aar-2.51.1/AndroidManifest.xml:18:3-42
+	android:targetSdkVersion
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/fc8573ed72377534a1de26472b6eca84/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+permission#com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+uses-permission#com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92

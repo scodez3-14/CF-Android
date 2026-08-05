@@ -61,7 +61,7 @@ fun OnboardingScreen(
                 modifier = Modifier
                     .size(96.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(CodeforcesRed),
+                    .background(CodeforcesAccent),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -125,9 +125,9 @@ fun OnboardingScreen(
                     else isError = true
                 }),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = CodeforcesRed,
-                    focusedLabelColor = CodeforcesRed,
-                    cursorColor = CodeforcesRed
+                    focusedBorderColor = CodeforcesAccent,
+                    focusedLabelColor = CodeforcesAccent,
+                    cursorColor = CodeforcesAccent
                 ),
                 shape = RoundedCornerShape(12.dp)
             )
@@ -141,7 +141,7 @@ fun OnboardingScreen(
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesRed),
+                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent),
                 enabled = !isLoading
             ) {
                 if (isLoading) {

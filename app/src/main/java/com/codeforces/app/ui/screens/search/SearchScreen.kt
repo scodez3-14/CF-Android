@@ -51,7 +51,7 @@ fun SearchScreen(
                     placeholder = { Text("Enter Codeforces handle...") },
                     leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
                     trailingIcon = {
-                        if (state.isLoading) CircularProgressIndicator(modifier = Modifier.size(20.dp), color = CodeforcesRed, strokeWidth = 2.dp)
+                        if (state.isLoading) CircularProgressIndicator(modifier = Modifier.size(20.dp), color = CodeforcesAccent, strokeWidth = 2.dp)
                         else if (state.query.isNotEmpty()) {
                             IconButton(onClick = { viewModel.onQueryChanged("") }) {
                                 Icon(Icons.Rounded.Clear, contentDescription = "Clear")
@@ -60,7 +60,7 @@ fun SearchScreen(
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = CodeforcesRed),
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = CodeforcesAccent),
                     shape = RoundedCornerShape(12.dp)
                 )
                 HorizontalDivider(color = CfDivider)

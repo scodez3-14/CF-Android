@@ -48,7 +48,7 @@ fun BlogScreen(
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesRed)
+                CircularProgressIndicator(color = CodeforcesAccent)
             }
             return@Scaffold
         }
@@ -92,8 +92,8 @@ fun BlogEntryCard(entry: BlogEntryDto, onClick: () -> Unit) {
                     Text(dateStr, style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(Icons.Rounded.Star, contentDescription = null, tint = CodeforcesRed, modifier = Modifier.size(16.dp))
-                    Text(entry.rating.toString(), style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesRed)
+                    Icon(Icons.Rounded.Star, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(16.dp))
+                    Text(entry.rating.toString(), style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
                 }
             }
         }

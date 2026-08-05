@@ -21,26 +21,48 @@ class CodeforcesRepository @Inject constructor(
     private val contestDao: ContestDao
 ) {
 
+    companion object {
+        private const val USER_TTL_MS = 5 * 60 * 1000L        // 5 minutes
+        private const val CONTEST_TTL_MS = 15 * 60 * 1000L    // 15 minutes
+        private const val PROBLEMS_TTL_MS = 24 * 60 * 60 * 1000L // 24 hours
+        private const val RATED_LIST_TTL_MS = 60 * 60 * 1000L // 1 hour
+    }
+
+    private data class RatedListCache(
+        val activeOnly: Boolean,
+        val timestamp: Long,
+        val users: List<UserDto>
+    )
+
+    @Volatile
+    private var ratedListCache: RatedListCache? = null
+
+    private fun isFresh(timestamp: Long, ttlMs: Long): Boolean =
+        System.currentTimeMillis() - timestamp < ttlMs
+
     // ── Users ──────────────────────────────────────────────────────────────────
 
     fun getUserInfo(handle: String): Flow<Resource<UserDto>> = flow {
         emit(Resource.Loading())
-        // Try cache first
-        userDao.getUser(handle)?.let { cached ->
+        val cached = userDao.getUser(handle)
+        // Fresh cache: skip the network entirely.
+        if (cached != null && isFresh(cached.cachedAt, USER_TTL_MS)) {
             emit(Resource.Success(cached.toDto()))
+            return@flow
         }
-        // Fetch fresh from API
+        // Stale cache: show it immediately, refresh in the background.
+        if (cached != null) emit(Resource.Success(cached.toDto()))
         try {
             val response = api.getUserInfo(handle)
             if (response.status == "OK" && response.result != null) {
                 val user = response.result.first()
                 userDao.insertUser(user.toEntity())
                 emit(Resource.Success(user))
-            } else {
+            } else if (cached == null) {
                 emit(Resource.Error(response.comment ?: "Unknown error"))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Network error"))
+            if (cached == null) emit(Resource.Error(e.localizedMessage ?: "Network error"))
         }
     }
 
@@ -62,10 +84,23 @@ class CodeforcesRepository @Inject constructor(
 
     fun getRatedList(activeOnly: Boolean = true): Flow<Resource<List<UserDto>>> = flow {
         emit(Resource.Loading())
+        // user.ratedList is a huge payload; cache it in memory so the leaderboard
+        // doesn't re-download the entire ranked list on every open.
+        ratedListCache?.let { cached ->
+            if (cached.activeOnly == activeOnly && isFresh(cached.timestamp, RATED_LIST_TTL_MS)) {
+                emit(Resource.Success(cached.users))
+                return@flow
+            }
+        }
         try {
             val response = api.getRatedList(activeOnly)
-            if (response.status == "OK") emit(Resource.Success(response.result ?: emptyList()))
-            else emit(Resource.Error(response.comment ?: "Error"))
+            if (response.status == "OK") {
+                val users = response.result ?: emptyList()
+                ratedListCache = RatedListCache(activeOnly, System.currentTimeMillis(), users)
+                emit(Resource.Success(users))
+            } else {
+                emit(Resource.Error(response.comment ?: "Error"))
+            }
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Network error"))
         }
@@ -81,27 +116,38 @@ class CodeforcesRepository @Inject constructor(
 
     // ── Problems ───────────────────────────────────────────────────────────────
 
-    fun getProblems(tags: String? = null): Flow<Resource<ProblemSetResultDto>> = flow {
+    fun getProblems(tags: String? = null, forceRefresh: Boolean = false): Flow<Resource<ProblemSetResultDto>> = flow {
         emit(Resource.Loading())
-        // Check cache
-        val cacheCount = problemDao.count()
-        if (cacheCount > 0 && tags == null) {
-            // Cache hit for unfiltered; we'll still fetch fresh in background
+        // The full Codeforces problem set is large. Show Room data immediately and
+        // only wait on the network when the cache is empty, stale, or refreshed.
+        var showedCache = false
+        if (tags == null && !forceRefresh) {
+            val cachedProblems = problemDao.getAllProblemsOnce()
+            if (cachedProblems.isNotEmpty()) {
+                emit(Resource.Success(cachedProblems.toProblemSetResult()))
+                showedCache = true
+                val cacheAge = System.currentTimeMillis() - (cachedProblems.maxOfOrNull { it.cachedAt } ?: 0L)
+                if (cacheAge < PROBLEMS_TTL_MS) return@flow
+            }
         }
         try {
             val response = api.getProblems(tags)
             if (response.status == "OK" && response.result != null) {
                 // Cache problems
                 if (tags == null) {
-                    val entities = response.result.problems.map { it.toEntity(response.result.problemStatistics) }
+                    val solvedCounts = response.result.problemStatistics.associateBy(
+                        keySelector = { it.cacheKey() },
+                        valueTransform = { it.solvedCount }
+                    )
+                    val entities = response.result.problems.map { it.toEntity(solvedCounts) }
                     problemDao.insertProblems(entities)
                 }
                 emit(Resource.Success(response.result))
-            } else {
+            } else if (!showedCache) {
                 emit(Resource.Error(response.comment ?: "Error"))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Network error"))
+            if (!showedCache) emit(Resource.Error(e.localizedMessage ?: "Network error"))
         }
     }
 
@@ -109,27 +155,66 @@ class CodeforcesRepository @Inject constructor(
 
     fun getContestList(): Flow<Resource<List<ContestDto>>> = flow {
         emit(Resource.Loading())
+        // Home and Problems screens both call this; serve a fresh cache instead of
+        // hitting the network twice every launch.
+        val cached = contestDao.getAllContestsOnce()
+        val cacheAge = cached.maxOfOrNull { it.cachedAt } ?: 0L
+        if (cached.isNotEmpty() && isFresh(cacheAge, CONTEST_TTL_MS)) {
+            emit(Resource.Success(cached.toContestList()))
+            return@flow
+        }
+        if (cached.isNotEmpty()) emit(Resource.Success(cached.toContestList()))
         try {
             val response = api.getContestList()
             if (response.status == "OK" && response.result != null) {
                 contestDao.insertContests(response.result.map { it.toEntity() })
                 emit(Resource.Success(response.result))
-            } else {
+            } else if (cached.isEmpty()) {
                 emit(Resource.Error(response.comment ?: "Error"))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Network error"))
+            if (cached.isEmpty()) emit(Resource.Error(e.localizedMessage ?: "Network error"))
         }
     }
 
-    suspend fun getContestStandings(contestId: Int, from: Int = 1, count: Int = 50): Resource<StandingsDto> = try {
-        val response = api.getContestStandings(contestId, from, count)
-        if (response.status == "OK") Resource.Success(response.result!!)
+    suspend fun getContestStandings(contestId: Int): Resource<StandingsDto> = try {
+        val response = api.getContestStandings(contestId)
+        val result = response.result
+        if (response.status == "OK" && result != null) Resource.Success(result)
         else Resource.Error(response.comment ?: "Error")
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
 
+    suspend fun getDailyProblem(): ProblemDto? {
+        val cached = problemDao.getAllProblemsOnce()
+        if (cached.isNotEmpty()) return pickDaily(cached)
+        try {
+            val response = api.getProblems(null)
+            if (response.status == "OK" && response.result != null) {
+                val solvedCounts = response.result.problemStatistics.associateBy({ it.cacheKey() }, { it.solvedCount })
+                val entities = response.result.problems.map { it.toEntity(solvedCounts) }
+                problemDao.insertProblems(entities)
+                return pickDaily(entities)
+            }
+        } catch (_: Exception) {
+        }
+        return null
+    }
+
+    private fun pickDaily(cached: List<CachedProblemEntity>): ProblemDto? {
+        if (cached.isEmpty()) return null
+        val daysSinceEpoch = java.time.LocalDate.now().toEpochDay()
+        val sorted = cached.sortedBy { it.id }
+        val chosen = sorted[(daysSinceEpoch % sorted.size).toInt()]
+        return ProblemDto(
+            contestId = chosen.contestId,
+            index = chosen.index,
+            name = chosen.name,
+            rating = chosen.rating,
+            tags = chosen.tags
+        )
+    }
     suspend fun getContestRatingChanges(contestId: Int): Resource<List<RatingChangeDto>> = try {
         val response = api.getContestRatingChanges(contestId)
         if (response.status == "OK") Resource.Success(response.result ?: emptyList())
@@ -142,7 +227,8 @@ class CodeforcesRepository @Inject constructor(
 
     suspend fun getBlogEntry(blogEntryId: Int): Resource<BlogEntryDto> = try {
         val response = api.getBlogEntry(blogEntryId)
-        if (response.status == "OK") Resource.Success(response.result!!)
+        val result = response.result
+        if (response.status == "OK" && result != null) Resource.Success(result)
         else Resource.Error(response.comment ?: "Error")
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
@@ -190,8 +276,8 @@ private fun UserDto.toEntity() = CachedUserEntity(
     registrationTimeSeconds = registrationTimeSeconds
 )
 
-private fun ProblemDto.toEntity(stats: List<ProblemStatisticsDto>): CachedProblemEntity {
-    val solvedCount = stats.find { it.contestId == contestId && it.index == index }?.solvedCount ?: 0
+private fun ProblemDto.toEntity(solvedCounts: Map<String, Int>): CachedProblemEntity {
+    val solvedCount = solvedCounts[cacheKey()] ?: 0
     return CachedProblemEntity(
         id = "${contestId}_${index}",
         contestId = contestId, index = index, name = name,
@@ -199,7 +285,37 @@ private fun ProblemDto.toEntity(stats: List<ProblemStatisticsDto>): CachedProble
     )
 }
 
+private fun ProblemDto.cacheKey() = "${contestId}_${index}"
+
+private fun ProblemStatisticsDto.cacheKey() = "${contestId}_${index}"
+
+private fun List<CachedProblemEntity>.toProblemSetResult() = ProblemSetResultDto(
+    problems = map { cached ->
+        ProblemDto(
+            contestId = cached.contestId,
+            index = cached.index,
+            name = cached.name,
+            rating = cached.rating,
+            tags = cached.tags
+        )
+    },
+    problemStatistics = map { cached ->
+        ProblemStatisticsDto(
+            contestId = cached.contestId,
+            index = cached.index,
+            solvedCount = cached.solvedCount
+        )
+    }
+)
+
 private fun ContestDto.toEntity() = CachedContestEntity(
     id = id, name = name, type = type, phase = phase,
     durationSeconds = durationSeconds, startTimeSeconds = startTimeSeconds
 )
+
+private fun List<CachedContestEntity>.toContestList() = map {
+    ContestDto(
+        id = it.id, name = it.name, type = it.type, phase = it.phase,
+        durationSeconds = it.durationSeconds, startTimeSeconds = it.startTimeSeconds
+    )
+}

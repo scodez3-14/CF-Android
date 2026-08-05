@@ -53,15 +53,15 @@ fun SubmissionsScreen(
                         onClick = { viewModel.setFilter(verdict) },
                         label = { Text(verdictLabels[i], fontSize = 12.sp) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = CodeforcesRed.copy(alpha = 0.2f),
-                            selectedLabelColor = CfRedLight
+                            selectedContainerColor = CodeforcesAccent.copy(alpha = 0.2f),
+                            selectedLabelColor = CfAccentLight
                         )
                     )
                 }
             }
             if (state.isLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = CodeforcesRed)
+                    CircularProgressIndicator(color = CodeforcesAccent)
                 }
                 return@Column
             }

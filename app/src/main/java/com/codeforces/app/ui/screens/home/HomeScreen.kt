@@ -41,7 +41,7 @@ fun HomeScreen(
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Icon(Icons.Rounded.Code, contentDescription = null, tint = CodeforcesRed, modifier = Modifier.size(22.dp))
+                        Icon(Icons.Rounded.Code, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(22.dp))
                         Text("Codeforces", fontWeight = FontWeight.ExtraBold, color = CfTextPrimary)
                     }
                 },
@@ -76,7 +76,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .background(
                                 Brush.horizontalGradient(
-                                    colors = listOf(CfCardSurface, CodeforcesRed.copy(alpha = 0.15f))
+                                    colors = listOf(CfCardSurface, CodeforcesAccent.copy(alpha = 0.15f))
                                 )
                             )
                             .padding(20.dp)
@@ -111,6 +111,61 @@ fun HomeScreen(
                                 Text("Rating", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
                             }
                         }
+                    }
+                }
+            }
+
+            // Problem of the Day
+            state.dailyProblem?.let { problem ->
+                SectionHeader("Problem of the Day", onSeeAll = null)
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .clickable {
+                            navController.navigate(
+                                Screen.ProblemDetail.createRoute(
+                                    problem.contestId.toString(),
+                                    problem.index,
+                                    problem.name
+                                )
+                            )
+                        },
+                    colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(CodeforcesAccent.copy(alpha = 0.08f))
+                            .padding(18.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(46.dp)
+                                .clip(CircleShape)
+                                .background(CodeforcesAccent.copy(alpha = 0.18f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Rounded.CalendarMonth, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(24.dp))
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = problem.name,
+                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                                color = CfTextPrimary,
+                                maxLines = 2
+                            )
+                            Text(
+                                text = "${problem.contestId}${problem.index} · ${problem.rating ?: "?"} rating · ${problem.tags.take(3).joinToString(", ")}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = CfTextSecondary,
+                                maxLines = 1
+                            )
+                        }
+                        Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = CfTextDisabled)
                     }
                 }
             }
@@ -165,7 +220,7 @@ fun SectionHeader(title: String, onSeeAll: (() -> Unit)?) {
         Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
         onSeeAll?.let {
             TextButton(onClick = it) {
-                Text("See all", color = CfRedLight, style = MaterialTheme.typography.labelMedium)
+                Text("See all", color = CfAccentLight, style = MaterialTheme.typography.labelMedium)
             }
         }
     }
@@ -192,14 +247,14 @@ fun ContestCard(contest: ContestDto, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(Icons.Rounded.EmojiEvents, contentDescription = null, tint = CodeforcesRed, modifier = Modifier.size(28.dp))
+            Icon(Icons.Rounded.EmojiEvents, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(28.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(contest.name, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold), color = CfTextPrimary, maxLines = 2)
                 Text("${contest.durationSeconds / 3600}h duration", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text("in", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
-                Text(timeLabel, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesRed)
+                Text(timeLabel, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
             }
         }
     }

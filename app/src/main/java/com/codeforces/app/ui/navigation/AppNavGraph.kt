@@ -12,8 +12,11 @@ import androidx.navigation.navArgument
 import com.codeforces.app.ui.screens.blog.BlogScreen
 import com.codeforces.app.ui.screens.contests.ContestDetailScreen
 import com.codeforces.app.ui.screens.contests.ContestListScreen
+import com.codeforces.app.ui.screens.contests.EditorialScreen
 import com.codeforces.app.ui.screens.home.HomeScreen
 import com.codeforces.app.ui.screens.leaderboard.LeaderboardScreen
+import com.codeforces.app.ui.screens.login.LoginScreen
+import com.codeforces.app.ui.screens.login.WebLoginScreen
 import com.codeforces.app.ui.screens.onboarding.OnboardingScreen
 import com.codeforces.app.ui.screens.problems.ProblemDetailScreen
 import com.codeforces.app.ui.screens.problems.ProblemsScreen
@@ -76,6 +79,7 @@ fun AppNavGraph(
                 contestId = backStackEntry.arguments?.getString("contestId") ?: "",
                 index = backStackEntry.arguments?.getString("index") ?: "",
                 name = Uri.decode(backStackEntry.arguments?.getString("name") ?: ""),
+                onLogin = { navController.navigate(Screen.Login.route) },
                 onBack = { navController.popBackStack() }
             )
         }
@@ -98,6 +102,19 @@ fun AppNavGraph(
         ) { backStackEntry ->
             StandingsScreen(
                 contestId = backStackEntry.arguments?.getInt("contestId") ?: -1,
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            Screen.Editorial.route,
+            arguments = listOf(
+                navArgument("contestId") { type = NavType.IntType },
+                navArgument("name") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            EditorialScreen(
+                contestId = backStackEntry.arguments?.getInt("contestId") ?: -1,
+                name = Uri.decode(backStackEntry.arguments?.getString("name") ?: "Editorial"),
                 onBack = { navController.popBackStack() }
             )
         }
@@ -139,7 +156,23 @@ fun AppNavGraph(
             )
         }
         composable(Screen.Settings.route) {
-            SettingsScreen(navController = navController)
+            SettingsScreen(
+                navController = navController,
+                onLogin = { navController.navigate(Screen.Login.route) }
+            )
+        }
+        composable(Screen.Login.route) {
+            LoginScreen(
+                onLoggedIn = { navController.popBackStack() },
+                onBack = { navController.popBackStack() },
+                onBrowserLogin = { navController.navigate(Screen.WebLogin.route) }
+            )
+        }
+        composable(Screen.WebLogin.route) {
+            WebLoginScreen(
+                onLoggedIn = { navController.popBackStack() },
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

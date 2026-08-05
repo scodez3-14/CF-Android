@@ -169,6 +169,58 @@ public final class ContestDao_Impl implements ContestDao {
   }
 
   @Override
+  public Object getAllContestsOnce(
+      final Continuation<? super List<CachedContestEntity>> $completion) {
+    final String _sql = "SELECT * FROM cached_contests ORDER BY startTimeSeconds DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<CachedContestEntity>>() {
+      @Override
+      @NonNull
+      public List<CachedContestEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfType = CursorUtil.getColumnIndexOrThrow(_cursor, "type");
+          final int _cursorIndexOfPhase = CursorUtil.getColumnIndexOrThrow(_cursor, "phase");
+          final int _cursorIndexOfDurationSeconds = CursorUtil.getColumnIndexOrThrow(_cursor, "durationSeconds");
+          final int _cursorIndexOfStartTimeSeconds = CursorUtil.getColumnIndexOrThrow(_cursor, "startTimeSeconds");
+          final int _cursorIndexOfCachedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "cachedAt");
+          final List<CachedContestEntity> _result = new ArrayList<CachedContestEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final CachedContestEntity _item;
+            final int _tmpId;
+            _tmpId = _cursor.getInt(_cursorIndexOfId);
+            final String _tmpName;
+            _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpType;
+            _tmpType = _cursor.getString(_cursorIndexOfType);
+            final String _tmpPhase;
+            _tmpPhase = _cursor.getString(_cursorIndexOfPhase);
+            final long _tmpDurationSeconds;
+            _tmpDurationSeconds = _cursor.getLong(_cursorIndexOfDurationSeconds);
+            final Long _tmpStartTimeSeconds;
+            if (_cursor.isNull(_cursorIndexOfStartTimeSeconds)) {
+              _tmpStartTimeSeconds = null;
+            } else {
+              _tmpStartTimeSeconds = _cursor.getLong(_cursorIndexOfStartTimeSeconds);
+            }
+            final long _tmpCachedAt;
+            _tmpCachedAt = _cursor.getLong(_cursorIndexOfCachedAt);
+            _item = new CachedContestEntity(_tmpId,_tmpName,_tmpType,_tmpPhase,_tmpDurationSeconds,_tmpStartTimeSeconds,_tmpCachedAt);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Object count(final Continuation<? super Integer> $completion) {
     final String _sql = "SELECT COUNT(*) FROM cached_contests";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);

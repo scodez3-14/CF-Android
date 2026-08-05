@@ -1,16 +1,18 @@
 package com.codeforces.app.di
 
 import android.content.Context
+import android.webkit.WebSettings
 import androidx.room.Room
 import com.codeforces.app.data.api.CodeforcesApiService
 import com.codeforces.app.data.db.*
+import com.codeforces.app.data.scraper.CfSubmitter
+import com.codeforces.app.data.scraper.PersistentCookieJar
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -24,13 +26,21 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            // Codeforces is strict with unauthenticated bots; a User-Agent helps
+            // avoid 403s. Only set it when the caller didn't provide one, so the
+            // scraper's mobile Chrome UA keeps working.
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val request = if (original.header("User-Agent") == null) {
+                    original.newBuilder()
+                        .header("User-Agent", "Mozilla/5.0 (Linux; Android 14) CodeforcesApp/1.0")
+                        .build()
+                } else original
+                chain.proceed(request)
+            }
             .build()
     }
 
@@ -49,6 +59,22 @@ object NetworkModule {
     fun provideApiService(retrofit: Retrofit): CodeforcesApiService {
         return retrofit.create(CodeforcesApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun providePersistentCookieJar(@ApplicationContext context: Context): PersistentCookieJar {
+        return PersistentCookieJar(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCfSubmitter(
+        @ApplicationContext context: Context,
+        okHttpClient: OkHttpClient,
+        cookieJar: PersistentCookieJar
+    ): CfSubmitter {
+        return CfSubmitter(okHttpClient, cookieJar, WebSettings.getDefaultUserAgent(context))
+    }
 }
 
 @Module
@@ -62,7 +88,7 @@ object DatabaseModule {
             context,
             CodeforcesDatabase::class.java,
             "codeforces.db"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
 
     @Provides

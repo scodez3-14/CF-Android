@@ -1,0 +1,1 @@
+{"className":"com.codeforces.app.notifications.Hilt_ContestReminderBootReceiver","classAnnotations":["dagger.hilt.android.internal.OnReceiveBytecodeInjectionMarker"],"interfaces":[],"superClasses":["android.content.BroadcastReceiver","java.lang.Object"]}

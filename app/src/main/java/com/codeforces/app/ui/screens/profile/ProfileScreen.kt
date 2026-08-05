@@ -95,7 +95,7 @@ fun ProfileScreen(
     ) { padding ->
         if (state.isLoading && state.user == null) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesRed)
+                CircularProgressIndicator(color = CodeforcesAccent)
             }
             return@Scaffold
         }
@@ -212,7 +212,7 @@ fun ProfileScreen(
                         onClick = { navController.navigate(Screen.Submissions.createRoute(resolvedHandle)) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     ) {
-                        Text("View all submissions →", color = CfRedLight)
+                        Text("View all submissions →", color = CfAccentLight)
                     }
                 }
                 Spacer(Modifier.height(24.dp))
@@ -232,7 +232,7 @@ fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesRed)
+            Text(text = value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
             Text(text = label, style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
         }
     }

@@ -185,6 +185,67 @@ public final class ProblemDao_Impl implements ProblemDao {
   }
 
   @Override
+  public Object getAllProblemsOnce(
+      final Continuation<? super List<CachedProblemEntity>> $completion) {
+    final String _sql = "SELECT * FROM cached_problems ORDER BY rating ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<CachedProblemEntity>>() {
+      @Override
+      @NonNull
+      public List<CachedProblemEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfContestId = CursorUtil.getColumnIndexOrThrow(_cursor, "contestId");
+          final int _cursorIndexOfIndex = CursorUtil.getColumnIndexOrThrow(_cursor, "index");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfRating = CursorUtil.getColumnIndexOrThrow(_cursor, "rating");
+          final int _cursorIndexOfTags = CursorUtil.getColumnIndexOrThrow(_cursor, "tags");
+          final int _cursorIndexOfSolvedCount = CursorUtil.getColumnIndexOrThrow(_cursor, "solvedCount");
+          final int _cursorIndexOfCachedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "cachedAt");
+          final List<CachedProblemEntity> _result = new ArrayList<CachedProblemEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final CachedProblemEntity _item;
+            final String _tmpId;
+            _tmpId = _cursor.getString(_cursorIndexOfId);
+            final Integer _tmpContestId;
+            if (_cursor.isNull(_cursorIndexOfContestId)) {
+              _tmpContestId = null;
+            } else {
+              _tmpContestId = _cursor.getInt(_cursorIndexOfContestId);
+            }
+            final String _tmpIndex;
+            _tmpIndex = _cursor.getString(_cursorIndexOfIndex);
+            final String _tmpName;
+            _tmpName = _cursor.getString(_cursorIndexOfName);
+            final Integer _tmpRating;
+            if (_cursor.isNull(_cursorIndexOfRating)) {
+              _tmpRating = null;
+            } else {
+              _tmpRating = _cursor.getInt(_cursorIndexOfRating);
+            }
+            final List<String> _tmpTags;
+            final String _tmp;
+            _tmp = _cursor.getString(_cursorIndexOfTags);
+            _tmpTags = __converters.toStringList(_tmp);
+            final int _tmpSolvedCount;
+            _tmpSolvedCount = _cursor.getInt(_cursorIndexOfSolvedCount);
+            final long _tmpCachedAt;
+            _tmpCachedAt = _cursor.getLong(_cursorIndexOfCachedAt);
+            _item = new CachedProblemEntity(_tmpId,_tmpContestId,_tmpIndex,_tmpName,_tmpRating,_tmpTags,_tmpSolvedCount,_tmpCachedAt);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Flow<List<CachedProblemEntity>> getProblemsByRating(final int minRating,
       final int maxRating) {
     final String _sql = "SELECT * FROM cached_problems WHERE rating BETWEEN ? AND ? ORDER BY rating ASC";

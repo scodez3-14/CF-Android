@@ -13,13 +13,20 @@ import com.codeforces.app.data.db.ProblemDao;
 import com.codeforces.app.data.db.UserDao;
 import com.codeforces.app.data.repository.CodeforcesRepository;
 import com.codeforces.app.data.repository.UserPreferencesRepository;
+import com.codeforces.app.data.scraper.CfSubmitter;
+import com.codeforces.app.data.scraper.PersistentCookieJar;
 import com.codeforces.app.di.DatabaseModule_ProvideContestDaoFactory;
 import com.codeforces.app.di.DatabaseModule_ProvideDatabaseFactory;
 import com.codeforces.app.di.DatabaseModule_ProvideProblemDaoFactory;
 import com.codeforces.app.di.DatabaseModule_ProvideUserDaoFactory;
 import com.codeforces.app.di.NetworkModule_ProvideApiServiceFactory;
+import com.codeforces.app.di.NetworkModule_ProvideCfSubmitterFactory;
 import com.codeforces.app.di.NetworkModule_ProvideOkHttpClientFactory;
+import com.codeforces.app.di.NetworkModule_ProvidePersistentCookieJarFactory;
 import com.codeforces.app.di.NetworkModule_ProvideRetrofitFactory;
+import com.codeforces.app.notifications.ContestReminderBootReceiver;
+import com.codeforces.app.notifications.ContestReminderBootReceiver_MembersInjector;
+import com.codeforces.app.notifications.ContestReminderManager;
 import com.codeforces.app.ui.screens.blog.BlogViewModel;
 import com.codeforces.app.ui.screens.blog.BlogViewModel_HiltModules;
 import com.codeforces.app.ui.screens.contests.ContestViewModel;
@@ -28,6 +35,10 @@ import com.codeforces.app.ui.screens.home.HomeViewModel;
 import com.codeforces.app.ui.screens.home.HomeViewModel_HiltModules;
 import com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel;
 import com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel_HiltModules;
+import com.codeforces.app.ui.screens.login.LoginViewModel;
+import com.codeforces.app.ui.screens.login.LoginViewModel_HiltModules;
+import com.codeforces.app.ui.screens.login.WebLoginViewModel;
+import com.codeforces.app.ui.screens.login.WebLoginViewModel_HiltModules;
 import com.codeforces.app.ui.screens.onboarding.OnboardingViewModel;
 import com.codeforces.app.ui.screens.onboarding.OnboardingViewModel_HiltModules;
 import com.codeforces.app.ui.screens.problems.ProblemDetailViewModel;
@@ -44,6 +55,7 @@ import com.codeforces.app.ui.screens.standings.StandingsViewModel;
 import com.codeforces.app.ui.screens.standings.StandingsViewModel_HiltModules;
 import com.codeforces.app.ui.screens.submissions.SubmissionsViewModel;
 import com.codeforces.app.ui.screens.submissions.SubmissionsViewModel_HiltModules;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import dagger.hilt.android.ActivityRetainedLifecycle;
 import dagger.hilt.android.ViewModelLifecycle;
 import dagger.hilt.android.internal.builders.ActivityComponentBuilder;
@@ -406,7 +418,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(13).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_blog_BlogViewModel, BlogViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_contests_ContestViewModel, ContestViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel, LeaderboardViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_MainViewModel, MainViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemDetailViewModel, ProblemDetailViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemsViewModel, ProblemsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_search_SearchViewModel, SearchViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_standings_StandingsViewModel, StandingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_submissions_SubmissionsViewModel, SubmissionsViewModel_HiltModules.KeyModule.provide()).build());
+      return LazyClassKeyMap.<Boolean>of(MapBuilder.<String, Boolean>newMapBuilder(15).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_blog_BlogViewModel, BlogViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_contests_ContestViewModel, ContestViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_home_HomeViewModel, HomeViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel, LeaderboardViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_login_LoginViewModel, LoginViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_MainViewModel, MainViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_onboarding_OnboardingViewModel, OnboardingViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemDetailViewModel, ProblemDetailViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemsViewModel, ProblemsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_profile_ProfileViewModel, ProfileViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_search_SearchViewModel, SearchViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_settings_SettingsViewModel, SettingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_standings_StandingsViewModel, StandingsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_submissions_SubmissionsViewModel, SubmissionsViewModel_HiltModules.KeyModule.provide()).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_login_WebLoginViewModel, WebLoginViewModel_HiltModules.KeyModule.provide()).build());
     }
 
     @Override
@@ -426,34 +438,56 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
+      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
+
+      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
+
+      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
+
+      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
+
+      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
+
+      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+
+      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
 
       static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
 
       static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
 
-      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
-
       static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
-
-      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
-
-      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
-
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
 
       static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
 
-      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
+      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
 
-      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
 
-      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
+
+      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
 
       @KeepFieldType
-      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
+      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
+
+      @KeepFieldType
+      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
+
+      @KeepFieldType
+      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
+
+      @KeepFieldType
+      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
+
+      @KeepFieldType
+      MainViewModel com_codeforces_app_MainViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
 
       @KeepFieldType
       StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
@@ -462,34 +496,22 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
 
       @KeepFieldType
-      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
-
-      @KeepFieldType
       SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
-
-      @KeepFieldType
-      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
-
-      @KeepFieldType
-      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
-
-      @KeepFieldType
-      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
-
-      @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
 
       @KeepFieldType
       ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
 
       @KeepFieldType
-      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
+      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
 
       @KeepFieldType
-      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
 
       @KeepFieldType
-      MainViewModel com_codeforces_app_MainViewModel2;
+      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
+
+      @KeepFieldType
+      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
     }
   }
 
@@ -507,6 +529,8 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
     private Provider<HomeViewModel> homeViewModelProvider;
 
     private Provider<LeaderboardViewModel> leaderboardViewModelProvider;
+
+    private Provider<LoginViewModel> loginViewModelProvider;
 
     private Provider<MainViewModel> mainViewModelProvider;
 
@@ -526,6 +550,8 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     private Provider<SubmissionsViewModel> submissionsViewModelProvider;
 
+    private Provider<WebLoginViewModel> webLoginViewModelProvider;
+
     private ViewModelCImpl(SingletonCImpl singletonCImpl,
         ActivityRetainedCImpl activityRetainedCImpl, SavedStateHandle savedStateHandleParam,
         ViewModelLifecycle viewModelLifecycleParam) {
@@ -543,20 +569,22 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       this.contestViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
       this.homeViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
       this.leaderboardViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
-      this.mainViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
-      this.onboardingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
-      this.problemDetailViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 6);
-      this.problemsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 7);
-      this.profileViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 8);
-      this.searchViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 9);
-      this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 10);
-      this.standingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 11);
-      this.submissionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 12);
+      this.loginViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
+      this.mainViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
+      this.onboardingViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 6);
+      this.problemDetailViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 7);
+      this.problemsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 8);
+      this.profileViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 9);
+      this.searchViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 10);
+      this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 11);
+      this.standingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 12);
+      this.submissionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 13);
+      this.webLoginViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 14);
     }
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(13).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_blog_BlogViewModel, ((Provider) blogViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_contests_ContestViewModel, ((Provider) contestViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel, ((Provider) leaderboardViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_MainViewModel, ((Provider) mainViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemDetailViewModel, ((Provider) problemDetailViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemsViewModel, ((Provider) problemsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_search_SearchViewModel, ((Provider) searchViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_standings_StandingsViewModel, ((Provider) standingsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_submissions_SubmissionsViewModel, ((Provider) submissionsViewModelProvider)).build());
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(15).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_blog_BlogViewModel, ((Provider) blogViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_contests_ContestViewModel, ((Provider) contestViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_home_HomeViewModel, ((Provider) homeViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel, ((Provider) leaderboardViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_login_LoginViewModel, ((Provider) loginViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_MainViewModel, ((Provider) mainViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_onboarding_OnboardingViewModel, ((Provider) onboardingViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemDetailViewModel, ((Provider) problemDetailViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_problems_ProblemsViewModel, ((Provider) problemsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_profile_ProfileViewModel, ((Provider) profileViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_search_SearchViewModel, ((Provider) searchViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_settings_SettingsViewModel, ((Provider) settingsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_standings_StandingsViewModel, ((Provider) standingsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_submissions_SubmissionsViewModel, ((Provider) submissionsViewModelProvider)).put(LazyClassKeyProvider.com_codeforces_app_ui_screens_login_WebLoginViewModel, ((Provider) webLoginViewModelProvider)).build());
     }
 
     @Override
@@ -566,70 +594,80 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
-
-      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
-
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
-
       static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
 
-      static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
-
-      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
-
-      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
-
-      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
-
-      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
 
       static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
 
+      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
+
+      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
+
+      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
+
+      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
+
+      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
+
+      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
+
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
+
+      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+
+      static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
+
       static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
 
-      @KeepFieldType
-      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
 
-      @KeepFieldType
-      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
-
-      @KeepFieldType
-      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
-
-      @KeepFieldType
-      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
-
-      @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
+      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
 
       @KeepFieldType
       StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
 
       @KeepFieldType
-      ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
-
-      @KeepFieldType
-      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
-
-      @KeepFieldType
-      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
-
-      @KeepFieldType
-      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
-
-      @KeepFieldType
-      MainViewModel com_codeforces_app_MainViewModel2;
+      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
 
       @KeepFieldType
       OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
 
       @KeepFieldType
+      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
+
+      @KeepFieldType
+      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
+
+      @KeepFieldType
+      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
+
+      @KeepFieldType
+      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
+
+      @KeepFieldType
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
+
+      @KeepFieldType
+      MainViewModel com_codeforces_app_MainViewModel2;
+
+      @KeepFieldType
+      ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
+
+      @KeepFieldType
       ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -657,7 +695,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           return (T) new BlogViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
 
           case 1: // com.codeforces.app.ui.screens.contests.ContestViewModel 
-          return (T) new ContestViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
+          return (T) new ContestViewModel(singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.provideOkHttpClientProvider.get());
 
           case 2: // com.codeforces.app.ui.screens.home.HomeViewModel 
           return (T) new HomeViewModel(singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
@@ -665,32 +703,38 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           case 3: // com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel 
           return (T) new LeaderboardViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
 
-          case 4: // com.codeforces.app.MainViewModel 
-          return (T) new MainViewModel(singletonCImpl.userPreferencesRepositoryProvider.get());
+          case 4: // com.codeforces.app.ui.screens.login.LoginViewModel 
+          return (T) new LoginViewModel(singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
-          case 5: // com.codeforces.app.ui.screens.onboarding.OnboardingViewModel 
+          case 5: // com.codeforces.app.MainViewModel 
+          return (T) new MainViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.contestReminderManagerProvider.get());
+
+          case 6: // com.codeforces.app.ui.screens.onboarding.OnboardingViewModel 
           return (T) new OnboardingViewModel(singletonCImpl.userPreferencesRepositoryProvider.get());
 
-          case 6: // com.codeforces.app.ui.screens.problems.ProblemDetailViewModel 
-          return (T) new ProblemDetailViewModel(singletonCImpl.provideOkHttpClientProvider.get());
+          case 7: // com.codeforces.app.ui.screens.problems.ProblemDetailViewModel 
+          return (T) new ProblemDetailViewModel(singletonCImpl.provideOkHttpClientProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.provideApiServiceProvider.get());
 
-          case 7: // com.codeforces.app.ui.screens.problems.ProblemsViewModel 
-          return (T) new ProblemsViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
+          case 8: // com.codeforces.app.ui.screens.problems.ProblemsViewModel 
+          return (T) new ProblemsViewModel(singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
-          case 8: // com.codeforces.app.ui.screens.profile.ProfileViewModel 
+          case 9: // com.codeforces.app.ui.screens.profile.ProfileViewModel 
           return (T) new ProfileViewModel(singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
-          case 9: // com.codeforces.app.ui.screens.search.SearchViewModel 
+          case 10: // com.codeforces.app.ui.screens.search.SearchViewModel 
           return (T) new SearchViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
 
-          case 10: // com.codeforces.app.ui.screens.settings.SettingsViewModel 
-          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.codeforcesRepositoryProvider.get());
+          case 11: // com.codeforces.app.ui.screens.settings.SettingsViewModel 
+          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.provideCfSubmitterProvider.get());
 
-          case 11: // com.codeforces.app.ui.screens.standings.StandingsViewModel 
+          case 12: // com.codeforces.app.ui.screens.standings.StandingsViewModel 
           return (T) new StandingsViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
 
-          case 12: // com.codeforces.app.ui.screens.submissions.SubmissionsViewModel 
+          case 13: // com.codeforces.app.ui.screens.submissions.SubmissionsViewModel 
           return (T) new SubmissionsViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
+
+          case 14: // com.codeforces.app.ui.screens.login.WebLoginViewModel 
+          return (T) new WebLoginViewModel(singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -784,6 +828,12 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     private Provider<UserPreferencesRepository> userPreferencesRepositoryProvider;
 
+    private Provider<ContestReminderManager> contestReminderManagerProvider;
+
+    private Provider<PersistentCookieJar> providePersistentCookieJarProvider;
+
+    private Provider<CfSubmitter> provideCfSubmitterProvider;
+
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
       initialize(applicationContextModuleParam);
@@ -804,16 +854,25 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @SuppressWarnings("unchecked")
     private void initialize(final ApplicationContextModule applicationContextModuleParam) {
-      this.provideOkHttpClientProvider = DoubleCheck.provider(new SwitchingProvider<OkHttpClient>(singletonCImpl, 3));
-      this.provideRetrofitProvider = DoubleCheck.provider(new SwitchingProvider<Retrofit>(singletonCImpl, 2));
-      this.provideApiServiceProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesApiService>(singletonCImpl, 1));
-      this.provideDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesDatabase>(singletonCImpl, 4));
-      this.codeforcesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesRepository>(singletonCImpl, 0));
-      this.userPreferencesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesRepository>(singletonCImpl, 5));
+      this.provideOkHttpClientProvider = DoubleCheck.provider(new SwitchingProvider<OkHttpClient>(singletonCImpl, 4));
+      this.provideRetrofitProvider = DoubleCheck.provider(new SwitchingProvider<Retrofit>(singletonCImpl, 3));
+      this.provideApiServiceProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesApiService>(singletonCImpl, 2));
+      this.provideDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesDatabase>(singletonCImpl, 5));
+      this.codeforcesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<CodeforcesRepository>(singletonCImpl, 1));
+      this.userPreferencesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesRepository>(singletonCImpl, 6));
+      this.contestReminderManagerProvider = DoubleCheck.provider(new SwitchingProvider<ContestReminderManager>(singletonCImpl, 0));
+      this.providePersistentCookieJarProvider = DoubleCheck.provider(new SwitchingProvider<PersistentCookieJar>(singletonCImpl, 8));
+      this.provideCfSubmitterProvider = DoubleCheck.provider(new SwitchingProvider<CfSubmitter>(singletonCImpl, 7));
     }
 
     @Override
     public void injectCodeforcesApp(CodeforcesApp codeforcesApp) {
+    }
+
+    @Override
+    public void injectContestReminderBootReceiver(
+        ContestReminderBootReceiver contestReminderBootReceiver) {
+      injectContestReminderBootReceiver2(contestReminderBootReceiver);
     }
 
     @Override
@@ -831,6 +890,13 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       return new ServiceCBuilder(singletonCImpl);
     }
 
+    @CanIgnoreReturnValue
+    private ContestReminderBootReceiver injectContestReminderBootReceiver2(
+        ContestReminderBootReceiver instance) {
+      ContestReminderBootReceiver_MembersInjector.injectManager(instance, contestReminderManagerProvider.get());
+      return instance;
+    }
+
     private static final class SwitchingProvider<T> implements Provider<T> {
       private final SingletonCImpl singletonCImpl;
 
@@ -845,23 +911,32 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.codeforces.app.data.repository.CodeforcesRepository 
+          case 0: // com.codeforces.app.notifications.ContestReminderManager 
+          return (T) new ContestReminderManager(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
+
+          case 1: // com.codeforces.app.data.repository.CodeforcesRepository 
           return (T) new CodeforcesRepository(singletonCImpl.provideApiServiceProvider.get(), singletonCImpl.userDao(), singletonCImpl.problemDao(), singletonCImpl.contestDao());
 
-          case 1: // com.codeforces.app.data.api.CodeforcesApiService 
+          case 2: // com.codeforces.app.data.api.CodeforcesApiService 
           return (T) NetworkModule_ProvideApiServiceFactory.provideApiService(singletonCImpl.provideRetrofitProvider.get());
 
-          case 2: // retrofit2.Retrofit 
+          case 3: // retrofit2.Retrofit 
           return (T) NetworkModule_ProvideRetrofitFactory.provideRetrofit(singletonCImpl.provideOkHttpClientProvider.get());
 
-          case 3: // okhttp3.OkHttpClient 
+          case 4: // okhttp3.OkHttpClient 
           return (T) NetworkModule_ProvideOkHttpClientFactory.provideOkHttpClient();
 
-          case 4: // com.codeforces.app.data.db.CodeforcesDatabase 
+          case 5: // com.codeforces.app.data.db.CodeforcesDatabase 
           return (T) DatabaseModule_ProvideDatabaseFactory.provideDatabase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 5: // com.codeforces.app.data.repository.UserPreferencesRepository 
+          case 6: // com.codeforces.app.data.repository.UserPreferencesRepository 
           return (T) new UserPreferencesRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 7: // com.codeforces.app.data.scraper.CfSubmitter 
+          return (T) NetworkModule_ProvideCfSubmitterFactory.provideCfSubmitter(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideOkHttpClientProvider.get(), singletonCImpl.providePersistentCookieJarProvider.get());
+
+          case 8: // com.codeforces.app.data.scraper.PersistentCookieJar 
+          return (T) NetworkModule_ProvidePersistentCookieJarFactory.providePersistentCookieJar(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
           default: throw new AssertionError(id);
         }

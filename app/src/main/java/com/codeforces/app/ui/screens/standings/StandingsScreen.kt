@@ -40,7 +40,7 @@ fun StandingsScreen(
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesRed)
+                CircularProgressIndicator(color = CodeforcesAccent)
             }
             return@Scaffold
         }
@@ -81,7 +81,7 @@ fun StandingsScreen(
                                 text = row.rank.toString(),
                                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                                 color = when (row.rank) {
-                                    1 -> CodeforcesRed
+                                    1 -> CodeforcesAccent
                                     2 -> CfTextPrimary
                                     3 -> CfTextSecondary
                                     else -> CfTextDisabled

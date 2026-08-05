@@ -50,10 +50,7 @@ interface CodeforcesApiService {
 
     @GET("contest.standings")
     suspend fun getContestStandings(
-        @Query("contestId") contestId: Int,
-        @Query("from") from: Int = 1,
-        @Query("count") count: Int = 50,
-        @Query("showUnofficial") showUnofficial: Boolean = false
+        @Query("contestId") contestId: Int
     ): CfResponse<StandingsDto>
 
     @GET("contest.ratingChanges")

@@ -2,10 +2,13 @@ package com.codeforces.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Codeforces Dark Theme Palette
-val CodeforcesRed = Color(0xFFD32F2F)
-val CfRedLight = Color(0xFFFF6659)
-val CfRedDark = Color(0xFF9A0007)
+// ── Brand accent (teal) ──────────────────────────────────────────────────────
+
+val CodeforcesAccent = Color(0xFF00BFA5)
+val CfAccentLight = Color(0xFF64FFDA)
+val CfAccentDark = Color(0xFF00897B)
+
+// ── Dark theme palette (fixed) ───────────────────────────────────────────────
 
 val CfBackground = Color(0xFF121212)
 val CfSurface = Color(0xFF1E1E1E)
@@ -16,17 +19,17 @@ val CfTextPrimary = Color(0xFFEEEEEE)
 val CfTextSecondary = Color(0xFF9E9E9E)
 val CfTextDisabled = Color(0xFF616161)
 
-// Rating Colors (Codeforces standard)
-val RatingNewbie = Color(0xFF808080)
-val RatingPupil = Color(0xFF008000)
-val RatingApprentice = Color(0xFF03A89E)
-val RatingSpecialist = Color(0xFF03A89E)
-val RatingExpert = Color(0xFF0000FF)
-val RatingCM = Color(0xFFAA00AA)
-val RatingIM = Color(0xFFFF8C00)
-val RatingGM = Color(0xFFFF0000)
-val RatingIGM = Color(0xFFFF0000)
-val RatingLGM = Color(0xFFFF0000)
+// Rating Colors (Codeforces standard, brightened for dark theme readability)
+val RatingNewbie = Color(0xFFB0BEC5)
+val RatingPupil = Color(0xFF66BB6A)
+val RatingApprentice = Color(0xFF26C6DA)
+val RatingSpecialist = Color(0xFF26C6DA)
+val RatingExpert = Color(0xFF64B5F6)
+val RatingCM = Color(0xFFBA68C8)
+val RatingIM = Color(0xFFFFA726)
+val RatingGM = Color(0xFFEF5350)
+val RatingIGM = Color(0xFFEF5350)
+val RatingLGM = Color(0xFFEF5350)
 
 // Verdict Colors
 val VerdictOK = Color(0xFF4CAF50)

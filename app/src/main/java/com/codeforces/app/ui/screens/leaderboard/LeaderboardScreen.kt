@@ -39,7 +39,7 @@ fun LeaderboardScreen(
                             checked = state.activeOnly,
                             onCheckedChange = { viewModel.load(it) },
                             modifier = Modifier.padding(horizontal = 8.dp),
-                            colors = SwitchDefaults.colors(checkedThumbColor = CodeforcesRed, checkedTrackColor = CodeforcesRed.copy(alpha = 0.5f))
+                            colors = SwitchDefaults.colors(checkedThumbColor = CodeforcesAccent, checkedTrackColor = CodeforcesAccent.copy(alpha = 0.5f))
                         )
                     }
                 },
@@ -50,7 +50,7 @@ fun LeaderboardScreen(
         if (state.isLoading) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator(color = CodeforcesRed)
+                    CircularProgressIndicator(color = CodeforcesAccent)
                     Spacer(Modifier.height(12.dp))
                     Text("Loading leaderboard…", color = CfTextSecondary, style = MaterialTheme.typography.bodySmall)
                 }
@@ -70,7 +70,7 @@ fun LeaderboardScreen(
                         text = "#${index + 1}",
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                         color = when (index) {
-                            0 -> CodeforcesRed
+                            0 -> CodeforcesAccent
                             1 -> CfTextPrimary
                             2 -> CfTextSecondary
                             else -> CfTextDisabled

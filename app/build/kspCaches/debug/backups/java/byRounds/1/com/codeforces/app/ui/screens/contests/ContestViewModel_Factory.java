@@ -7,6 +7,7 @@ import dagger.internal.QualifierMetadata;
 import dagger.internal.ScopeMetadata;
 import javax.annotation.processing.Generated;
 import javax.inject.Provider;
+import okhttp3.OkHttpClient;
 
 @ScopeMetadata
 @QualifierMetadata
@@ -25,20 +26,25 @@ import javax.inject.Provider;
 public final class ContestViewModel_Factory implements Factory<ContestViewModel> {
   private final Provider<CodeforcesRepository> repoProvider;
 
-  public ContestViewModel_Factory(Provider<CodeforcesRepository> repoProvider) {
+  private final Provider<OkHttpClient> okHttpClientProvider;
+
+  public ContestViewModel_Factory(Provider<CodeforcesRepository> repoProvider,
+      Provider<OkHttpClient> okHttpClientProvider) {
     this.repoProvider = repoProvider;
+    this.okHttpClientProvider = okHttpClientProvider;
   }
 
   @Override
   public ContestViewModel get() {
-    return newInstance(repoProvider.get());
+    return newInstance(repoProvider.get(), okHttpClientProvider.get());
   }
 
-  public static ContestViewModel_Factory create(Provider<CodeforcesRepository> repoProvider) {
-    return new ContestViewModel_Factory(repoProvider);
+  public static ContestViewModel_Factory create(Provider<CodeforcesRepository> repoProvider,
+      Provider<OkHttpClient> okHttpClientProvider) {
+    return new ContestViewModel_Factory(repoProvider, okHttpClientProvider);
   }
 
-  public static ContestViewModel newInstance(CodeforcesRepository repo) {
-    return new ContestViewModel(repo);
+  public static ContestViewModel newInstance(CodeforcesRepository repo, OkHttpClient okHttpClient) {
+    return new ContestViewModel(repo, okHttpClient);
   }
 }
