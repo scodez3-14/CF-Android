@@ -26,6 +26,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -951,5 +952,6 @@ private fun HiddenSubmitWebView(
         modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
+            .alpha(0f)
     )
 }
