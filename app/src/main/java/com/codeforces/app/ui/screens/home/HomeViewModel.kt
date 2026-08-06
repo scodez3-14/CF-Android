@@ -11,7 +11,7 @@ import com.codeforces.app.data.repository.CodeforcesRepository
 import com.codeforces.app.data.repository.Resource
 import com.codeforces.app.data.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
     private fun loadAll(handle: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            coroutineScope {
+            supervisorScope {
                 launch {
                     repo.getUserInfo(handle).collect { resource ->
                         when (resource) {

@@ -1,5 +1,6 @@
 package com.codeforces.app.ui.screens.submissions
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,10 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.screens.profile.SubmissionRow
 import com.codeforces.app.ui.theme.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun SubmissionsScreen(
     handle: String,
@@ -60,9 +62,11 @@ fun SubmissionsScreen(
                 }
             }
             if (state.isLoading) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = CodeforcesAccent)
-                }
+                ShimmerList(
+                    modifier = Modifier.fillMaxSize(),
+                    itemCount = 8,
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp)
+                )
                 return@Column
             }
             LazyColumn {
@@ -71,7 +75,8 @@ fun SubmissionsScreen(
                         problemName = sub.problem.name,
                         verdict = sub.verdict ?: "IN_QUEUE",
                         language = sub.programmingLanguage,
-                        timeMs = sub.timeConsumedMillis
+                        timeMs = sub.timeConsumedMillis,
+                        modifier = Modifier.animateItemPlacement()
                     )
                 }
             }

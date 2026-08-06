@@ -1,8 +1,12 @@
 package com.codeforces.app.ui.navigation
 
-import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,18 +15,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.codeforces.app.ui.screens.blog.BlogScreen
 import com.codeforces.app.ui.screens.contests.ContestDetailScreen
-import com.codeforces.app.ui.screens.contests.ContestListScreen
 import com.codeforces.app.ui.screens.contests.EditorialScreen
-import com.codeforces.app.ui.screens.home.HomeScreen
 import com.codeforces.app.ui.screens.leaderboard.LeaderboardScreen
 import com.codeforces.app.ui.screens.login.LoginScreen
 import com.codeforces.app.ui.screens.login.WebLoginScreen
-import com.codeforces.app.ui.screens.onboarding.OnboardingScreen
 import com.codeforces.app.ui.screens.problems.ProblemDetailScreen
-import com.codeforces.app.ui.screens.problems.ProblemsScreen
 import android.net.Uri
 import com.codeforces.app.ui.screens.profile.ProfileScreen
-import com.codeforces.app.ui.screens.search.SearchScreen
 import com.codeforces.app.ui.screens.settings.SettingsScreen
 import com.codeforces.app.ui.screens.standings.StandingsScreen
 import com.codeforces.app.ui.screens.submissions.SubmissionsScreen
@@ -30,7 +29,7 @@ import com.codeforces.app.ui.screens.submissions.SubmissionsScreen
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    startDestination: String,
+    startDestination: String = Screen.TabHost.route,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -38,35 +37,23 @@ fun AppNavGraph(
         startDestination = startDestination,
         modifier = modifier,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(280)) +
-                    fadeIn(animationSpec = tween(280))
+            fadeIn(tween(220, easing = FastOutSlowInEasing)) +
+                    slideInHorizontally(tween(300, easing = FastOutSlowInEasing)) { it / 3 }
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -it / 3 }, animationSpec = tween(280)) +
-                    fadeOut(animationSpec = tween(200))
+            fadeOut(tween(180, easing = FastOutSlowInEasing))
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -it / 3 }, animationSpec = tween(280)) +
-                    fadeIn(animationSpec = tween(280))
+            fadeIn(tween(220, easing = FastOutSlowInEasing)) +
+                    slideInHorizontally(tween(300, easing = FastOutSlowInEasing)) { -it / 3 }
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(280)) +
-                    fadeOut(animationSpec = tween(200))
+            fadeOut(tween(180, easing = FastOutSlowInEasing)) +
+                    slideOutHorizontally(tween(300, easing = FastOutSlowInEasing)) { it / 2 }
         }
     ) {
-        composable(Screen.Onboarding.route) {
-            OnboardingScreen(onComplete = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Onboarding.route) { inclusive = true }
-                }
-            })
-        }
-        composable(Screen.Home.route) {
-            HomeScreen(navController = navController)
-        }
-        composable(Screen.Problems.route) {
-            ProblemsScreen(navController = navController)
-        }
+        composable(Screen.TabHost.route) { }
+
         composable(
             Screen.ProblemDetail.route,
             arguments = listOf(
@@ -82,9 +69,6 @@ fun AppNavGraph(
                 onLogin = { navController.navigate(Screen.Login.route) },
                 onBack = { navController.popBackStack() }
             )
-        }
-        composable(Screen.Contests.route) {
-            ContestListScreen(navController = navController)
         }
         composable(
             Screen.ContestDetail.route,
@@ -118,9 +102,6 @@ fun AppNavGraph(
                 onBack = { navController.popBackStack() }
             )
         }
-        composable(Screen.MyProfile.route) {
-            ProfileScreen(handle = null, navController = navController, onBack = null)
-        }
         composable(
             Screen.Profile.route,
             arguments = listOf(navArgument("handle") { type = NavType.StringType })
@@ -139,9 +120,6 @@ fun AppNavGraph(
                 handle = backStackEntry.arguments?.getString("handle") ?: "",
                 onBack = { navController.popBackStack() }
             )
-        }
-        composable(Screen.Search.route) {
-            SearchScreen(navController = navController)
         }
         composable(Screen.Leaderboard.route) {
             LeaderboardScreen(navController = navController)

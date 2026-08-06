@@ -23,6 +23,9 @@ interface ProblemDao {
     @Query("SELECT * FROM cached_problems ORDER BY rating ASC")
     suspend fun getAllProblemsOnce(): List<CachedProblemEntity>
 
+    @Query("SELECT * FROM cached_problems ORDER BY id LIMIT 1 OFFSET :offset")
+    suspend fun getProblemAtOffset(offset: Int): CachedProblemEntity?
+
     @Query("SELECT * FROM cached_problems WHERE rating BETWEEN :minRating AND :maxRating ORDER BY rating ASC")
     fun getProblemsByRating(minRating: Int, maxRating: Int): Flow<List<CachedProblemEntity>>
 

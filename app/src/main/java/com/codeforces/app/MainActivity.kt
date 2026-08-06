@@ -1,29 +1,49 @@
 package com.codeforces.app
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.dp
+import kotlin.math.absoluteValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.codeforces.app.ui.navigation.AppNavGraph
 import com.codeforces.app.ui.navigation.Screen
+import com.codeforces.app.ui.screens.contests.ContestListScreen
+import com.codeforces.app.ui.screens.home.HomeScreen
+import com.codeforces.app.ui.screens.onboarding.OnboardingScreen
+import com.codeforces.app.ui.screens.problems.ProblemsScreen
+import com.codeforces.app.ui.screens.profile.ProfileScreen
+import com.codeforces.app.ui.screens.search.SearchScreen
+import com.codeforces.app.ui.theme.CodeforcesAccent
 import com.codeforces.app.ui.theme.CodeforcesTheme
 import com.codeforces.app.ui.theme.CfSurface
 import com.codeforces.app.ui.theme.CfDivider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 data class BottomNavItem(
     val label: String,
@@ -40,13 +60,21 @@ val bottomNavItems = listOf(
     BottomNavItem("More", Screen.Search.route, Icons.Rounded.Search, Icons.Filled.Search)
 )
 
-val bottomNavRoutes = bottomNavItems.map { it.route }.toSet()
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        
+        // Force maximum refresh rate (e.g., 144Hz) on supported devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            display?.supportedModes?.maxByOrNull { it.refreshRate }?.let { mode ->
+                window.attributes = window.attributes.apply {
+                    preferredDisplayModeId = mode.modeId
+                }
+            }
+        }
+        
         enableEdgeToEdge()
         setContent {
             CodeforcesTheme {
@@ -56,7 +84,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainAppContent() {
     val navController = rememberNavController()
@@ -66,57 +94,111 @@ fun MainAppContent() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val startDestination = when {
-        isLoading -> null
-        handle.isNullOrBlank() -> Screen.Onboarding.route
-        else -> Screen.Home.route
-    }
+    when {
+        isLoading -> Unit
+        handle.isNullOrBlank() -> OnboardingScreen(onComplete = {})
+        else -> {
+            val scope = rememberCoroutineScope()
 
-    val showBottomBar = currentRoute in bottomNavRoutes
+            var selectedTab by rememberSaveable { mutableStateOf(0) }
+            val pagerState = rememberPagerState(initialPage = selectedTab) { bottomNavItems.size }
 
-    if (startDestination != null) {
-        Scaffold(
-            bottomBar = {
-                if (showBottomBar) {
-                    NavigationBar(
-                        containerColor = CfSurface
-                    ) {
-                        bottomNavItems.forEach { item ->
-                            val isSelected = currentRoute == item.route
-                            NavigationBarItem(
-                                selected = isSelected,
-                                onClick = {
-                                    navController.navigate(item.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        imageVector = if (isSelected) item.selectedIcon else item.icon,
-                                        contentDescription = item.label
+            LaunchedEffect(pagerState) {
+                snapshotFlow { pagerState.currentPage }.collect { page -> selectedTab = page }
+            }
+
+            val showBottomBar = currentRoute == Screen.TabHost.route
+
+            Scaffold(
+                bottomBar = {
+                    if (showBottomBar) {
+                        Column {
+                            HorizontalDivider(color = CfDivider)
+                            NavigationBar(
+                                containerColor = CfSurface,
+                                tonalElevation = 0.dp
+                            ) {
+                                bottomNavItems.forEachIndexed { index, item ->
+                                    val isSelected = selectedTab == index
+                                    NavigationBarItem(
+                                        selected = isSelected,
+                                        onClick = {
+                                            scope.launch {
+                                                pagerState.animateScrollToPage(
+                                                    index,
+                                                    animationSpec = tween(
+                                                        durationMillis = 350,
+                                                        easing = FastOutSlowInEasing
+                                                    )
+                                                )
+                                            }
+                                        },
+                                        icon = {
+                                            Icon(
+                                                imageVector = if (isSelected) item.selectedIcon else item.icon,
+                                                contentDescription = item.label,
+                                                modifier = Modifier.size(26.dp)
+                                            )
+                                        },
+                                        label = { Text(item.label) },
+                                        colors = NavigationBarItemDefaults.colors(
+                                            selectedIconColor = CodeforcesAccent,
+                                            selectedTextColor = CodeforcesAccent,
+                                            indicatorColor = CodeforcesAccent.copy(alpha = 0.15f)
+                                        )
                                     )
-                                },
-                                label = { Text(item.label) },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                )
-                            )
+                                }
+                            }
                         }
                     }
                 }
+            ) { padding ->
+                Box(Modifier.fillMaxSize().padding(padding)) {
+                    HorizontalPager(
+                        state = pagerState,
+                        beyondBoundsPageCount = bottomNavItems.size - 1,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
+                        val scale = 1f - (pageOffset * 0.08f).coerceIn(0f, 1f)
+                        val alpha = 1f - (pageOffset * 0.3f).coerceIn(0f, 1f)
+                        
+                        Box(
+                            modifier = Modifier.fillMaxSize().graphicsLayer {
+                                scaleX = scale
+                                scaleY = scale
+                                this.alpha = alpha
+                            }
+                        ) {
+                            when (page) {
+                                0 -> HomeScreen(
+                                    navController = navController,
+                                    onOpenTab = { index ->
+                                        scope.launch {
+                                            pagerState.animateScrollToPage(
+                                                index,
+                                                animationSpec = tween(
+                                                    durationMillis = 350,
+                                                    easing = FastOutSlowInEasing
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                                1 -> ProblemsScreen(navController = navController)
+                                2 -> ContestListScreen(navController = navController)
+                                3 -> ProfileScreen(handle = null, navController = navController, onBack = null)
+                                4 -> SearchScreen(navController = navController)
+                            }
+                        }
+                    }
+                    AppNavGraph(
+                        navController = navController,
+                        startDestination = Screen.TabHost.route,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
-        ) { padding ->
-            AppNavGraph(
-                navController = navController,
-                startDestination = startDestination,
-                modifier = Modifier.padding(padding)
-            )
         }
     }
 }

@@ -3,6 +3,7 @@ package com.codeforces.app.ui.screens.blog
 import android.content.Intent
 import android.net.Uri
 import android.text.Html
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,11 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codeforces.app.data.api.BlogEntryDto
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun BlogScreen(
     handle: String,
@@ -47,9 +49,11 @@ fun BlogScreen(
         }
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesAccent)
-            }
+            ShimmerList(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                itemCount = 6,
+                contentPadding = PaddingValues(16.dp)
+            )
             return@Scaffold
         }
         if (state.entries.isEmpty() && !state.isLoading) {
@@ -64,23 +68,27 @@ fun BlogScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(state.entries, key = { it.id }) { entry ->
-                BlogEntryCard(entry = entry) {
-                    val url = "https://codeforces.com/blog/entry/${entry.id}"
-                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                }
+                BlogEntryCard(
+                    entry = entry,
+                    modifier = Modifier.animateItemPlacement(),
+                    onClick = {
+                        val url = "https://codeforces.com/blog/entry/${entry.id}"
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun BlogEntryCard(entry: BlogEntryDto, onClick: () -> Unit) {
+fun BlogEntryCard(entry: BlogEntryDto, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val fmt = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
     val dateStr = fmt.format(Date(entry.creationTimeSeconds * 1000))
     val titlePlain = Html.fromHtml(entry.title, Html.FROM_HTML_MODE_LEGACY).toString()
 
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = modifier.fillMaxWidth().clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = CfCardSurface),
         shape = RoundedCornerShape(12.dp)
     ) {

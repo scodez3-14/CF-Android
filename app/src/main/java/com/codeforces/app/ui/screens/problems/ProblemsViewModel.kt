@@ -8,15 +8,22 @@ import com.codeforces.app.data.repository.CodeforcesRepository
 import com.codeforces.app.data.repository.Resource
 import com.codeforces.app.data.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class ProblemSection(
+    val contestId: Int?,
+    val problems: List<ProblemDto>
+)
 
 data class ProblemsUiState(
     val problems: List<ProblemDto> = emptyList(),
     val statistics: List<ProblemStatisticsDto> = emptyList(),
     val statisticsByProblem: Map<String, Int> = emptyMap(),
     val filteredProblems: List<ProblemDto> = emptyList(),
+    val sections: List<ProblemSection> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
     val searchQuery: String = "",
@@ -26,7 +33,8 @@ data class ProblemsUiState(
     val maxRating: Int = 3500,
     val contestNames: Map<Int, String> = emptyMap(),
     val bookmarks: Set<String> = emptySet(),
-    val savedOnly: Boolean = false
+    val savedOnly: Boolean = false,
+    val hasMore: Boolean = false
 )
 
 @HiltViewModel
@@ -37,6 +45,17 @@ class ProblemsViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ProblemsUiState())
     val state: StateFlow<ProblemsUiState> = _state.asStateFlow()
+
+    private var filterGen = 0
+    private var displayCount = INITIAL_PAGE_SIZE
+    private var allFilteredProblems: List<ProblemDto> = emptyList()
+
+    companion object {
+        private const val INITIAL_PAGE_SIZE = 80
+        private const val PAGE_SIZE = 80
+    }
+
+    private val searchQueryFlow = MutableStateFlow("")
 
     val allTags = listOf(
         "dp", "greedy", "implementation", "math", "brute force", "data structures",
@@ -55,6 +74,12 @@ class ProblemsViewModel @Inject constructor(
                 applyFilters()
             }
         }
+        viewModelScope.launch {
+            searchQueryFlow
+                .debounce(150)
+                .distinctUntilChanged()
+                .collect { applyFilters() }
+        }
     }
 
     fun toggleBookmark(id: String) {
@@ -63,6 +88,7 @@ class ProblemsViewModel @Inject constructor(
 
     fun setSavedOnly(enabled: Boolean) {
         _state.update { it.copy(savedOnly = enabled) }
+        displayCount = INITIAL_PAGE_SIZE
         applyFilters()
     }
 
@@ -104,7 +130,7 @@ class ProblemsViewModel @Inject constructor(
 
     fun setSearchQuery(query: String) {
         _state.update { it.copy(searchQuery = query) }
-        applyFilters()
+        searchQueryFlow.value = query
     }
 
     fun toggleTag(tag: String) {
@@ -113,6 +139,7 @@ class ProblemsViewModel @Inject constructor(
             if (tag in updated) updated.remove(tag) else updated.add(tag)
             s.copy(selectedTags = updated)
         }
+        displayCount = INITIAL_PAGE_SIZE
         applyFilters()
     }
 
@@ -123,11 +150,13 @@ class ProblemsViewModel @Inject constructor(
 
     fun setRatingFilterEnabled(enabled: Boolean) {
         _state.update { it.copy(ratingFilterEnabled = enabled) }
+        displayCount = INITIAL_PAGE_SIZE
         applyFilters()
     }
 
     fun setRatingRange(min: Int, max: Int) {
         _state.update { it.copy(minRating = min, maxRating = max) }
+        displayCount = INITIAL_PAGE_SIZE
         applyFilters()
     }
 
@@ -141,13 +170,21 @@ class ProblemsViewModel @Inject constructor(
                 maxRating = 3500
             )
         }
+        displayCount = INITIAL_PAGE_SIZE
         applyFilters()
+    }
+
+    fun loadMore() {
+        if (!_state.value.hasMore) return
+        displayCount += PAGE_SIZE
+        paginateCurrentFiltered()
     }
 
     private fun applyFilters() {
         val s = _state.value
-        _state.update {
-            it.copy(filteredProblems = s.problems
+        val gen = ++filterGen
+        viewModelScope.launch(Dispatchers.Default) {
+            val filtered = s.problems
                 .filter { p ->
                     val id = "${p.contestId}_${p.index}"
                     val matchesSaved = !s.savedOnly || id in s.bookmarks
@@ -164,6 +201,24 @@ class ProblemsViewModel @Inject constructor(
                 // Sort: newest contest first (highest contestId), then by index letter
                 .sortedWith(compareByDescending<ProblemDto> { it.contestId ?: 0 }
                     .thenBy { it.index })
+            if (gen == filterGen) {
+                allFilteredProblems = filtered
+                displayCount = INITIAL_PAGE_SIZE
+                paginateCurrentFiltered()
+            }
+        }
+    }
+
+    private fun paginateCurrentFiltered() {
+        val paginated = allFilteredProblems.take(displayCount)
+        val sections = paginated
+            .groupBy { it.contestId }
+            .map { (contestId, problems) -> ProblemSection(contestId, problems) }
+        _state.update {
+            it.copy(
+                filteredProblems = allFilteredProblems,
+                sections = sections,
+                hasMore = displayCount < allFilteredProblems.size
             )
         }
     }

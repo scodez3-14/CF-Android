@@ -1,5 +1,6 @@
 package com.codeforces.app.ui.screens.leaderboard
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,11 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.rankColor
 import com.codeforces.app.ui.theme.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun LeaderboardScreen(
     navController: NavController,
@@ -48,13 +50,10 @@ fun LeaderboardScreen(
         }
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator(color = CodeforcesAccent)
-                    Spacer(Modifier.height(12.dp))
-                    Text("Loading leaderboard…", color = CfTextSecondary, style = MaterialTheme.typography.bodySmall)
-                }
-            }
+            ShimmerList(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                itemCount = 10
+            )
             return@Scaffold
         }
         LazyColumn(modifier = Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(vertical = 8.dp)) {
@@ -62,6 +61,7 @@ fun LeaderboardScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .clickable { navController.navigate(Screen.Profile.createRoute(user.handle)) }
+                        .animateItemPlacement()
                         .padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)

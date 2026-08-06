@@ -1,5 +1,6 @@
 package com.codeforces.app.ui.screens.standings
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,9 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.theme.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun StandingsScreen(
     contestId: Int,
@@ -39,9 +41,10 @@ fun StandingsScreen(
         }
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesAccent)
-            }
+            ShimmerList(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                itemCount = 10
+            )
             return@Scaffold
         }
         state.error?.let {
@@ -71,9 +74,9 @@ fun StandingsScreen(
                 }
                 HorizontalDivider(color = CfDivider)
                 LazyColumn {
-                    itemsIndexed(standings.rows) { index, row ->
+                    itemsIndexed(standings.rows, key = { _, row -> row.rank }) { index, row ->
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
+                            modifier = Modifier.fillMaxWidth().animateItemPlacement().padding(horizontal = 16.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {

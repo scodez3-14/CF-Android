@@ -4,6 +4,7 @@ import android.net.Uri
 
 sealed class Screen(val route: String) {
     object Onboarding : Screen("onboarding")
+    object TabHost : Screen("tab_host")
     object Home : Screen("home")
     object Problems : Screen("problems")
     object ProblemDetail : Screen("problem_detail/{contestId}/{index}/{name}") {

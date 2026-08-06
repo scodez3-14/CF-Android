@@ -11,6 +11,14 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,6 +48,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codeforces.app.ui.components.CfWebView
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.components.buildEditorialHtml
 import com.codeforces.app.ui.components.buildProblemHtml
 import com.codeforces.app.ui.theme.*
@@ -169,95 +178,118 @@ fun ProblemDetailScreen(
             HorizontalDivider(color = CfDivider, thickness = 1.dp)
 
             Box(modifier = Modifier.fillMaxSize().weight(1f)) {
-                // ── Loading ──
-                if (state.isLoading) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = CodeforcesAccent, strokeWidth = 3.dp)
-                    }
+                val contentKey = when {
+                    state.isLoading -> 0
+                    state.error != null -> 1
+                    state.detail != null -> 2
+                    else -> 3
                 }
-
-                // ── Error ──
-                if (state.error != null) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Icon(
-                                Icons.Rounded.ErrorOutline,
-                                contentDescription = null,
-                                tint = CodeforcesAccent,
-                                modifier = Modifier.size(48.dp)
-                            )
-                            Text("Failed to load", color = CfTextPrimary, fontWeight = FontWeight.Bold)
-                            Text(state.error ?: "", color = CfTextSecondary, fontSize = 13.sp)
-                            Button(
-                                onClick = { viewModel.load(contestId, index, name) },
-                                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)
-                            ) {
-                                Text("Retry")
+                AnimatedContent(
+                    targetState = contentKey,
+                    modifier = Modifier.fillMaxSize(),
+                    transitionSpec = {
+                        (fadeIn(tween(250, easing = FastOutSlowInEasing)) +
+                                slideInVertically(tween(250, easing = FastOutSlowInEasing)) { it / 20 })
+                                .togetherWith(fadeOut(tween(150)))
+                    },
+                    label = "problemDetailContent"
+                ) { key ->
+                    when (key) {
+                        // ── Loading ──
+                        0 -> {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(color = CodeforcesAccent, strokeWidth = 3.dp)
                             }
                         }
-                    }
-                }
-
-                // ── Content ──
-                val detail = state.detail
-                if (detail != null && !state.isLoading && state.error == null) {
-                    when (selectedTabIndex) {
-                        0 -> {
-                            // Description tab
-                            CfWebView(
-                                html = buildProblemHtml(detail.statementHtml),
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        // ── Error ──
                         1 -> {
-                            // Submit tab
-                            SubmitTab(state = state, viewModel = viewModel, onLogin = onLogin)
-                        }
-                        2 -> {
-                            // Submission tab
-                            SubmissionsTab(state = state, viewModel = viewModel)
-                        }
-                        else -> {
-                            // Solution / Editorial tab
-                            val editorial = detail.editorialHtml
-                            if (editorial != null) {
-                                CfWebView(
-                                    html = buildEditorialHtml(editorial),
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            } else if (state.isEditorialLoading) {
-                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                    CircularProgressIndicator(color = CodeforcesAccent, strokeWidth = 3.dp)
-                                }
-                            } else {
-                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Rounded.ErrorOutline,
+                                        contentDescription = null,
+                                        tint = CodeforcesAccent,
+                                        modifier = Modifier.size(48.dp)
+                                    )
+                                    Text("Failed to load", color = CfTextPrimary, fontWeight = FontWeight.Bold)
+                                    Text(state.error ?: "", color = CfTextSecondary, fontSize = 13.sp)
+                                    Button(
+                                        onClick = { viewModel.load(contestId, index, name) },
+                                        colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)
                                     ) {
-                                        Text(
-                                            "📝",
-                                            fontSize = 40.sp
-                                        )
-                                        Text(
-                                            "No solution found",
-                                            color = CfTextSecondary,
-                                            fontSize = 15.sp,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                        Text(
-                                            "A solution for this problem\nis not available in the contest tutorial.",
-                                            color = CfTextDisabled,
-                                            fontSize = 13.sp,
-                                            textAlign = TextAlign.Center,
-                                            lineHeight = 18.sp
-                                        )
+                                        Text("Retry")
                                     }
                                 }
                             }
+                        }
+                        // ── Content ──
+                        2 -> {
+                            val detail = state.detail
+                            if (detail != null) {
+                                when (selectedTabIndex) {
+                                    0 -> {
+                                        // Description tab
+                                        CfWebView(
+                                            html = buildProblemHtml(detail.statementHtml),
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                    }
+                                    1 -> {
+                                        // Submit tab
+                                        SubmitTab(state = state, viewModel = viewModel, onLogin = onLogin)
+                                    }
+                                    2 -> {
+                                        // Submission tab
+                                        SubmissionsTab(state = state, viewModel = viewModel)
+                                    }
+                                    else -> {
+                                        // Solution / Editorial tab
+                                        val editorial = detail.editorialHtml
+                                        if (editorial != null) {
+                                            CfWebView(
+                                                html = buildEditorialHtml(editorial),
+                                                modifier = Modifier.fillMaxSize()
+                                            )
+                                        } else if (state.isEditorialLoading) {
+                                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                                CircularProgressIndicator(color = CodeforcesAccent, strokeWidth = 3.dp)
+                                            }
+                                        } else {
+                                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                                Column(
+                                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                                ) {
+                                                    Text(
+                                                        "📝",
+                                                        fontSize = 40.sp
+                                                    )
+                                                    Text(
+                                                        "No solution found",
+                                                        color = CfTextSecondary,
+                                                        fontSize = 15.sp,
+                                                        fontWeight = FontWeight.Medium
+                                                    )
+                                                    Text(
+                                                        "A solution for this problem\nis not available in the contest tutorial.",
+                                                        color = CfTextDisabled,
+                                                        fontSize = 13.sp,
+                                                        textAlign = TextAlign.Center,
+                                                        lineHeight = 18.sp
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // ── Idle ──
+                        else -> {
+                            Box(Modifier.fillMaxSize())
                         }
                     }
                 }
@@ -497,6 +529,7 @@ private fun SubmitForm(
 // ── Submission history (verdicts from the public API) ─────────────────────────
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 private fun SubmissionsTab(
     state: ProblemDetailUiState,
     viewModel: ProblemDetailViewModel
@@ -504,9 +537,11 @@ private fun SubmissionsTab(
     val context = LocalContext.current
 
     if (state.isSubmissionsLoading && state.submissions.isEmpty()) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = CodeforcesAccent, strokeWidth = 3.dp)
-        }
+        ShimmerList(
+            modifier = Modifier.fillMaxSize(),
+            itemCount = 6,
+            contentPadding = PaddingValues(12.dp)
+        )
         return
     }
 
@@ -567,7 +602,7 @@ private fun SubmissionsTab(
                 },
                 colors = CardDefaults.cardColors(containerColor = CfCardSurface),
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().animateItemPlacement()
             ) {
                 Column(Modifier.padding(12.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

@@ -14,133 +14,162 @@
 12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 12-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:5-79
 12-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:22-76
-13
-14    <permission
-14-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
-15        android:name="com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-15-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
-16        android:protectionLevel="signature" />
-16-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
-17
-18    <uses-permission android:name="com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-18-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
-18-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
-19
-20    <application
-20-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-27:19
-21        android:name="com.codeforces.app.CodeforcesApp"
-21-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:9-38
-22        android:allowBackup="true"
-22-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:9:9-35
-23        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-23-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
-24        android:extractNativeLibs="false"
-25        android:icon="@mipmap/ic_launcher"
-25-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:9-43
-26        android:label="@string/app_name"
-26-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:11:9-41
-27        android:roundIcon="@mipmap/ic_launcher_round"
-27-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:12:9-54
-28        android:supportsRtl="true"
-28-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:13:9-35
-29        android:theme="@style/Theme.CodeforcesApp"
-29-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:14:9-51
-30        android:usesCleartextTraffic="false" >
-30-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:15:9-45
-31        <activity
-31-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:17:9-25:20
-32            android:name="com.codeforces.app.MainActivity"
-32-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:18:13-41
-33            android:exported="true"
-33-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:19:13-36
-34            android:theme="@style/Theme.CodeforcesApp.SplashScreen" >
-34-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:20:13-68
-35            <intent-filter>
-35-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:21:13-24:29
-36                <action android:name="android.intent.action.MAIN" />
-36-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:17-69
-36-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:25-66
-37
-38                <category android:name="android.intent.category.LAUNCHER" />
-38-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:17-77
-38-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:27-74
-39            </intent-filter>
-40        </activity>
-41
-42        <provider
-42-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
-43            android:name="androidx.startup.InitializationProvider"
-43-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
-44            android:authorities="com.codeforces.app.androidx-startup"
-44-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
-45            android:exported="false" >
-45-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
-46            <meta-data
-46-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
-47                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-47-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
-48                android:value="androidx.startup" />
-48-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
-49            <meta-data
-49-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:29:13-31:52
-50                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-50-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:30:17-78
-51                android:value="androidx.startup" />
-51-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:31:17-49
-52            <meta-data
-52-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
-53                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-53-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
-54                android:value="androidx.startup" />
-54-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
-55        </provider>
-56
-57        <service
-57-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
-58            android:name="androidx.room.MultiInstanceInvalidationService"
-58-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
-59            android:directBootAware="true"
-59-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
-60            android:exported="false" />
-60-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
-61
-62        <receiver
-62-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
-63            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-63-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
-64            android:directBootAware="false"
-64-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
-65            android:enabled="true"
-65-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
-66            android:exported="true"
-66-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
-67            android:permission="android.permission.DUMP" >
-67-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
-68            <intent-filter>
-68-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
-69                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-69-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
-69-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
-70            </intent-filter>
-71            <intent-filter>
-71-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
-72                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-72-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
-72-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
-73            </intent-filter>
-74            <intent-filter>
-74-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
-75                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
-76            </intent-filter>
-77            <intent-filter>
-77-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
-78                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
-79            </intent-filter>
-80        </receiver>
-81    </application>
-82
-83</manifest>
+13    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+13-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:6:5-77
+13-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:6:22-74
+14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+14-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-81
+14-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:22-78
+15    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+15-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:5-79
+15-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:22-76
+16
+17    <permission
+17-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+18        android:name="com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+18-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+19        android:protectionLevel="signature" />
+19-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+20
+21    <uses-permission android:name="com.codeforces.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+21-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+21-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+22
+23    <application
+23-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:5-42:19
+24        android:name="com.codeforces.app.CodeforcesApp"
+24-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:11:9-38
+25        android:allowBackup="true"
+25-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:12:9-35
+26        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+26-->[androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+27        android:extractNativeLibs="false"
+28        android:icon="@mipmap/ic_launcher"
+28-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:13:9-43
+29        android:label="@string/app_name"
+29-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:14:9-41
+30        android:roundIcon="@mipmap/ic_launcher_round"
+30-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:15:9-54
+31        android:supportsRtl="true"
+31-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:16:9-35
+32        android:theme="@style/Theme.CodeforcesApp"
+32-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:17:9-51
+33        android:usesCleartextTraffic="false" >
+33-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:18:9-45
+34        <activity
+34-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:20:9-28:20
+35            android:name="com.codeforces.app.MainActivity"
+35-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:21:13-41
+36            android:exported="true"
+36-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:13-36
+37            android:theme="@style/Theme.CodeforcesApp.SplashScreen" >
+37-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:13-68
+38            <intent-filter>
+38-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:24:13-27:29
+39                <action android:name="android.intent.action.MAIN" />
+39-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:25:17-69
+39-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:25:25-66
+40
+41                <category android:name="android.intent.category.LAUNCHER" />
+41-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:26:17-77
+41-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:26:27-74
+42            </intent-filter>
+43        </activity>
+44
+45        <receiver
+45-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:30:9-32:40
+46            android:name="com.codeforces.app.notifications.ContestReminderReceiver"
+46-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:31:13-66
+47            android:exported="false" />
+47-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:32:13-37
+48        <receiver
+48-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:34:9-40:20
+49            android:name="com.codeforces.app.notifications.ContestReminderBootReceiver"
+49-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:35:13-70
+50            android:exported="false" >
+50-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:36:13-37
+51            <intent-filter>
+51-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:37:13-39:29
+52                <action android:name="android.intent.action.BOOT_COMPLETED" />
+52-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:38:17-79
+52-->/home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:38:25-76
+53            </intent-filter>
+54        </receiver>
+55
+56        <provider
+56-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+57            android:name="androidx.startup.InitializationProvider"
+57-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+58            android:authorities="com.codeforces.app.androidx-startup"
+58-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+59            android:exported="false" >
+59-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+60            <meta-data
+60-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+61                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+61-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+62                android:value="androidx.startup" />
+62-->[androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+63            <meta-data
+63-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:29:13-31:52
+64                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+64-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:30:17-78
+65                android:value="androidx.startup" />
+65-->[androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:31:17-49
+66            <meta-data
+66-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+67                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+67-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+68                android:value="androidx.startup" />
+68-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+69        </provider>
+70
+71        <service
+71-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+72            android:name="androidx.room.MultiInstanceInvalidationService"
+72-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+73            android:directBootAware="true"
+73-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+74            android:exported="false" />
+74-->[androidx.room:room-runtime:2.6.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/416efc803d3762c956f7401a42b1e882/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+75
+76        <receiver
+76-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+77            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+77-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+78            android:directBootAware="false"
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+79            android:enabled="true"
+79-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+80            android:exported="true"
+80-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+81            android:permission="android.permission.DUMP" >
+81-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+82            <intent-filter>
+82-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+83                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+83-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+83-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+84            </intent-filter>
+85            <intent-filter>
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+86                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+87            </intent-filter>
+88            <intent-filter>
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+89                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+90            </intent-filter>
+91            <intent-filter>
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+92                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/30d6ac7993e36bec31c2cd387c06e7fe/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+93            </intent-filter>
+94        </receiver>
+95    </application>
+96
+97</manifest>

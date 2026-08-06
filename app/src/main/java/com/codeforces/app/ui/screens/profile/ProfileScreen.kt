@@ -25,6 +25,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.codeforces.app.data.api.UserDto
+import com.codeforces.app.ui.components.AnimatedCountUpText
+import com.codeforces.app.ui.components.RevealItem
+import com.codeforces.app.ui.components.ShimmerCardRow
+import com.codeforces.app.ui.components.ShimmerHeroCard
+import com.codeforces.app.ui.components.SkeletonBox
+import com.codeforces.app.ui.components.rememberShimmerBrush
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.theme.*
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -94,8 +100,34 @@ fun ProfileScreen(
         }
     ) { padding ->
         if (state.isLoading && state.user == null) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = CodeforcesAccent)
+            val brush = rememberShimmerBrush()
+            Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+                ShimmerHeroCard(brush, Modifier.padding(20.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    repeat(4) {
+                        Card(
+                            modifier = Modifier.weight(1f),
+                            colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                SkeletonBox(brush, Modifier.size(48.dp, 20.dp), cornerRadius = 6.dp)
+                                SkeletonBox(brush, Modifier.size(32.dp, 10.dp), cornerRadius = 4.dp)
+                            }
+                        }
+                    }
+                }
+                SkeletonBox(brush, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(180.dp), cornerRadius = 16.dp)
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    repeat(4) { ShimmerCardRow(brush, shapeRadius = 10.dp) }
+                }
             }
             return@Scaffold
         }
@@ -113,40 +145,42 @@ fun ProfileScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 // Header
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(CfSurface)
-                        .padding(20.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        AsyncImage(
-                            model = user.titlePhoto ?: user.avatar,
-                            contentDescription = "Avatar",
-                            modifier = Modifier
-                                .size(80.dp)
-                                .clip(CircleShape)
-                                .background(CfCardSurface)
-                        )
-                        Column {
-                            Text(
-                                text = "${user.firstName.orEmpty()} ${user.lastName.orEmpty()}".trim().ifBlank { user.handle },
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                color = CfTextPrimary
+                RevealItem(visible = true, delayMillis = 0) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(CfSurface)
+                            .padding(20.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            AsyncImage(
+                                model = user.titlePhoto ?: user.avatar,
+                                contentDescription = "Avatar",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(CircleShape)
+                                    .background(CfCardSurface)
                             )
-                            Text(
-                                text = user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated",
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                                color = rankColor(user.rank)
-                            )
-                            user.country?.let {
-                                Text(text = "🌍 $it", style = MaterialTheme.typography.bodySmall, color = CfTextSecondary)
-                            }
-                            user.organization?.let {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(Icons.Rounded.Business, contentDescription = null, modifier = Modifier.size(12.dp), tint = CfTextSecondary)
-                                    Spacer(Modifier.width(4.dp))
-                                    Text(it, style = MaterialTheme.typography.bodySmall, color = CfTextSecondary)
+                            Column {
+                                Text(
+                                    text = "${user.firstName.orEmpty()} ${user.lastName.orEmpty()}".trim().ifBlank { user.handle },
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = CfTextPrimary
+                                )
+                                Text(
+                                    text = user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = rankColor(user.rank)
+                                )
+                                user.country?.let {
+                                    Text(text = "🌍 $it", style = MaterialTheme.typography.bodySmall, color = CfTextSecondary)
+                                }
+                                user.organization?.let {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(Icons.Rounded.Business, contentDescription = null, modifier = Modifier.size(12.dp), tint = CfTextSecondary)
+                                        Spacer(Modifier.width(4.dp))
+                                        Text(it, style = MaterialTheme.typography.bodySmall, color = CfTextSecondary)
+                                    }
                                 }
                             }
                         }
@@ -154,41 +188,45 @@ fun ProfileScreen(
                 }
 
                 // Stats row
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    StatCard("Rating", user.rating.toString(), modifier = Modifier.weight(1f))
-                    StatCard("Max", user.maxRating.toString(), modifier = Modifier.weight(1f))
-                    StatCard("Friends", user.friendOfCount.toString(), modifier = Modifier.weight(1f))
-                    StatCard("Contrib", user.contribution.toString(), modifier = Modifier.weight(1f))
+                RevealItem(visible = true, delayMillis = 60) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        StatCard("Rating", user.rating, modifier = Modifier.weight(1f))
+                        StatCard("Max", user.maxRating, modifier = Modifier.weight(1f))
+                        StatCard("Friends", user.friendOfCount, modifier = Modifier.weight(1f))
+                        StatCard("Contrib", user.contribution, modifier = Modifier.weight(1f))
+                    }
                 }
 
                 // Rating Chart
                 if (state.ratingHistory.isNotEmpty()) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        colors = CardDefaults.cardColors(containerColor = CfCardSurface),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Rating History", style = MaterialTheme.typography.titleMedium)
-                            Spacer(Modifier.height(12.dp))
-                            val ratingEntries = state.ratingHistory.map { it.newRating.toFloat() }
-                            val model = entryModelOf(*ratingEntries.toTypedArray())
-                            Chart(
-                                chart = lineChart(),
-                                model = model,
-                                startAxis = rememberStartAxis(),
-                                bottomAxis = rememberBottomAxis(),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(180.dp)
-                            )
+                    RevealItem(visible = true, delayMillis = 120) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text("Rating History", style = MaterialTheme.typography.titleMedium)
+                                Spacer(Modifier.height(12.dp))
+                                val ratingEntries = state.ratingHistory.map { it.newRating.toFloat() }
+                                val model = entryModelOf(*ratingEntries.toTypedArray())
+                                Chart(
+                                    chart = lineChart(),
+                                    model = model,
+                                    startAxis = rememberStartAxis(),
+                                    bottomAxis = rememberBottomAxis(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(180.dp)
+                                )
+                            }
                         }
                     }
                 }
@@ -200,19 +238,23 @@ fun ProfileScreen(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
                     )
-                    state.recentSubmissions.take(10).forEach { sub ->
-                        SubmissionRow(
-                            problemName = sub.problem.name,
-                            verdict = sub.verdict ?: "IN_QUEUE",
-                            language = sub.programmingLanguage,
-                            timeMs = sub.timeConsumedMillis
-                        )
-                    }
-                    TextButton(
-                        onClick = { navController.navigate(Screen.Submissions.createRoute(resolvedHandle)) },
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    ) {
-                        Text("View all submissions →", color = CfAccentLight)
+                    RevealItem(visible = true, delayMillis = 180) {
+                        Column {
+                            state.recentSubmissions.take(10).forEach { sub ->
+                                SubmissionRow(
+                                    problemName = sub.problem.name,
+                                    verdict = sub.verdict ?: "IN_QUEUE",
+                                    language = sub.programmingLanguage,
+                                    timeMs = sub.timeConsumedMillis
+                                )
+                            }
+                            TextButton(
+                                onClick = { navController.navigate(Screen.Submissions.createRoute(resolvedHandle)) },
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
+                                Text("View all submissions →", color = CfAccentLight)
+                            }
+                        }
                     }
                 }
                 Spacer(Modifier.height(24.dp))
@@ -222,7 +264,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
+fun StatCard(label: String, value: Int, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = CfCardSurface),
@@ -232,14 +274,18 @@ fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
+            AnimatedCountUpText(
+                target = value,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = CodeforcesAccent
+            )
             Text(text = label, style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
         }
     }
 }
 
 @Composable
-fun SubmissionRow(problemName: String, verdict: String, language: String, timeMs: Int) {
+fun SubmissionRow(problemName: String, verdict: String, language: String, timeMs: Int, modifier: Modifier = Modifier) {
     val verdictColor = when (verdict) {
         "OK" -> VerdictOK
         "WRONG_ANSWER" -> VerdictWA
@@ -260,7 +306,7 @@ fun SubmissionRow(problemName: String, verdict: String, language: String, timeMs
         else -> verdict.take(6)
     }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(10.dp))

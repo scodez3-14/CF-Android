@@ -1,5 +1,6 @@
 package com.codeforces.app.data.api
 
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 
 // ─── Wrapper ─────────────────────────────────────────────────────────────────
@@ -12,6 +13,7 @@ data class CfResponse<T>(
 
 // ─── User ─────────────────────────────────────────────────────────────────────
 
+@Immutable
 data class UserDto(
     @SerializedName("handle") val handle: String,
     @SerializedName("email") val email: String? = null,
@@ -46,6 +48,7 @@ data class RatingChangeDto(
 
 // ─── Problem ──────────────────────────────────────────────────────────────────
 
+@Immutable
 data class ProblemDto(
     @SerializedName("contestId") val contestId: Int? = null,
     @SerializedName("problemsetName") val problemsetName: String? = null,
@@ -57,6 +60,7 @@ data class ProblemDto(
     @SerializedName("tags") val tags: List<String> = emptyList()
 )
 
+@Immutable
 data class ProblemStatisticsDto(
     @SerializedName("contestId") val contestId: Int? = null,
     @SerializedName("index") val index: String,
@@ -70,6 +74,7 @@ data class ProblemSetResultDto(
 
 // ─── Contest ──────────────────────────────────────────────────────────────────
 
+@Immutable
 data class ContestDto(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -92,6 +97,7 @@ data class ContestDto(
 
 // ─── Submission ───────────────────────────────────────────────────────────────
 
+@Immutable
 data class SubmissionDto(
     @SerializedName("id") val id: Long,
     @SerializedName("contestId") val contestId: Int? = null,

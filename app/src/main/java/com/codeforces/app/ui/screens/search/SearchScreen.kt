@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.codeforces.app.ui.components.RevealItem
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.rankColor
 import com.codeforces.app.ui.theme.*
@@ -78,31 +79,33 @@ fun SearchScreen(
                 }
             }
             state.result?.let { user ->
-                Card(
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        navController.navigate(Screen.Profile.createRoute(user.handle))
-                    },
-                    colors = CardDefaults.cardColors(containerColor = CfCardSurface),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                RevealItem(visible = true) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            navController.navigate(Screen.Profile.createRoute(user.handle))
+                        },
+                        colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        AsyncImage(
-                            model = user.titlePhoto ?: user.avatar,
-                            contentDescription = "Avatar",
-                            modifier = Modifier.size(64.dp).clip(CircleShape).background(CfSurface)
-                        )
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(user.handle, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CfTextPrimary)
-                            Text(user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated", color = rankColor(user.rank), style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold))
-                            user.country?.let { Text("🌍 $it", style = MaterialTheme.typography.bodySmall, color = CfTextSecondary) }
-                        }
-                        Column(horizontalAlignment = Alignment.End) {
-                            Text(user.rating.toString(), style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold), color = rankColor(user.rank))
-                            Text("Rating", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            AsyncImage(
+                                model = user.titlePhoto ?: user.avatar,
+                                contentDescription = "Avatar",
+                                modifier = Modifier.size(64.dp).clip(CircleShape).background(CfSurface)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(user.handle, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CfTextPrimary)
+                                Text(user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated", color = rankColor(user.rank), style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold))
+                                user.country?.let { Text("🌍 $it", style = MaterialTheme.typography.bodySmall, color = CfTextSecondary) }
+                            }
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(user.rating.toString(), style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold), color = rankColor(user.rank))
+                                Text("Rating", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
+                            }
                         }
                     }
                 }

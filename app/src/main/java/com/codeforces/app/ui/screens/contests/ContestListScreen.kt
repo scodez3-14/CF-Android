@@ -1,5 +1,13 @@
 package com.codeforces.app.ui.screens.contests
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,12 +26,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codeforces.app.data.api.ContestDto
+import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContestListScreen(
     navController: NavController,
@@ -62,17 +71,34 @@ fun ContestListScreen(
                 }
             }
             if (state.isLoading) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = CodeforcesAccent)
-                }
+                ShimmerList(
+                    modifier = Modifier.fillMaxSize(),
+                    itemCount = 8,
+                    contentPadding = PaddingValues(16.dp)
+                )
                 return@Column
             }
-            val list = if (selectedTab == 0) state.upcoming else state.past
-            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(list, key = { it.id }) { contest ->
-                    ContestListCard(contest = contest, isUpcoming = selectedTab == 0, onClick = {
-                        navController.navigate(Screen.ContestDetail.createRoute(contest.id))
-                    })
+            AnimatedContent(
+                targetState = selectedTab,
+                modifier = Modifier.fillMaxSize(),
+                transitionSpec = {
+                    (fadeIn(tween(280, easing = FastOutSlowInEasing)) +
+                            slideInVertically(tween(280, easing = FastOutSlowInEasing)) { it / 16 })
+                            .togetherWith(fadeOut(tween(160)))
+                },
+                label = "contestTabs"
+            ) { tabIndex ->
+                val list = if (tabIndex == 0) state.upcoming else state.past
+                LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    items(list, key = { it.id }) { contest ->
+                        ContestListCard(
+                            contest = contest,
+                            isUpcoming = tabIndex == 0,
+                            onClick = {
+                                navController.navigate(Screen.ContestDetail.createRoute(contest.id))
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -80,11 +106,11 @@ fun ContestListScreen(
 }
 
 @Composable
-fun ContestListCard(contest: ContestDto, isUpcoming: Boolean, onClick: () -> Unit) {
+fun ContestListCard(contest: ContestDto, isUpcoming: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val fmt = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())
     val startStr = contest.startTimeSeconds?.let { fmt.format(Date(it * 1000)) } ?: "TBD"
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = modifier.fillMaxWidth().clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = CfCardSurface),
         shape = RoundedCornerShape(14.dp)
     ) {

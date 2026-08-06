@@ -32,7 +32,11 @@ class ProfileViewModel @Inject constructor(
 
     val savedHandle: Flow<String?> = prefs.handle
 
+    private val loadedHandles = mutableSetOf<String>()
+
     fun loadProfile(handle: String) {
+        if (handle in loadedHandles) return
+        loadedHandles += handle
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             repo.getUserInfo(handle).collect { resource ->

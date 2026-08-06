@@ -2,8 +2,10 @@ package com.codeforces.app.data.repository
 
 import com.codeforces.app.data.api.*
 import com.codeforces.app.data.db.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -124,7 +126,8 @@ class CodeforcesRepository @Inject constructor(
         if (tags == null && !forceRefresh) {
             val cachedProblems = problemDao.getAllProblemsOnce()
             if (cachedProblems.isNotEmpty()) {
-                emit(Resource.Success(cachedProblems.toProblemSetResult()))
+                val result = withContext(Dispatchers.Default) { cachedProblems.toProblemSetResult() }
+                emit(Resource.Success(result))
                 showedCache = true
                 val cacheAge = System.currentTimeMillis() - (cachedProblems.maxOfOrNull { it.cachedAt } ?: 0L)
                 if (cacheAge < PROBLEMS_TTL_MS) return@flow
@@ -135,11 +138,13 @@ class CodeforcesRepository @Inject constructor(
             if (response.status == "OK" && response.result != null) {
                 // Cache problems
                 if (tags == null) {
-                    val solvedCounts = response.result.problemStatistics.associateBy(
-                        keySelector = { it.cacheKey() },
-                        valueTransform = { it.solvedCount }
-                    )
-                    val entities = response.result.problems.map { it.toEntity(solvedCounts) }
+                    val entities = withContext(Dispatchers.Default) {
+                        val solvedCounts = response.result.problemStatistics.associateBy(
+                            keySelector = { it.cacheKey() },
+                            valueTransform = { it.solvedCount }
+                        )
+                        response.result.problems.map { it.toEntity(solvedCounts) }
+                    }
                     problemDao.insertProblems(entities)
                 }
                 emit(Resource.Success(response.result))
@@ -187,33 +192,25 @@ class CodeforcesRepository @Inject constructor(
     }
 
     suspend fun getDailyProblem(): ProblemDto? {
-        val cached = problemDao.getAllProblemsOnce()
-        if (cached.isNotEmpty()) return pickDaily(cached)
+        val count = problemDao.count()
+        if (count > 0) {
+            val daysSinceEpoch = java.time.LocalDate.now().toEpochDay()
+            val offset = (daysSinceEpoch % count).toInt()
+            return problemDao.getProblemAtOffset(offset)?.toDto()
+        }
         try {
             val response = api.getProblems(null)
             if (response.status == "OK" && response.result != null) {
                 val solvedCounts = response.result.problemStatistics.associateBy({ it.cacheKey() }, { it.solvedCount })
                 val entities = response.result.problems.map { it.toEntity(solvedCounts) }
                 problemDao.insertProblems(entities)
-                return pickDaily(entities)
+                val daysSinceEpoch = java.time.LocalDate.now().toEpochDay()
+                val offset = (daysSinceEpoch % entities.size).toInt()
+                return entities[offset].toDto()
             }
         } catch (_: Exception) {
         }
         return null
-    }
-
-    private fun pickDaily(cached: List<CachedProblemEntity>): ProblemDto? {
-        if (cached.isEmpty()) return null
-        val daysSinceEpoch = java.time.LocalDate.now().toEpochDay()
-        val sorted = cached.sortedBy { it.id }
-        val chosen = sorted[(daysSinceEpoch % sorted.size).toInt()]
-        return ProblemDto(
-            contestId = chosen.contestId,
-            index = chosen.index,
-            name = chosen.name,
-            rating = chosen.rating,
-            tags = chosen.tags
-        )
     }
     suspend fun getContestRatingChanges(contestId: Int): Resource<List<RatingChangeDto>> = try {
         val response = api.getContestRatingChanges(contestId)
@@ -286,6 +283,14 @@ private fun ProblemDto.toEntity(solvedCounts: Map<String, Int>): CachedProblemEn
 }
 
 private fun ProblemDto.cacheKey() = "${contestId}_${index}"
+
+private fun CachedProblemEntity.toDto() = ProblemDto(
+    contestId = contestId,
+    index = index,
+    name = name,
+    rating = rating,
+    tags = tags
+)
 
 private fun ProblemStatisticsDto.cacheKey() = "${contestId}_${index}"
 

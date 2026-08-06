@@ -22,7 +22,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -34,6 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codeforces.app.data.api.ProblemDto
+import com.codeforces.app.ui.components.RefreshIcon
+import com.codeforces.app.ui.components.rememberShimmerBrush
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.theme.*
 import kotlin.math.roundToInt
@@ -118,7 +119,10 @@ fun ProblemsScreen(
                         }
                         // Refresh
                         IconButton(onClick = { viewModel.loadProblems(forceRefresh = true) }) {
-                            Icon(Icons.Rounded.Refresh, contentDescription = "Refresh", tint = CfTextSecondary)
+                            RefreshIcon(
+                                isRefreshing = state.isLoading && state.problems.isNotEmpty(),
+                                modifier = Modifier.size(24.dp)
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = CfSurface)
@@ -175,23 +179,25 @@ fun ProblemsScreen(
                     )
                 }
 
-                // Collapsible filter panel
-                AnimatedVisibility(
-                    visible = showFilters,
-                    enter = expandVertically(animationSpec = tween(250)) + fadeIn(),
-                    exit = shrinkVertically(animationSpec = tween(200)) + fadeOut()
-                ) {
-                    FilterPanel(
-                        allTags = viewModel.allTags,
-                        selectedTags = state.selectedTags,
-                        onTagToggle = { viewModel.toggleTag(it) },
-                        onClearAll = { viewModel.clearFilters() },
-                        ratingEnabled = state.ratingFilterEnabled,
-                        onRatingEnabledChange = { viewModel.setRatingFilterEnabled(it) },
-                        minRating = state.minRating,
-                        maxRating = state.maxRating,
-                        onRatingChange = { min, max -> viewModel.setRatingRange(min, max) }
-                    )
+                // Filter sheet
+                if (showFilters) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showFilters = false },
+                        containerColor = CfSurface,
+                        dragHandle = { BottomSheetDefaults.DragHandle() }
+                    ) {
+                        FilterSheetContent(
+                            allTags = viewModel.allTags,
+                            selectedTags = state.selectedTags,
+                            onTagToggle = { viewModel.toggleTag(it) },
+                            onClearAll = { viewModel.clearFilters() },
+                            ratingEnabled = state.ratingFilterEnabled,
+                            onRatingEnabledChange = { viewModel.setRatingFilterEnabled(it) },
+                            minRating = state.minRating,
+                            maxRating = state.maxRating,
+                            onRatingChange = { min, max -> viewModel.setRatingRange(min, max) }
+                        )
+                    }
                 }
 
                 HorizontalDivider(color = CfDivider)
@@ -199,82 +205,113 @@ fun ProblemsScreen(
         },
         containerColor = CfBackground
     ) { padding ->
-        when {
-            state.isLoading && state.problems.isEmpty() -> {
-                val brush = rememberShimmerBrush()
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(8) { ProblemCardSkeleton(brush) }
+        val contentKey = when {
+            state.isLoading && state.problems.isEmpty() -> 0
+            state.error != null && state.problems.isEmpty() -> 1
+            state.filteredProblems.isEmpty() && !state.isLoading -> 2
+            else -> 3
+        }
+        AnimatedContent(
+            targetState = contentKey,
+            modifier = Modifier.fillMaxSize().padding(padding),
+            transitionSpec = {
+                (fadeIn(tween(300, easing = FastOutSlowInEasing)) +
+                        slideInVertically(tween(300, easing = FastOutSlowInEasing)) { it / 24 })
+                        .togetherWith(fadeOut(tween(180)))
+            },
+            label = "problemsContent"
+        ) { key ->
+            when (key) {
+                0 -> {
+                    val brush = rememberShimmerBrush()
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(8) { ProblemCardSkeleton(brush) }
+                    }
                 }
-            }
-            state.error != null && state.problems.isEmpty() -> {
-                Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Icon(Icons.Rounded.WifiOff, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(48.dp))
-                        Text("Failed to load", color = CfTextPrimary, fontWeight = FontWeight.Bold)
-                        Text(state.error ?: "", color = CfTextSecondary, fontSize = 13.sp)
-                        Button(onClick = { viewModel.loadProblems() }, colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)) {
-                            Text("Retry")
+                1 -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Icon(Icons.Rounded.WifiOff, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(48.dp))
+                            Text("Failed to load", color = CfTextPrimary, fontWeight = FontWeight.Bold)
+                            Text(state.error ?: "", color = CfTextSecondary, fontSize = 13.sp)
+                            Button(onClick = { viewModel.loadProblems() }, colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)) {
+                                Text("Retry")
+                            }
                         }
                     }
                 }
-            }
-            state.filteredProblems.isEmpty() && !state.isLoading -> {
-                Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Icon(Icons.Rounded.SearchOff, contentDescription = null, tint = CfTextSecondary, modifier = Modifier.size(48.dp))
-                        Text("No problems match", color = CfTextPrimary, fontWeight = FontWeight.Bold)
-                        Text("Try adjusting your filters", color = CfTextSecondary, fontSize = 13.sp)
+                2 -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(Icons.Rounded.SearchOff, contentDescription = null, tint = CfTextSecondary, modifier = Modifier.size(48.dp))
+                            Text("No problems match", color = CfTextPrimary, fontWeight = FontWeight.Bold)
+                            Text("Try adjusting your filters", color = CfTextSecondary, fontSize = 13.sp)
+                        }
                     }
                 }
-            }
-            else -> {
-                val groups = remember(state.filteredProblems) {
-                    state.filteredProblems
-                        .groupBy { it.contestId }
-                        .toList()
-                        .sortedByDescending { it.first ?: Int.MAX_VALUE }
-                }
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(padding),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    groups.forEach { (contestId, problems) ->
-                        stickyHeader(key = "header_${contestId ?: "practice"}") {
-                            val ratings = problems.mapNotNull { it.rating }
-                            ContestHeader(
-                                name = contestId?.let { state.contestNames[it] },
-                                count = problems.size,
-                                range = if (ratings.isNotEmpty()) "${ratings.min()}–${ratings.max()}" else null,
-                                tint = if (ratings.isNotEmpty()) ratingColor(ratings.min()) else CfTextSecondary
-                            )
-                        }
-                        items(problems, key = { "${it.contestId}_${it.index}" }) { problem ->
-                            val solvedCount = state.statisticsByProblem["${problem.contestId}_${problem.index}"] ?: 0
-                            val problemId = "${problem.contestId}_${problem.index}"
-                            ProblemCard(
-                                problem = problem,
-                                solvedCount = solvedCount,
-                                isBookmarked = problemId in state.bookmarks,
-                                onBookmarkToggle = { viewModel.toggleBookmark(problemId) },
-                                onClick = {
-                                    navController.navigate(
-                                        Screen.ProblemDetail.createRoute(
-                                            problem.contestId?.toString() ?: "0",
-                                            problem.index,
-                                            problem.name
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        state.sections.forEach { section ->
+                            stickyHeader(key = "header_${section.contestId ?: "practice"}") {
+                                val ratings = section.problems.mapNotNull { it.rating }
+                                ContestHeader(
+                                    name = section.contestId?.let { state.contestNames[it] },
+                                    count = section.problems.size,
+                                    range = if (ratings.isNotEmpty()) "${ratings.min()}–${ratings.max()}" else null,
+                                    tint = if (ratings.isNotEmpty()) ratingColor(ratings.min()) else CfTextSecondary
+                                )
+                            }
+                            items(section.problems, key = { "${it.contestId}_${it.index}" }) { problem ->
+                                val solvedCount = state.statisticsByProblem["${problem.contestId}_${problem.index}"] ?: 0
+                                val problemId = "${problem.contestId}_${problem.index}"
+                                ProblemCard(
+                                    problem = problem,
+                                    solvedCount = solvedCount,
+                                    isBookmarked = problemId in state.bookmarks,
+                                    onBookmarkToggle = { viewModel.toggleBookmark(problemId) },
+                                    onClick = {
+                                        navController.navigate(
+                                            Screen.ProblemDetail.createRoute(
+                                                problem.contestId?.toString() ?: "0",
+                                                problem.index,
+                                                problem.name
+                                            )
                                         )
+                                    }
+                                )
+                            }
+                        }
+                        // Pagination: load more when scrolled near the bottom
+                        if (state.hasMore) {
+                            item(key = "load_more") {
+                                LaunchedEffect(Unit) {
+                                    viewModel.loadMore()
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        color = CodeforcesAccent,
+                                        strokeWidth = 2.dp,
+                                        modifier = Modifier.size(24.dp)
                                     )
                                 }
-                            )
+                            }
                         }
-                    }
-                    item {
-                        Spacer(Modifier.height(80.dp))
+                        item {
+                            Spacer(Modifier.height(80.dp))
+                        }
                     }
                 }
             }
@@ -317,17 +354,17 @@ private fun QuickRatingFilters(
                     )
                 },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = CodeforcesAccent.copy(alpha = 0.18f),
-                    selectedLabelColor = CfTextPrimary,
-                    selectedLeadingIconColor = CfAccentLight,
+                    selectedContainerColor = CodeforcesAccent,
+                    selectedLabelColor = Color(0xFF00231C),
+                    selectedLeadingIconColor = Color(0xFF00231C),
                     containerColor = CfCardSurface,
                     labelColor = CfTextSecondary
                 ),
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,
                     selected = savedOnly,
-                    selectedBorderColor = CodeforcesAccent.copy(alpha = 0.65f),
-                    borderColor = CfDivider
+                    selectedBorderColor = Color.Transparent,
+                    borderColor = Color.Transparent
                 )
             )
         }
@@ -342,17 +379,17 @@ private fun QuickRatingFilters(
                     { Icon(Icons.Rounded.Bolt, contentDescription = null, modifier = Modifier.size(15.dp)) }
                 } else null,
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = CodeforcesAccent.copy(alpha = 0.18f),
-                    selectedLabelColor = CfTextPrimary,
-                    selectedLeadingIconColor = CfAccentLight,
+                    selectedContainerColor = CodeforcesAccent,
+                    selectedLabelColor = Color(0xFF00231C),
+                    selectedLeadingIconColor = Color(0xFF00231C),
                     containerColor = CfCardSurface,
                     labelColor = CfTextSecondary
                 ),
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,
                     selected = selected,
-                    selectedBorderColor = CodeforcesAccent.copy(alpha = 0.65f),
-                    borderColor = CfDivider
+                    selectedBorderColor = Color.Transparent,
+                    borderColor = Color.Transparent
                 )
             )
         }
@@ -413,11 +450,11 @@ private fun ActiveFiltersRow(
     }
 }
 
-// ─── Filter Panel ─────────────────────────────────────────────────────────────
+// ─── Filter Sheet ─────────────────────────────────────────────────────────────
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun FilterPanel(
+private fun FilterSheetContent(
     allTags: List<String>,
     selectedTags: Set<String>,
     onTagToggle: (String) -> Unit,
@@ -428,73 +465,124 @@ private fun FilterPanel(
     maxRating: Int,
     onRatingChange: (Int, Int) -> Unit
 ) {
-    var showAllTags by remember { mutableStateOf(false) }
-    val visibleTags = if (showAllTags) allTags else allTags.take(12)
+    var query by remember { mutableStateOf("") }
+    val activeCount = selectedTags.size + if (ratingEnabled) 1 else 0
+
+    val filteredTags = remember(allTags, query) {
+        val q = query.trim()
+        if (q.isEmpty()) allTags
+        else allTags.filter { it.contains(q, ignoreCase = true) }
+    }
+    val sortedTags = remember(filteredTags, selectedTags) {
+        filteredTags.filter { it in selectedTags } + filteredTags.filter { it !in selectedTags }
+    }
+
+    var sliderRange by remember(minRating, maxRating) {
+        mutableStateOf(minRating.toFloat()..maxRating.toFloat())
+    }
+    val liveMin = (sliderRange.start / 100).roundToInt() * 100
+    val liveMax = (sliderRange.endInclusive / 100).roundToInt() * 100
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CfSurface)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 36.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Tags section
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                "Tags",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = CfTextSecondary
-            )
-            if (selectedTags.isNotEmpty() || ratingEnabled) {
-                TextButton(
-                    onClick = onClearAll,
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+            Text("Filters", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = CfTextPrimary)
+            if (activeCount > 0) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text("Reset filters", color = CodeforcesAccent, fontSize = 12.sp)
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(CodeforcesAccent.copy(alpha = 0.15f))
+                            .padding(horizontal = 10.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            "$activeCount active",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CodeforcesAccent
+                        )
+                    }
+                    TextButton(onClick = onClearAll, contentPadding = PaddingValues(horizontal = 4.dp)) {
+                        Text("Reset", color = CodeforcesAccent, fontSize = 13.sp)
+                    }
                 }
             }
         }
 
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            visibleTags.forEach { tag ->
-                val selected = tag in selectedTags
-                FilterChip(
-                    selected = selected,
-                    onClick = { onTagToggle(tag) },
-                    label = { Text(tag, fontSize = 11.sp, maxLines = 1) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = CodeforcesAccent.copy(alpha = 0.2f),
-                        selectedLabelColor = CfAccentLight,
-                        containerColor = CfCardSurface,
-                        labelColor = CfTextSecondary
-                    ),
-                    border = FilterChipDefaults.filterChipBorder(
-                        enabled = true,
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Search tags…", color = CfTextSecondary) },
+            leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null, tint = CfTextSecondary) },
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { query = "" }) {
+                        Icon(Icons.Rounded.Clear, contentDescription = "Clear", tint = CfTextSecondary)
+                    }
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(14.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = CodeforcesAccent,
+                unfocusedBorderColor = CfDivider,
+                focusedContainerColor = CfBackground,
+                unfocusedContainerColor = CfBackground,
+                cursorColor = CodeforcesAccent
+            )
+        )
+
+        if (sortedTags.isEmpty()) {
+            Text("No tags match \"$query\"", color = CfTextDisabled, fontSize = 13.sp)
+        } else {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                sortedTags.forEach { tag ->
+                    val selected = tag in selectedTags
+                    FilterChip(
                         selected = selected,
-                        selectedBorderColor = CodeforcesAccent.copy(alpha = 0.6f),
-                        borderColor = CfDivider
-                    ),
-                    modifier = Modifier.height(30.dp)
-                )
+                        onClick = { onTagToggle(tag) },
+                        label = { Text(tag, fontSize = 12.sp, maxLines = 1) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = CodeforcesAccent,
+                            selectedLabelColor = Color(0xFF00231C),
+                            containerColor = CfCardSurface,
+                            labelColor = CfTextSecondary
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            enabled = true,
+                            selected = selected,
+                            selectedBorderColor = Color.Transparent,
+                            borderColor = Color.Transparent
+                        )
+                    )
+                }
             }
-        }
-        TextButton(onClick = { showAllTags = !showAllTags }, contentPadding = PaddingValues(0.dp)) {
-            Text(if (showAllTags) "Show fewer tags" else "Show all ${allTags.size} tags", color = CfAccentLight, fontSize = 12.sp)
         }
 
         HorizontalDivider(color = CfDivider)
 
-        // Rating range section
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Rating Range", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = CfTextSecondary)
+            Text("Rating Range", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = CfTextPrimary)
             Switch(
                 checked = ratingEnabled,
                 onCheckedChange = onRatingEnabledChange,
@@ -505,39 +593,37 @@ private fun FilterPanel(
             )
         }
 
-        AnimatedVisibility(visible = ratingEnabled) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    RatingBadgeSmall(minRating)
-                    Text("→", color = CfTextSecondary, fontSize = 14.sp)
-                    RatingBadgeSmall(maxRating)
-                }
-                var sliderValues by remember(minRating, maxRating) {
-                    mutableStateOf(minRating.toFloat()..maxRating.toFloat())
-                }
-                RangeSlider(
-                    value = sliderValues,
-                    onValueChange = { range ->
-                        sliderValues = range
-                        val newMin = (range.start / 100).roundToInt() * 100
-                        val newMax = (range.endInclusive / 100).roundToInt() * 100
-                        onRatingChange(newMin.coerceAtLeast(800), newMax.coerceAtMost(3500))
-                    },
-                    valueRange = 800f..3500f,
-                    steps = 26,
-                    colors = SliderDefaults.colors(
-                        thumbColor = CodeforcesAccent,
-                        activeTrackColor = CodeforcesAccent,
-                        inactiveTrackColor = CfDivider
-                    )
+        if (ratingEnabled) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                RatingBadgeSmall(liveMin)
+                Text("→", color = CfTextSecondary, fontSize = 14.sp)
+                RatingBadgeSmall(liveMax)
+            }
+            RangeSlider(
+                value = sliderRange,
+                onValueChange = { sliderRange = it },
+                onValueChangeFinished = {
+                    onRatingChange(liveMin.coerceAtLeast(800), liveMax.coerceAtMost(3500))
+                },
+                valueRange = 800f..3500f,
+                steps = 26,
+                colors = SliderDefaults.colors(
+                    thumbColor = CodeforcesAccent,
+                    activeTrackColor = CodeforcesAccent,
+                    inactiveTrackColor = CfDivider
                 )
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("800", fontSize = 10.sp, color = CfTextDisabled)
+                Text("3500", fontSize = 10.sp, color = CfTextDisabled)
             }
         }
-
-        Spacer(Modifier.height(4.dp))
     }
 }
 
@@ -566,6 +652,7 @@ fun ProblemCard(
     problem: ProblemDto,
     solvedCount: Int,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     isBookmarked: Boolean = false,
     onBookmarkToggle: (() -> Unit)? = null
 ) {
@@ -573,39 +660,31 @@ fun ProblemCard(
 
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = CfCardSurface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp, pressedElevation = 3.dp)
+        colors = CardDefaults.cardColors(containerColor = CfSurface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp, pressedElevation = 3.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 12.dp),
+                .padding(horizontal = 14.dp, vertical = 13.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-                // Index badge
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(color.copy(alpha = 0.15f))
-                        .border(1.dp, color.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
-                        .padding(horizontal = 9.dp, vertical = 5.dp)
-                ) {
-                    Text(
-                        text = problem.index,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontFamily = FontFamily.Monospace,
-                        color = color
-                    )
-                }
+                // Index letter
+                Text(
+                    text = problem.index,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = FontFamily.Monospace,
+                    color = color
+                )
 
                 // Middle: name + tags
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
                         text = problem.name,
@@ -627,8 +706,7 @@ fun ProblemCard(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
                                         .background(color.copy(alpha = 0.10f))
-                                        .border(0.5.dp, color.copy(alpha = 0.25f), RoundedCornerShape(4.dp))
-                                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                                        .padding(horizontal = 5.dp, vertical = 2.dp)
                                 )
                             }
                             if (problem.tags.size > 3) {
@@ -646,14 +724,13 @@ fun ProblemCard(
                 // Right: rating pill + solved count
                 Column(
                     horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
                     if (problem.rating != null) {
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(color.copy(alpha = 0.15f))
-                                .border(1.dp, color.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
+                                .background(color.copy(alpha = 0.12f))
                                 .padding(horizontal = 8.dp, vertical = 3.dp)
                         ) {
                             Text(
@@ -683,13 +760,13 @@ fun ProblemCard(
                 if (onBookmarkToggle != null) {
                     IconButton(
                         onClick = onBookmarkToggle,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(36.dp)
                     ) {
                         Icon(
                             if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
                             contentDescription = "Bookmark",
                             tint = if (isBookmarked) CodeforcesAccent else CfTextDisabled,
-                            modifier = Modifier.size(19.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 }
@@ -701,66 +778,52 @@ fun ProblemCard(
 
 @Composable
 private fun ContestHeader(name: String?, count: Int, range: String?, tint: Color) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(CfBackground)
-            .padding(horizontal = 4.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(top = 18.dp, bottom = 2.dp)
     ) {
-        Text(
-            text = name ?: "Practice",
-            modifier = Modifier.weight(1f),
-            fontSize = 13.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = CfTextPrimary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        if (range != null) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Text(
-                text = range,
+                text = (name ?: "Practice").uppercase(),
+                modifier = Modifier.weight(1f),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.8.sp,
+                color = CfTextPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            if (range != null) {
+                Text(
+                    text = range,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Monospace,
+                    color = tint
+                )
+            }
+            Text(
+                text = count.toString(),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Monospace,
-                color = tint
+                color = CfTextSecondary
             )
         }
-        Text(
-            text = count.toString(),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.Monospace,
-            color = CfTextSecondary
-        )
+        Spacer(Modifier.height(8.dp))
+        HorizontalDivider(color = CfDivider.copy(alpha = 0.5f))
     }
 }
 
 // ─── Skeleton loading ─────────────────────────────────────────────────────────
-
-@Composable
-private fun rememberShimmerBrush(): Brush {
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val shift by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1200f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1300, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmerShift"
-    )
-    return Brush.linearGradient(
-        colors = listOf(
-            CfCardSurface,
-            CfTextPrimary.copy(alpha = 0.06f),
-            CfCardSurface
-        ),
-        start = Offset(shift - 600f, 0f),
-        end = Offset(shift, 400f)
-    )
-}
 
 @Composable
 private fun ProblemCardSkeleton(brush: Brush) {

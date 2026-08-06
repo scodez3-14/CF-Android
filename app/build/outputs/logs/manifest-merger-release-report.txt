@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-29:12
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-44:12
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:2:1-44:12
 MERGED from [androidx.hilt:hilt-navigation-compose:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/019e32ad58d823087231cf2b75e5a543/transformed/hilt-navigation-compose-1.2.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.hilt:hilt-navigation:1.2.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/250d7deafb135ccdac137b3797705cdc/transformed/hilt-navigation-1.2.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.navigation:navigation-common:2.7.7] /home/santu/.gradle/caches/9.0-milestone-1/transforms/feb71d29526bfbecb30a38e8d62d0e89/transformed/navigation-common-2.7.7/AndroidManifest.xml:17:1-22:12
@@ -103,9 +103,21 @@ uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:5-79
 	android:name
 		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:5:22-76
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:6:5-77
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:6:22-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:22-78
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:5-79
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:22-76
 application
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-27:19
-INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:7:5-27:19
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:5-42:19
+INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:5-42:19
 MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.emoji2:emoji2:1.3.0] /home/santu/.gradle/caches/9.0-milestone-1/transforms/f109fde3d4b64c4ecdc9b8a36df2e9a7/transformed/emoji2-1.3.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] /home/santu/.gradle/caches/9.0-milestone-1/transforms/9b2f7fe4fc84138472e15e6b30ec0def/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:23:5-33:19
@@ -125,39 +137,57 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /home/santu/.gradle/caches/
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] /home/santu/.gradle/caches/9.0-milestone-1/transforms/01c58f2f73d4563c2486605a914f6da9/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:13:9-35
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:16:9-35
 	android:label
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:11:9-41
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:14:9-41
 	android:roundIcon
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:12:9-54
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:15:9-54
 	android:icon
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:10:9-43
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:13:9-43
 	android:allowBackup
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:9:9-35
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:12:9-35
 	android:theme
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:14:9-51
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:17:9-51
 	android:usesCleartextTraffic
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:15:9-45
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:18:9-45
 	android:name
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:8:9-38
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:11:9-38
 activity#com.codeforces.app.MainActivity
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:17:9-25:20
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:20:9-28:20
 	android:exported
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:19:13-36
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:13-36
 	android:theme
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:20:13-68
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:13-68
 	android:name
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:18:13-41
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:21:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:21:13-24:29
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:24:13-27:29
 action#android.intent.action.MAIN
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:17-69
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:25:17-69
 	android:name
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:22:25-66
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:25:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:17-77
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:26:17-77
 	android:name
-		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:23:27-74
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:26:27-74
+receiver#com.codeforces.app.notifications.ContestReminderReceiver
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:30:9-32:40
+	android:exported
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:32:13-37
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:31:13-66
+receiver#com.codeforces.app.notifications.ContestReminderBootReceiver
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:34:9-40:20
+	android:exported
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:36:13-37
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:35:13-70
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:37:13-39:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:38:17-79
+	android:name
+		ADDED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml:38:25-76
 uses-sdk
 INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/santu/A2Z/Projects /coden/CodeforcesApp/app/src/main/AndroidManifest.xml

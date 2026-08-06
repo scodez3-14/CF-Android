@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.codeforces.app.data.repository.UserPreferencesRepository
 import com.codeforces.app.notifications.ContestReminderManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +23,6 @@ class MainViewModel @Inject constructor(
     init {
         reminderManager.init()
         viewModelScope.launch {
-            delay(500) // allow splash screen
             _isLoading.value = false
         }
     }

@@ -20,6 +20,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.codeforces.app.data.api.ContestDto
+import com.codeforces.app.ui.components.AnimatedCountUpText
+import com.codeforces.app.ui.components.RevealItem
+import com.codeforces.app.ui.components.ShimmerCardRow
+import com.codeforces.app.ui.components.ShimmerHeroCard
+import com.codeforces.app.ui.components.SkeletonBox
+import com.codeforces.app.ui.components.rememberShimmerBrush
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.SubmissionRow
 import com.codeforces.app.ui.screens.profile.rankColor
@@ -31,6 +37,7 @@ import kotlin.math.abs
 @Composable
 fun HomeScreen(
     navController: NavController,
+    onOpenTab: (Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -54,6 +61,7 @@ fun HomeScreen(
             )
         }
     ) { padding ->
+        val showingSkeleton = state.isLoading && state.user == null && state.dailyProblem == null
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,147 +69,175 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Profile hero card
-            state.user?.let { user ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clickable { navController.navigate(Screen.MyProfile.route) },
-                    colors = CardDefaults.cardColors(containerColor = CfCardSurface),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(CfCardSurface, CodeforcesAccent.copy(alpha = 0.15f))
-                                )
-                            )
-                            .padding(20.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            AsyncImage(
-                                model = user.titlePhoto ?: user.avatar,
-                                contentDescription = "Avatar",
-                                modifier = Modifier.size(60.dp).clip(CircleShape).background(CfSurface)
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = user.handle,
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                                    color = CfTextPrimary
-                                )
-                                Text(
-                                    text = user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated",
-                                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                                    color = rankColor(user.rank)
-                                )
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text(
-                                    text = user.rating.toString(),
-                                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
-                                    color = rankColor(user.rank)
-                                )
-                                Text("Rating", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Problem of the Day
-            state.dailyProblem?.let { problem ->
-                SectionHeader("Problem of the Day", onSeeAll = null)
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clickable {
-                            navController.navigate(
-                                Screen.ProblemDetail.createRoute(
-                                    problem.contestId.toString(),
-                                    problem.index,
-                                    problem.name
-                                )
-                            )
-                        },
-                    colors = CardDefaults.cardColors(containerColor = CfCardSurface),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(CodeforcesAccent.copy(alpha = 0.08f))
-                            .padding(18.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(46.dp)
-                                .clip(CircleShape)
-                                .background(CodeforcesAccent.copy(alpha = 0.18f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(Icons.Rounded.CalendarMonth, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(24.dp))
-                        }
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = problem.name,
-                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                                color = CfTextPrimary,
-                                maxLines = 2
-                            )
-                            Text(
-                                text = "${problem.contestId}${problem.index} · ${problem.rating ?: "?"} rating · ${problem.tags.take(3).joinToString(", ")}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = CfTextSecondary,
-                                maxLines = 1
-                            )
-                        }
-                        Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = CfTextDisabled)
-                    }
-                }
-            }
-
-            // Upcoming Contests
-            if (state.upcomingContests.isNotEmpty()) {
-                SectionHeader("Upcoming Contests", onSeeAll = { navController.navigate(Screen.Contests.route) })
+            if (showingSkeleton) {
+                val brush = rememberShimmerBrush()
+                ShimmerHeroCard(brush, Modifier.padding(horizontal = 16.dp))
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    state.upcomingContests.take(3).forEach { contest ->
-                        ContestCard(contest = contest, onClick = {
-                            navController.navigate(Screen.ContestDetail.createRoute(contest.id))
-                        })
+                    SkeletonBox(brush, Modifier.fillMaxWidth(0.4f).height(18.dp), cornerRadius = 6.dp)
+                    ShimmerCardRow(brush, shapeRadius = 20.dp)
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    SkeletonBox(brush, Modifier.fillMaxWidth(0.45f).height(18.dp), cornerRadius = 6.dp)
+                    ShimmerCardRow(brush, shapeRadius = 12.dp)
+                    ShimmerCardRow(brush, shapeRadius = 12.dp)
+                    ShimmerCardRow(brush, shapeRadius = 12.dp)
+                }
+            } else {
+                // Profile hero card
+                state.user?.let { user ->
+                    RevealItem(visible = true, delayMillis = 0) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clickable { onOpenTab(3) },
+                            colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        Brush.horizontalGradient(
+                                            colors = listOf(CfCardSurface, CodeforcesAccent.copy(alpha = 0.15f))
+                                        )
+                                    )
+                                    .padding(20.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    AsyncImage(
+                                        model = user.titlePhoto ?: user.avatar,
+                                        contentDescription = "Avatar",
+                                        modifier = Modifier.size(60.dp).clip(CircleShape).background(CfSurface)
+                                    )
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = user.handle,
+                                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                                            color = CfTextPrimary
+                                        )
+                                        Text(
+                                            text = user.rank?.replaceFirstChar { it.uppercase() } ?: "Unrated",
+                                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                            color = rankColor(user.rank)
+                                        )
+                                    }
+                                    Column(horizontalAlignment = Alignment.End) {
+                                        AnimatedCountUpText(
+                                            target = user.rating,
+                                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                            color = rankColor(user.rank)
+                                        )
+                                        Text("Rating", style = MaterialTheme.typography.labelSmall, color = CfTextSecondary)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Problem of the Day
+                state.dailyProblem?.let { problem ->
+                    SectionHeader("Problem of the Day", onSeeAll = null)
+                    RevealItem(visible = true, delayMillis = 60) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    navController.navigate(
+                                        Screen.ProblemDetail.createRoute(
+                                            problem.contestId.toString(),
+                                            problem.index,
+                                            problem.name
+                                        )
+                                    )
+                                },
+                            colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(CodeforcesAccent.copy(alpha = 0.08f))
+                                    .padding(18.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(46.dp)
+                                        .clip(CircleShape)
+                                        .background(CodeforcesAccent.copy(alpha = 0.18f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(Icons.Rounded.CalendarMonth, contentDescription = null, tint = CodeforcesAccent, modifier = Modifier.size(24.dp))
+                                }
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = problem.name,
+                                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                                        color = CfTextPrimary,
+                                        maxLines = 2
+                                    )
+                                    Text(
+                                        text = "${problem.contestId}${problem.index} · ${problem.rating ?: "?"} rating · ${problem.tags.take(3).joinToString(", ")}",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = CfTextSecondary,
+                                        maxLines = 1
+                                    )
+                                }
+                                Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = CfTextDisabled)
+                            }
+                        }
+                    }
+                }
+
+                // Upcoming Contests
+                if (state.upcomingContests.isNotEmpty()) {
+                    SectionHeader("Upcoming Contests", onSeeAll = { onOpenTab(2) })
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        state.upcomingContests.take(3).forEach { contest ->
+                            RevealItem(visible = true, delayMillis = 120) {
+                                ContestCard(contest = contest, onClick = {
+                                    navController.navigate(Screen.ContestDetail.createRoute(contest.id))
+                                })
+                            }
+                        }
+                    }
+                }
+
+                // Recent Submissions
+                if (state.recentSubmissions.isNotEmpty()) {
+                    SectionHeader("Recent Submissions", onSeeAll = {
+                        handle?.let { navController.navigate(Screen.Submissions.createRoute(it)) }
+                    })
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        state.recentSubmissions.take(5).forEach { sub ->
+                            RevealItem(visible = true, delayMillis = 180) {
+                                SubmissionRow(
+                                    problemName = sub.problem.name,
+                                    verdict = sub.verdict ?: "IN_QUEUE",
+                                    language = sub.programmingLanguage,
+                                    timeMs = sub.timeConsumedMillis
+                                )
+                            }
+                        }
                     }
                 }
             }
-
-            // Recent Submissions
-            if (state.recentSubmissions.isNotEmpty()) {
-                SectionHeader("Recent Submissions", onSeeAll = {
-                    handle?.let { navController.navigate(Screen.Submissions.createRoute(it)) }
-                })
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    state.recentSubmissions.take(5).forEach { sub ->
-                        SubmissionRow(
-                            problemName = sub.problem.name,
-                            verdict = sub.verdict ?: "IN_QUEUE",
-                            language = sub.programmingLanguage,
-                            timeMs = sub.timeConsumedMillis
-                        )
-                    }
-                }
-            }
-
 
             Spacer(Modifier.height(12.dp))
         }
