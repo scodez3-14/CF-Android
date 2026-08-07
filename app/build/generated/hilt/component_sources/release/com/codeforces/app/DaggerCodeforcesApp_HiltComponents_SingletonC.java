@@ -438,80 +438,80 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
-
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
-
       static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
-
-      static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
-
-      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
-
-      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
-
-      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
-
-      static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
-
-      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
 
       static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
 
-      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
-
-      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
-
       static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
+
+      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
+
+      static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
+
+      static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
 
       static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
 
-      @KeepFieldType
-      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
+      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
 
-      @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
+      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
+
+      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
+
+      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+
+      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
+
+      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
+
+      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
+
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
 
       @KeepFieldType
       ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
 
       @KeepFieldType
-      ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
-
-      @KeepFieldType
-      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
-
-      @KeepFieldType
-      MainViewModel com_codeforces_app_MainViewModel2;
-
-      @KeepFieldType
-      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
-
-      @KeepFieldType
-      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
-
-      @KeepFieldType
-      OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
-      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
-
-      @KeepFieldType
       SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
-
-      @KeepFieldType
-      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
-
-      @KeepFieldType
-      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
 
       @KeepFieldType
       LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
 
       @KeepFieldType
+      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
+
+      @KeepFieldType
+      ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
+
+      @KeepFieldType
+      OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
+
+      @KeepFieldType
       ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
+
+      @KeepFieldType
+      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
+
+      @KeepFieldType
+      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
+
+      @KeepFieldType
+      MainViewModel com_codeforces_app_MainViewModel2;
+
+      @KeepFieldType
+      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
+
+      @KeepFieldType
+      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
     }
   }
 
@@ -594,41 +594,38 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
-
-      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
 
       static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
 
       static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
 
-      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
-
-      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
-
-      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
-
       static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
 
       static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
 
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
+      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
+
+      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
 
       static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
 
-      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
-
       static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
 
+      static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
+
+      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
+
       static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
+
+      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
+
+      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
 
       static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
 
       @KeepFieldType
-      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
-
-      @KeepFieldType
-      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
 
       @KeepFieldType
       LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
@@ -637,34 +634,37 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
 
       @KeepFieldType
-      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
-
-      @KeepFieldType
-      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
-
-      @KeepFieldType
-      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
-
-      @KeepFieldType
       WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
 
       @KeepFieldType
       OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
 
       @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
+      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
 
       @KeepFieldType
       StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
 
       @KeepFieldType
-      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
-
-      @KeepFieldType
       ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
 
       @KeepFieldType
+      HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+
+      @KeepFieldType
       ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
+
+      @KeepFieldType
+      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
+
+      @KeepFieldType
+      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
 
       @KeepFieldType
       MainViewModel com_codeforces_app_MainViewModel2;
