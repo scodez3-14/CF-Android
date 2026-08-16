@@ -1,71 +1,51 @@
 [
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher_round.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-anydpi-v26/ic_launcher.xml"
-    },
-    {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher_round.png"
     },
     {
         "merged": "com.codeforces.app-debug-68:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "com.codeforces.app-main-70:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/drawable/ic_launcher_foreground.xml"
+        "merged": "com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher_foreground.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher_foreground.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher_foreground.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher_round.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher_round.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher_round.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher.png"
-    },
-    {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher_foreground.png"
-    },
-    {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher_foreground.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher_foreground.png"
-    },
-    {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher_round.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-hdpi/ic_launcher.png"
     },
     {
         "merged": "com.codeforces.app-debug-68:/mipmap-anydpi-v26_ic_launcher.xml.flat",
@@ -76,11 +56,19 @@
         "source": "com.codeforces.app-main-70:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
-        "source": "/home/santu/.gradle/daemon/9.0-milestone-1/com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher_foreground.png"
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.codeforces.app-debug-68:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.codeforces.app-debug-68:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.codeforces.app-main-70:/mipmap-xxhdpi/ic_launcher.png"
     }
 ]

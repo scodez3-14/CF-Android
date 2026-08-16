@@ -47,13 +47,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.codeforces.app.data.tracker.SubmissionView
+import com.codeforces.app.data.tracker.TrackStage
+import com.codeforces.app.data.tracker.TrackedSubmission
+import com.codeforces.app.ui.components.AcceptedReveal
 import com.codeforces.app.ui.components.CfWebView
 import com.codeforces.app.ui.components.ShimmerList
 import com.codeforces.app.ui.components.buildEditorialHtml
 import com.codeforces.app.ui.components.buildProblemHtml
+import com.codeforces.app.ui.components.hasFailingTestNumber
+import com.codeforces.app.ui.components.verdictColor
+import com.codeforces.app.ui.components.verdictLabel
 import com.codeforces.app.ui.theme.*
 import org.json.JSONArray
 import org.json.JSONObject
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.border
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,12 +74,29 @@ fun ProblemDetailScreen(
     name: String,
     onLogin: () -> Unit,
     onBack: () -> Unit,
+    onOpenSubmission: ((contestId: String, submissionId: Long, handle: String) -> Unit)? = null,
     viewModel: ProblemDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val bookmarks by viewModel.bookmarks.collectAsStateWithLifecycle(initialValue = emptySet())
+    val track by viewModel.track.collectAsStateWithLifecycle()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("Description", "Submit", "Submission", "Solution")
+
+    // Full-screen Accepted celebration: triggered once, when the tracked
+    // submission for THIS problem finishes with an OK verdict.
+    var reveal by remember { mutableStateOf<TrackedSubmission?>(null) }
+    LaunchedEffect(Unit) {
+        viewModel.finishedEvents.collect { finished ->
+            val detail = state.detail
+            if (finished.finalVerdict == "OK" &&
+                detail?.contestId == finished.contestId &&
+                detail?.index == finished.problemIndex
+            ) {
+                reveal = finished
+            }
+        }
+    }
 
     val isBookmarked = state.detail?.let { "${it.contestId}_${it.index}" in bookmarks } == true
 
@@ -90,7 +118,8 @@ fun ProblemDetailScreen(
         }
     }
 
-    Scaffold(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
         topBar = {
             TopAppBar(
                 title = {
@@ -239,11 +268,11 @@ fun ProblemDetailScreen(
                                     }
                                     1 -> {
                                         // Submit tab
-                                        SubmitTab(state = state, viewModel = viewModel, onLogin = onLogin)
+                                        SubmitTab(state = state, track = track, viewModel = viewModel, onLogin = onLogin)
                                     }
                                     2 -> {
                                         // Submission tab
-                                        SubmissionsTab(state = state, viewModel = viewModel)
+                                        SubmissionsTab(state = state, viewModel = viewModel, onOpenSubmission = onOpenSubmission)
                                     }
                                     else -> {
                                         // Solution / Editorial tab
@@ -308,9 +337,35 @@ fun ProblemDetailScreen(
                     onLanguagesLoaded = viewModel::onLanguagesLoaded,
                     onSubmitSucceeded = viewModel::onSubmitSucceeded,
                     onSubmitFailed = viewModel::onSubmitFailed,
+                    onSubmitAmbiguous = viewModel::onSubmitAmbiguous,
                     onSubmitDispatched = viewModel::onSubmitDispatched
                 )
             }
+        }
+        }
+
+        // ── Accepted celebration overlay ──
+        reveal?.let { finished ->
+            val view = finished.view ?: SubmissionView(
+                id = finished.submissionId ?: 0L,
+                verdict = finished.finalVerdict,
+                passedTestCount = 0,
+                timeMillis = 0,
+                memoryBytes = 0,
+                language = finished.language,
+                creationTimeSeconds = System.currentTimeMillis() / 1000
+            )
+            AcceptedReveal(
+                problemLabel = "${finished.contestId}${finished.problemIndex}",
+                contestId = finished.contestId,
+                submissionId = finished.submissionId,
+                passedTests = view.passedTestCount,
+                timeMillis = view.timeMillis,
+                memoryBytes = view.memoryBytes,
+                language = view.language.ifBlank { finished.language },
+                onSubmitAgain = { reveal = null },
+                onDismiss = { reveal = null }
+            )
         }
     }
 }
@@ -319,11 +374,12 @@ fun ProblemDetailScreen(
 @Composable
 private fun SubmitTab(
     state: ProblemDetailUiState,
+    track: TrackedSubmission?,
     viewModel: ProblemDetailViewModel,
     onLogin: () -> Unit
 ) {
     when (state.loginState) {
-        is LoginState.LoggedIn, LoginState.Checking -> SubmitForm(state, viewModel)
+        is LoginState.LoggedIn, LoginState.Checking -> SubmitForm(state = state, track = track, viewModel = viewModel)
         LoginState.LoggedOut -> LoginRequired(onLogin = onLogin)
     }
 }
@@ -372,6 +428,7 @@ private fun LoginRequired(onLogin: () -> Unit) {
 @Composable
 private fun SubmitForm(
     state: ProblemDetailUiState,
+    track: TrackedSubmission?,
     viewModel: ProblemDetailViewModel
 ) {
     var selectedLanguage by remember { mutableStateOf<String?>(null) }
@@ -486,37 +543,15 @@ private fun SubmitForm(
             }
         }
 
-        // Live verdict line while the hidden browser submits + the API polls.
-        if (state.isSubmitting) {
-            val t = state.trackedSubmission
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CircularProgressIndicator(
-                    color = CodeforcesAccent,
-                    strokeWidth = 2.dp,
-                    modifier = Modifier.size(14.dp)
-                )
-                Text(
-                    when {
-                        t != null && t.verdict == "TESTING" -> "Judging… test ${t.passedTestCount}"
-                        t != null -> "In queue…"
-                        else -> "Submitting your solution…"
-                    },
-                    color = CfTextSecondary,
-                    fontSize = 13.sp
-                )
-            }
+        // ── Live verdict card: app-wide tracking, updates in real time. ──
+        track?.let {
+            LiveJudgingCard(track = it, onDismiss = { viewModel.dismissTrack() })
         }
 
         state.submitError?.let {
             Text(it, color = VerdictWA, style = MaterialTheme.typography.bodyMedium)
         }
-        state.submitResult?.let {
-            Text(it, color = verdictColor(state.submitVerdict), style = MaterialTheme.typography.bodyMedium)
-        }
-        if (state.submitError == null && state.submitResult == null && !state.isSubmitting) {
+        if (state.submitError == null && track == null && !state.isSubmitting) {
             Text(
                 "Signed in as ${(state.loginState as? LoginState.LoggedIn)?.handle ?: "Codeforces user"}. Your session is used to submit on your behalf.",
                 color = CfTextDisabled,
@@ -526,13 +561,355 @@ private fun SubmitForm(
     }
 }
 
+// ── Live Judging Card (Codeforces-style) ────────────────────────────────────
+
+@Composable
+private fun LiveJudgingCard(track: TrackedSubmission, onDismiss: () -> Unit) {
+    val t = track.view
+    val running = track.isRunning
+
+    // Pulsing glow animation for the card border while the judge runs
+    val infiniteTransition = rememberInfiniteTransition(label = "judgingPulse")
+    val glowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(900, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "glowAlpha"
+    )
+    val dotScale by infiniteTransition.animateFloat(
+        initialValue = 0.7f, targetValue = 1.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "dotScale"
+    )
+
+    val stageColor = when (track.stage) {
+        TrackStage.SUBMITTING, TrackStage.IN_QUEUE -> CodeforcesAccent
+        TrackStage.TESTING -> Color(0xFFFFC107)   // amber
+        TrackStage.FINAL -> verdictColor(track.finalVerdict)
+        TrackStage.TIMED_OUT -> CfTextSecondary
+    }
+
+    val statusText = when (track.stage) {
+        TrackStage.SUBMITTING -> "Sending solution…"
+        TrackStage.IN_QUEUE -> "In queue for a judge…"
+        TrackStage.TESTING -> "Running on test ${(t?.passedTestCount ?: 0) + 1}…"
+        TrackStage.FINAL -> verdictLabel(track.finalVerdict)
+        TrackStage.TIMED_OUT -> "Still judging…"
+    }
+
+    val cardShape = RoundedCornerShape(14.dp)
+    Card(
+        colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+        shape = cardShape,
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (running) {
+                    Modifier.border(
+                        width = 1.5.dp,
+                        brush = Brush.horizontalGradient(
+                            listOf(
+                                stageColor.copy(alpha = glowAlpha * 0.8f),
+                                stageColor.copy(alpha = glowAlpha * 0.3f),
+                                stageColor.copy(alpha = glowAlpha * 0.8f)
+                            )
+                        ),
+                        shape = cardShape
+                    )
+                } else {
+                    Modifier.border(1.dp, stageColor.copy(alpha = 0.35f), shape = cardShape)
+                }
+            )
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            // Header row with pulsing dot / verdict icon + status
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (running) {
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp * dotScale)
+                            .clip(RoundedCornerShape(50))
+                            .background(stageColor.copy(alpha = glowAlpha))
+                    )
+                } else {
+                    Icon(
+                        imageVector = when (track.stage) {
+                            TrackStage.FINAL -> when (track.finalVerdict) {
+                                "OK" -> Icons.Rounded.CheckCircle
+                                "WRONG_ANSWER", "REJECTED" -> Icons.Rounded.Cancel
+                                "TIME_LIMIT_EXCEEDED", "IDLENESS_LIMIT_EXCEEDED" -> Icons.Rounded.Timer
+                                "MEMORY_LIMIT_EXCEEDED" -> Icons.Rounded.Memory
+                                "COMPILATION_ERROR" -> Icons.Rounded.BugReport
+                                else -> Icons.Rounded.ErrorOutline
+                            }
+                            else -> Icons.Rounded.HourglassTop
+                        },
+                        contentDescription = null,
+                        tint = stageColor,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                AnimatedContent(
+                    targetState = statusText,
+                    transitionSpec = {
+                        (fadeIn(tween(220)) + slideInVertically(tween(220)) { it / 3 })
+                            .togetherWith(fadeOut(tween(150)))
+                    },
+                    label = "judgingStatus",
+                    modifier = Modifier.weight(1f)
+                ) { text ->
+                    Text(text, color = stageColor, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                }
+                if (running) {
+                    CircularProgressIndicator(
+                        color = stageColor,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+
+            // Stage stepper: Sent → Queue → Tests → Done
+            JudgingStepper(stage = track.stage, finalVerdict = track.finalVerdict, accent = stageColor)
+
+            // Live progress while the judge runs tests
+            if (track.stage == TrackStage.TESTING && t != null) {
+                val progressAnim by animateFloatAsState(
+                    targetValue = if (t.passedTestCount > 0) {
+                        // We don't know total tests; show an indeterminate fill up to ~80%
+                        (t.passedTestCount * 0.04f).coerceAtMost(0.85f)
+                    } else 0.05f,
+                    animationSpec = tween(600),
+                    label = "progressAnim"
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    LinearProgressIndicator(
+                        progress = { progressAnim },
+                        modifier = Modifier.fillMaxWidth().height(5.dp).clip(RoundedCornerShape(50)),
+                        color = stageColor,
+                        trackColor = stageColor.copy(alpha = 0.15f)
+                    )
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        Text("${t.passedTestCount} tests passed", color = CfTextSecondary, fontSize = 11.sp)
+                        if (t.timeMillis > 0) {
+                            Text("${t.timeMillis} ms", color = CfTextSecondary, fontSize = 11.sp)
+                        }
+                    }
+                }
+            }
+
+            if (track.stage == TrackStage.FINAL) {
+                FinalVerdictBlock(track = track, tint = stageColor, onDismiss = onDismiss)
+            }
+            if (track.stage == TrackStage.TIMED_OUT) {
+                TimedOutBlock(track = track, onDismiss = onDismiss)
+            }
+        }
+    }
+}
+
+@Composable
+private fun JudgingStepper(stage: TrackStage, finalVerdict: String?, accent: Color) {
+    val currentStep = when (stage) {
+        TrackStage.SUBMITTING -> 0
+        TrackStage.IN_QUEUE -> 1
+        TrackStage.TESTING -> 2
+        TrackStage.FINAL -> 3
+        TrackStage.TIMED_OUT -> 2
+    }
+    val doneColor = if (stage == TrackStage.FINAL) verdictColor(finalVerdict) else accent
+
+    Row(
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        StepNode(Icons.Rounded.CloudUpload, "Sent", 0, currentStep, doneColor)
+        StepSegment(done = currentStep >= 1, color = doneColor)
+        StepNode(Icons.Rounded.Schedule, "Queue", 1, currentStep, doneColor)
+        StepSegment(done = currentStep >= 2, color = doneColor)
+        StepNode(Icons.Rounded.Science, "Tests", 2, currentStep, doneColor)
+        StepSegment(done = currentStep >= 3, color = doneColor)
+        StepNode(Icons.Rounded.TaskAlt, "Done", 3, currentStep, doneColor)
+    }
+}
+
+@Composable
+private fun StepNode(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    step: Int,
+    currentStep: Int,
+    doneColor: Color
+) {
+    val reached = step < currentStep
+    val isCurrent = step == currentStep
+    val tint = if (reached || isCurrent) doneColor else CfTextDisabled
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier
+                .size(30.dp)
+                .clip(RoundedCornerShape(50))
+                .background(if (reached || isCurrent) tint.copy(alpha = 0.16f) else CfCardSurface)
+                .border(
+                    width = 1.dp,
+                    color = if (reached || isCurrent) tint else CfDivider,
+                    shape = RoundedCornerShape(50)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, contentDescription = label, tint = tint, modifier = Modifier.size(15.dp))
+        }
+        Spacer(Modifier.height(4.dp))
+        Text(
+            label,
+            fontSize = 9.sp,
+            color = if (reached || isCurrent) CfTextSecondary else CfTextDisabled,
+            fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+private fun androidx.compose.foundation.layout.RowScope.StepSegment(
+    done: Boolean,
+    color: Color
+) {
+    val alpha by animateFloatAsState(
+        targetValue = if (done) 0.9f else 0.12f,
+        animationSpec = tween(400),
+        label = "stepSegment"
+    )
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .padding(top = 14.dp)
+            .padding(horizontal = 4.dp)
+            .height(2.dp)
+            .clip(RoundedCornerShape(2.dp))
+            .background(color.copy(alpha = alpha))
+    )
+}
+
+/** Inline verdict summary shown once judging finishes (the Accepted case gets
+ *  the full-screen overlay as well). */
+@Composable
+private fun FinalVerdictBlock(track: TrackedSubmission, tint: Color, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val t = track.view
+    val verdict = track.finalVerdict
+
+    HorizontalDivider(color = CfDivider, thickness = 0.5.dp)
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(6.dp))
+                .background(tint.copy(alpha = 0.15f))
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Text(verdictLabel(verdict), color = tint, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        }
+        if (verdict == "OK" && t != null && t.passedTestCount > 0) {
+            Text("· ${t.passedTestCount} tests", color = CfTextSecondary, fontSize = 12.sp)
+        } else if (hasFailingTestNumber(verdict) && t != null) {
+            Text("on test ${t.passedTestCount + 1}", color = CfTextSecondary, fontSize = 12.sp)
+        }
+    }
+
+    // Stats row (time + memory)
+    if (t != null && (t.timeMillis > 0 || t.memoryBytes > 0)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            if (t.timeMillis > 0) {
+                StatChip(label = "Time", value = "${t.timeMillis} ms", tint = Color(0xFF64B5F6))
+            }
+            if (t.memoryBytes > 0) {
+                StatChip(label = "Memory", value = formatMemory(t.memoryBytes), tint = Color(0xFFA5D6A7))
+            }
+        }
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        TextButton(
+            onClick = {
+                val id = t?.id ?: track.submissionId
+                val url = if (id != null) {
+                    "https://codeforces.com/contest/${track.contestId}/submission/$id"
+                } else {
+                    "https://codeforces.com/submissions/${track.handle}"
+                }
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            }
+        ) {
+            Icon(Icons.Rounded.OpenInNew, contentDescription = null, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(4.dp))
+            Text("View on Codeforces", fontSize = 12.sp)
+        }
+        TextButton(onClick = onDismiss) {
+            Icon(Icons.Rounded.Close, contentDescription = null, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(4.dp))
+            Text("Clear", fontSize = 12.sp)
+        }
+    }
+}
+
+/** Polling budget exhausted without a final verdict — don't fail silently. */
+@Composable
+private fun TimedOutBlock(track: TrackedSubmission, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    HorizontalDivider(color = CfDivider, thickness = 0.5.dp)
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Icon(Icons.Rounded.WarningAmber, contentDescription = null, tint = Color(0xFFFFC107), modifier = Modifier.size(18.dp))
+        Text("Taking longer than usual", color = CfTextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+    }
+    Text(
+        "The judge is still busy with this submission. Your verdict will show up on your submissions page shortly.",
+        color = CfTextDisabled,
+        fontSize = 11.sp,
+        lineHeight = 15.sp
+    )
+    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+        TextButton(
+            onClick = {
+                context.startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://codeforces.com/submissions/${track.handle}"))
+                )
+            }
+        ) {
+            Icon(Icons.Rounded.OpenInNew, contentDescription = null, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(4.dp))
+            Text("Open submissions", fontSize = 12.sp)
+        }
+        TextButton(onClick = onDismiss) {
+            Icon(Icons.Rounded.Close, contentDescription = null, modifier = Modifier.size(14.dp))
+            Spacer(Modifier.width(4.dp))
+            Text("Clear", fontSize = 12.sp)
+        }
+    }
+}
+
+@Composable
+private fun StatChip(label: String, value: String, tint: Color) {
+    Column {
+        Text(label, color = CfTextDisabled, fontSize = 10.sp, fontWeight = FontWeight.Medium)
+        Text(value, color = tint, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+    }
+}
+
 // ── Submission history (verdicts from the public API) ─────────────────────────
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun SubmissionsTab(
     state: ProblemDetailUiState,
-    viewModel: ProblemDetailViewModel
+    viewModel: ProblemDetailViewModel,
+    onOpenSubmission: ((contestId: String, submissionId: Long, handle: String) -> Unit)? = null
 ) {
     val context = LocalContext.current
 
@@ -590,14 +967,19 @@ private fun SubmissionsTab(
             val color = verdictColor(sub.verdict)
             Card(
                 onClick = {
-                    val contestId = state.detail?.contestId
-                    if (contestId != null) {
-                        context.startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://codeforces.com/contest/$contestId/submission/${sub.id}")
+                    val problemContestId = state.detail?.contestId
+                    if (problemContestId != null) {
+                        val submissionHandle = (state.loginState as? LoginState.LoggedIn)?.handle ?: ""
+                        if (onOpenSubmission != null) {
+                            onOpenSubmission(problemContestId, sub.id, submissionHandle)
+                        } else {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://codeforces.com/contest/$problemContestId/submission/${sub.id}")
+                                )
                             )
-                        )
+                        }
                     }
                 },
                 colors = CardDefaults.cardColors(containerColor = CfCardSurface),
@@ -658,17 +1040,6 @@ private fun relativeTime(seconds: Long): String {
         diff < 86400 -> "${diff / 3600}h ago"
         else -> "${diff / 86400}d ago"
     }
-}
-
-private fun verdictColor(verdict: String?): Color = when (verdict) {
-    "OK" -> VerdictOK
-    "WRONG_ANSWER" -> VerdictWA
-    "TIME_LIMIT_EXCEEDED" -> VerdictTLE
-    "MEMORY_LIMIT_EXCEEDED" -> VerdictMLE
-    "RUNTIME_ERROR" -> VerdictRTE
-    "COMPILATION_ERROR" -> VerdictCE
-    "SKIPPED", "CHALLENGED" -> VerdictSkipped
-    else -> CodeforcesAccent
 }
 
 // ── Hidden submit WebView ────────────────────────────────────────────────────
@@ -838,6 +1209,7 @@ private fun HiddenSubmitWebView(
     onLanguagesLoaded: (List<SubmitLanguage>) -> Unit,
     onSubmitSucceeded: (Long?) -> Unit,
     onSubmitFailed: (String) -> Unit,
+    onSubmitAmbiguous: () -> Unit,
     onSubmitDispatched: () -> Unit
 ) {
     val context = LocalContext.current
@@ -874,8 +1246,10 @@ private fun HiddenSubmitWebView(
         onSubmitDispatched()
         mainHandler.postDelayed({
             if (submitDispatched.value) {
+                // POST was sent but Codeforces didn't confirm in time. The
+                // submission may still have landed — don't call it a failure.
                 submitDispatched.value = false
-                onSubmitFailed("Codeforces didn't respond. Please try again.")
+                onSubmitAmbiguous()
             }
         }, 25000)
     }
@@ -925,7 +1299,7 @@ private fun HiddenSubmitWebView(
                         super.onPageFinished(view, url)
                         val u = url ?: return
                         Log.d(TAG, "onPageFinished $u")
-                        if (u.contains("/my") || u.contains("/submissions")) {
+                        if (u.contains("/my") || u.contains("/submissions") || u.contains("/status")) {
                             if (submitDispatched.value) {
                                 submitDispatched.value = false
                                 view.postDelayed({
@@ -941,13 +1315,17 @@ private fun HiddenSubmitWebView(
                             view.evaluateJavascript("window.__CF_CONTEST=" + jsString(contestId) + ";", null)
                             view.evaluateJavascript(INSTALL_HELPERS_JS, null)
                             if (submitDispatched.value) {
-                                // Came back to the form = validation failed.
+                                // Came back to the form. A real validation error
+                                // has visible text; a blank re-render is ambiguous
+                                // (the POST may still have landed) — let the API
+                                // tracker decide instead of declaring failure.
                                 submitDispatched.value = false
                                 view.postDelayed({
                                     view.evaluateJavascript(EXTRACT_ERROR_JS) { r ->
                                         val err = r?.trim()?.removeSurrounding("\"")?.ifBlank { null }
                                         mainHandler.post {
-                                            onSubmitFailed(err ?: "Submission failed. Please try again.")
+                                            if (err != null) onSubmitFailed(err)
+                                            else onSubmitAmbiguous()
                                         }
                                     }
                                 }, 800)

@@ -25,7 +25,7 @@
       classOutputs="build/intermediates/javac/release/compileReleaseJavaWithJavac/classes:build/tmp/kotlin-classes/release:build/kotlinToolingMetadata:build/intermediates/hilt/component_classes/release:build/generated/ksp/release/resources:build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/release/processReleaseResources/R.jar"
       type="MAIN"
       applicationId="com.codeforces.app"
-      generatedSourceFolders="build/generated/ksp/release/java:build/generated/ksp/release/kotlin:build/generated/ap_generated_sources/release/out"
+      generatedSourceFolders="build/generated/ksp/release/java:build/generated/ksp/release/kotlin:build/generated/ap_generated_sources/release/out:build/generated/source/buildConfig/release"
       generatedResourceFolders="build/generated/res/resValues/release"
       desugaredMethodsFiles="/home/santu/.gradle/caches/9.0-milestone-1/transforms/22195c8a87fa739d2bb4e55ed623fb39/transformed/D8BackportedDesugaredMethods.txt">
   </artifact>

@@ -24,6 +24,7 @@ import android.net.Uri
 import com.codeforces.app.ui.screens.profile.ProfileScreen
 import com.codeforces.app.ui.screens.settings.SettingsScreen
 import com.codeforces.app.ui.screens.standings.StandingsScreen
+import com.codeforces.app.ui.screens.submissions.SubmissionDetailScreen
 import com.codeforces.app.ui.screens.submissions.SubmissionsScreen
 
 @Composable
@@ -67,7 +68,10 @@ fun AppNavGraph(
                 index = backStackEntry.arguments?.getString("index") ?: "",
                 name = Uri.decode(backStackEntry.arguments?.getString("name") ?: ""),
                 onLogin = { navController.navigate(Screen.Login.route) },
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onOpenSubmission = { cid, sid, h ->
+                    navController.navigate(Screen.SubmissionDetail.createRoute(cid, sid, h))
+                }
             )
         }
         composable(
@@ -118,6 +122,23 @@ fun AppNavGraph(
         ) { backStackEntry ->
             SubmissionsScreen(
                 handle = backStackEntry.arguments?.getString("handle") ?: "",
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            Screen.SubmissionDetail.route,
+            arguments = listOf(
+                navArgument("contestId") { type = NavType.StringType },
+                navArgument("submissionId") { type = NavType.LongType },
+                navArgument("handle") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            SubmissionDetailScreen(
+                contestId = backStackEntry.arguments?.getString("contestId") ?: "",
+                submissionId = backStackEntry.arguments?.getLong("submissionId") ?: 0L,
+                handle = Uri.decode(backStackEntry.arguments?.getString("handle") ?: ""),
+                navController = navController,
                 onBack = { navController.popBackStack() }
             )
         }

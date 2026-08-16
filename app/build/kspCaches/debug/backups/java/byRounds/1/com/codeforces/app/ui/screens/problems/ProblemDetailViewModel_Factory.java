@@ -3,6 +3,7 @@ package com.codeforces.app.ui.screens.problems;
 import com.codeforces.app.data.api.CodeforcesApiService;
 import com.codeforces.app.data.repository.UserPreferencesRepository;
 import com.codeforces.app.data.scraper.CfSubmitter;
+import com.codeforces.app.data.tracker.SubmissionTracker;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -34,28 +35,32 @@ public final class ProblemDetailViewModel_Factory implements Factory<ProblemDeta
 
   private final Provider<CodeforcesApiService> apiProvider;
 
+  private final Provider<SubmissionTracker> trackerProvider;
+
   public ProblemDetailViewModel_Factory(Provider<OkHttpClient> okHttpClientProvider,
       Provider<UserPreferencesRepository> prefsProvider, Provider<CfSubmitter> submitterProvider,
-      Provider<CodeforcesApiService> apiProvider) {
+      Provider<CodeforcesApiService> apiProvider, Provider<SubmissionTracker> trackerProvider) {
     this.okHttpClientProvider = okHttpClientProvider;
     this.prefsProvider = prefsProvider;
     this.submitterProvider = submitterProvider;
     this.apiProvider = apiProvider;
+    this.trackerProvider = trackerProvider;
   }
 
   @Override
   public ProblemDetailViewModel get() {
-    return newInstance(okHttpClientProvider.get(), prefsProvider.get(), submitterProvider.get(), apiProvider.get());
+    return newInstance(okHttpClientProvider.get(), prefsProvider.get(), submitterProvider.get(), apiProvider.get(), trackerProvider.get());
   }
 
   public static ProblemDetailViewModel_Factory create(Provider<OkHttpClient> okHttpClientProvider,
       Provider<UserPreferencesRepository> prefsProvider, Provider<CfSubmitter> submitterProvider,
-      Provider<CodeforcesApiService> apiProvider) {
-    return new ProblemDetailViewModel_Factory(okHttpClientProvider, prefsProvider, submitterProvider, apiProvider);
+      Provider<CodeforcesApiService> apiProvider, Provider<SubmissionTracker> trackerProvider) {
+    return new ProblemDetailViewModel_Factory(okHttpClientProvider, prefsProvider, submitterProvider, apiProvider, trackerProvider);
   }
 
   public static ProblemDetailViewModel newInstance(OkHttpClient okHttpClient,
-      UserPreferencesRepository prefs, CfSubmitter submitter, CodeforcesApiService api) {
-    return new ProblemDetailViewModel(okHttpClient, prefs, submitter, api);
+      UserPreferencesRepository prefs, CfSubmitter submitter, CodeforcesApiService api,
+      SubmissionTracker tracker) {
+    return new ProblemDetailViewModel(okHttpClient, prefs, submitter, api, tracker);
   }
 }

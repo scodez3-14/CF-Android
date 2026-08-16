@@ -231,7 +231,17 @@ fun HomeScreen(
                                     problemName = sub.problem.name,
                                     verdict = sub.verdict ?: "IN_QUEUE",
                                     language = sub.programmingLanguage,
-                                    timeMs = sub.timeConsumedMillis
+                                    timeMs = sub.timeConsumedMillis,
+                                    onClick = {
+                                        val h = handle
+                                        sub.problem.contestId?.let { cid ->
+                                            if (!h.isNullOrBlank()) {
+                                                navController.navigate(
+                                                    Screen.SubmissionDetail.createRoute(cid.toString(), sub.id, h)
+                                                )
+                                            }
+                                        }
+                                    }
                                 )
                             }
                         }

@@ -31,6 +31,8 @@ import com.codeforces.app.ui.components.ShimmerCardRow
 import com.codeforces.app.ui.components.ShimmerHeroCard
 import com.codeforces.app.ui.components.SkeletonBox
 import com.codeforces.app.ui.components.rememberShimmerBrush
+import com.codeforces.app.ui.components.verdictColor
+import com.codeforces.app.ui.components.verdictShort
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.theme.*
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -245,7 +247,14 @@ fun ProfileScreen(
                                     problemName = sub.problem.name,
                                     verdict = sub.verdict ?: "IN_QUEUE",
                                     language = sub.programmingLanguage,
-                                    timeMs = sub.timeConsumedMillis
+                                    timeMs = sub.timeConsumedMillis,
+                                    onClick = {
+                                        sub.problem.contestId?.let { cid ->
+                                            navController.navigate(
+                                                Screen.SubmissionDetail.createRoute(cid.toString(), sub.id, resolvedHandle)
+                                            )
+                                        }
+                                    }
                                 )
                             }
                             TextButton(
@@ -285,32 +294,35 @@ fun StatCard(label: String, value: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SubmissionRow(problemName: String, verdict: String, language: String, timeMs: Int, modifier: Modifier = Modifier) {
-    val verdictColor = when (verdict) {
-        "OK" -> VerdictOK
-        "WRONG_ANSWER" -> VerdictWA
-        "TIME_LIMIT_EXCEEDED" -> VerdictTLE
-        "MEMORY_LIMIT_EXCEEDED" -> VerdictMLE
-        "RUNTIME_ERROR" -> VerdictRTE
-        "COMPILATION_ERROR" -> VerdictCE
-        else -> CfTextSecondary
-    }
-    val verdictText = when (verdict) {
-        "OK" -> "AC"
-        "WRONG_ANSWER" -> "WA"
-        "TIME_LIMIT_EXCEEDED" -> "TLE"
-        "MEMORY_LIMIT_EXCEEDED" -> "MLE"
-        "RUNTIME_ERROR" -> "RTE"
-        "COMPILATION_ERROR" -> "CE"
-        "SKIPPED" -> "SKIP"
-        else -> verdict.take(6)
-    }
+fun SubmissionRow(
+    problemName: String,
+    verdict: String,
+    language: String,
+    timeMs: Int,
+    modifier: Modifier = Modifier,
+    isRunning: Boolean = false,
+    onClick: (() -> Unit)? = null
+) {
+    val verdictColor = verdictColor(verdict)
+    val verdictText = if (isRunning) "…" else verdictShort(verdict)
+
+    // Pulsing alpha for verdicts still being judged
+    val pulseAlpha by rememberInfiniteTransition(label = "rowPulse").animateFloat(
+        initialValue = 0.45f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(650), RepeatMode.Reverse),
+        label = "rowPulseAlpha"
+    )
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(CfCardSurface)
+            .then(
+                if (onClick != null) Modifier.clickable(onClick = onClick)
+                else Modifier
+            )
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -318,11 +330,15 @@ fun SubmissionRow(problemName: String, verdict: String, language: String, timeMs
             modifier = Modifier
                 .width(40.dp)
                 .clip(RoundedCornerShape(6.dp))
-                .background(verdictColor.copy(alpha = 0.2f))
+                .background(verdictColor.copy(alpha = if (isRunning) 0.2f * pulseAlpha else 0.2f))
                 .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(verdictText, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold), color = verdictColor)
+            Text(
+                verdictText,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                color = verdictColor.copy(alpha = if (isRunning) pulseAlpha else 1f)
+            )
         }
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {

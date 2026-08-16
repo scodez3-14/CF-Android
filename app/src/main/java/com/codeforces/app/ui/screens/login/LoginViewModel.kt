@@ -78,6 +78,9 @@ class LoginViewModel @Inject constructor(
             if (result.success) {
                 if (remember) prefs.saveLoginCredentials(trimmed, password)
                 else prefs.clearLoginCredentials()
+                // Pin the UA this session was minted under, so later restarts
+                // restore the exact one cf_clearance is bound to.
+                prefs.saveLoginUserAgent(submitter.userAgent)
                 prefs.saveHandle(trimmed)
                 prefs.setSessionActive(true)
                 _state.value = _state.value.copy(

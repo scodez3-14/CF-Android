@@ -29,8 +29,15 @@ class CfSubmitter(
     var userAgent: String = initialUserAgent
         private set
 
+    private val initialUserAgent: String = initialUserAgent
+
     fun setUserAgent(ua: String) {
         if (ua.isNotBlank()) userAgent = ua
+    }
+
+    /** Drop back to the device's default WebView UA. */
+    fun resetUserAgent() {
+        userAgent = initialUserAgent
     }
 
     data class SubmitPage(
@@ -228,6 +235,42 @@ class CfSubmitter(
      */
     fun importCookies(cookieHeader: String) {
         (cookieJar as? PersistentCookieJar)?.importCookieHeader(cookieHeader)
+    }
+
+    /**
+     * Source code of a submission page. Viewing source requires the signed-in
+     * session this class holds, so it lives here rather than in [CfScraper].
+     */
+    fun fetchSubmissionSource(contestId: String, submissionId: Long): String? {
+        val urls = listOf(
+            "https://codeforces.com/contest/$contestId/submission/$submissionId?locale=en",
+            "https://codeforces.com/gym/$contestId/submission/$submissionId?locale=en"
+        )
+        for (url in urls) {
+            try {
+                val req = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", userAgent)
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                    .header("Accept-Language", "en-US,en;q=0.9")
+                    .build()
+                client.newCall(req).execute().use { resp ->
+                    Log.d("CFLOGIN", "submissionSource http=${resp.code} gym=${url.contains("/gym/")} uaOK=${userAgent == initialUserAgent}")
+                    if (!resp.isSuccessful) return@use
+                    val html = resp.body?.string() ?: return@use
+                    val doc = Jsoup.parse(html)
+                    val code = doc.selectFirst("#program-source-text")?.wholeText()?.trim()
+                    Log.d(
+                        "CFLOGIN",
+                        "submissionSource element=${code != null} len=${code?.length ?: 0} " +
+                            "loggedIn=${doc.selectFirst("a[href='/logout']") != null} pageBytes=${html.length}"
+                    )
+                    if (!code.isNullOrEmpty()) return code
+                }
+            } catch (_: Exception) {
+            }
+        }
+        return null
     }
 
     /** The logged-in handle, parsed from the homepage header, or null. */

@@ -1,5 +1,6 @@
 package com.codeforces.app.ui.screens.home;
 
+import com.codeforces.app.data.recommendation.RecommendationRepository;
 import com.codeforces.app.data.repository.CodeforcesRepository;
 import com.codeforces.app.data.repository.UserPreferencesRepository;
 import dagger.internal.DaggerGenerated;
@@ -26,26 +27,31 @@ import javax.inject.Provider;
 public final class HomeViewModel_Factory implements Factory<HomeViewModel> {
   private final Provider<CodeforcesRepository> repoProvider;
 
+  private final Provider<RecommendationRepository> recommendationRepoProvider;
+
   private final Provider<UserPreferencesRepository> prefsProvider;
 
   public HomeViewModel_Factory(Provider<CodeforcesRepository> repoProvider,
+      Provider<RecommendationRepository> recommendationRepoProvider,
       Provider<UserPreferencesRepository> prefsProvider) {
     this.repoProvider = repoProvider;
+    this.recommendationRepoProvider = recommendationRepoProvider;
     this.prefsProvider = prefsProvider;
   }
 
   @Override
   public HomeViewModel get() {
-    return newInstance(repoProvider.get(), prefsProvider.get());
+    return newInstance(repoProvider.get(), recommendationRepoProvider.get(), prefsProvider.get());
   }
 
   public static HomeViewModel_Factory create(Provider<CodeforcesRepository> repoProvider,
+      Provider<RecommendationRepository> recommendationRepoProvider,
       Provider<UserPreferencesRepository> prefsProvider) {
-    return new HomeViewModel_Factory(repoProvider, prefsProvider);
+    return new HomeViewModel_Factory(repoProvider, recommendationRepoProvider, prefsProvider);
   }
 
   public static HomeViewModel newInstance(CodeforcesRepository repo,
-      UserPreferencesRepository prefs) {
-    return new HomeViewModel(repo, prefs);
+      RecommendationRepository recommendationRepo, UserPreferencesRepository prefs) {
+    return new HomeViewModel(repo, recommendationRepo, prefs);
   }
 }

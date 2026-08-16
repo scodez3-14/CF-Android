@@ -3,18 +3,23 @@ package com.codeforces.app.ui.screens.problems
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codeforces.app.data.api.CodeforcesApiService
-import com.codeforces.app.data.api.SubmissionDto
 import com.codeforces.app.data.repository.UserPreferencesRepository
 import com.codeforces.app.data.scraper.CfScraper
 import com.codeforces.app.data.scraper.CfSubmitter
+import com.codeforces.app.data.tracker.SubmissionTracker
+import com.codeforces.app.data.tracker.SubmissionView
+import com.codeforces.app.data.tracker.TrackedSubmission
+import com.codeforces.app.data.tracker.toView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -41,16 +46,6 @@ data class SubmitLanguage(val id: String, val label: String)
 
 data class SubmitRequest(val languageId: String, val code: String)
 
-data class SubmissionView(
-    val id: Long,
-    val verdict: String?,
-    val passedTestCount: Int,
-    val timeMillis: Int,
-    val memoryBytes: Long,
-    val language: String,
-    val creationTimeSeconds: Long
-)
-
 sealed interface LoginState {
     object Checking : LoginState
     data class LoggedIn(val handle: String?) : LoginState
@@ -69,12 +64,10 @@ data class ProblemDetailUiState(
     val submitUserAgent: String? = null,
     val languages: List<SubmitLanguage> = emptyList(),
     val languagesReloadTrigger: Int = 0,
+    /** True while the hidden WebView is posting the form (submit in flight). */
     val isSubmitting: Boolean = false,
-    val submitResult: String? = null,
-    val submitVerdict: String? = null,
     val submitError: String? = null,
     val submitRequest: SubmitRequest? = null,
-    val trackedSubmission: SubmissionView? = null,
     // Submission tab
     val submissions: List<SubmissionView> = emptyList(),
     val isSubmissionsLoading: Boolean = false
@@ -85,7 +78,8 @@ class ProblemDetailViewModel @Inject constructor(
     okHttpClient: OkHttpClient,
     private val prefs: UserPreferencesRepository,
     private val submitter: CfSubmitter,
-    private val api: CodeforcesApiService
+    private val api: CodeforcesApiService,
+    private val tracker: SubmissionTracker
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProblemDetailUiState())
@@ -95,9 +89,31 @@ class ProblemDetailViewModel @Inject constructor(
 
     val bookmarks: Flow<Set<String>> = prefs.bookmarks
 
+    /** Live tracking of this problem's submission (null when idle or for
+     *  another problem). Survives tab switches and navigation. */
+    val track: StateFlow<TrackedSubmission?> =
+        combine(tracker.active, _state) { t, s ->
+            t?.takeIf { s.detail?.contestId == it.contestId && s.detail?.index == it.problemIndex }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    /** Emits each submission that reaches a final verdict. */
+    val finishedEvents: kotlinx.coroutines.flow.SharedFlow<TrackedSubmission> = tracker.events
+
     init {
         viewModelScope.launch {
             _state.value = _state.value.copy(submitUserAgent = prefs.loginUserAgent())
+        }
+        // Refresh the history tab whenever any tracked submission finishes.
+        viewModelScope.launch {
+            tracker.events.collect { finished ->
+                val detail = _state.value.detail
+                if (detail != null &&
+                    finished.contestId == detail.contestId &&
+                    finished.problemIndex == detail.index
+                ) {
+                    refreshSubmissions()
+                }
+            }
         }
     }
 
@@ -191,7 +207,8 @@ class ProblemDetailViewModel @Inject constructor(
     }
 
     /** Queue a submission. The actual form POST happens inside the WebView
-     *  (which passes Cloudflare), driven by [submitRequest]. */
+     *  (which passes Cloudflare), driven by [submitRequest]. Verdict tracking
+     *  continues app-wide via [SubmissionTracker]. */
     fun submitCode(languageId: String, code: String) {
         if (_state.value.isSubmitting) return
         if (_state.value.loginState !is LoginState.LoggedIn) {
@@ -204,38 +221,66 @@ class ProblemDetailViewModel @Inject constructor(
             _state.value = _state.value.copy(submitError = "Code is empty")
             return
         }
-        _state.value = _state.value.copy(
-            isSubmitting = true,
-            submitError = null,
-            submitResult = null,
-            submitVerdict = null,
-            trackedSubmission = null,
-            submitRequest = SubmitRequest(languageId, code)
-        )
+        val detail = _state.value.detail ?: return
+        val languageLabel = _state.value.languages.firstOrNull { it.id == languageId }?.label.orEmpty()
+
+        viewModelScope.launch {
+            val handle = currentHandle()
+            if (handle == null) {
+                _state.value = _state.value.copy(submitError = "Could not determine your handle.")
+                return@launch
+            }
+            tracker.begin(handle, detail.contestId, detail.index, detail.name, languageLabel)
+            _state.value = _state.value.copy(
+                isSubmitting = true,
+                submitError = null,
+                submitRequest = SubmitRequest(languageId, code)
+            )
+        }
     }
 
-    /** The WebView filled the form and fired the native form POST. */
+    /** The WebView filled the form and fired the native form POST. From here
+     *  the public API is the source of truth — start polling immediately so
+     *  a slow/undetected redirect can't be mistaken for a failed submit. */
     fun onSubmitDispatched() {
         _state.value = _state.value.copy(submitRequest = null)
+        tracker.onDispatched(null)
     }
 
     /** The WebView landed on the "my submissions" page after a successful POST. */
     fun onSubmitSucceeded(submissionId: Long?) {
         if (!_state.value.isSubmitting) return
         _state.value = _state.value.copy(isSubmitting = false, submitRequest = null, submitError = null)
-        viewModelScope.launch {
-            trackSubmission(submissionId)
-        }
+        tracker.onDispatched(submissionId)
     }
 
-    /** The WebView reported that the submission didn't go through. */
+    /** The WebView reported that the submission didn't go through (form
+     *  validation error, missing editor, etc. — the POST never happened). */
     fun onSubmitFailed(message: String) {
         if (!_state.value.isSubmitting) return
+        tracker.fail()
         _state.value = _state.value.copy(
             isSubmitting = false,
             submitRequest = null,
             submitError = message
         )
+    }
+
+    /** The POST was sent but Codeforces didn't confirm in time (watchdog).
+     *  The submission may well have landed — keep watching via the tracker
+     *  instead of declaring failure. */
+    fun onSubmitAmbiguous() {
+        if (!_state.value.isSubmitting) return
+        _state.value = _state.value.copy(
+            isSubmitting = false,
+            submitRequest = null,
+            submitError = null
+        )
+    }
+
+    /** Hide the finished/timed-out verdict card. */
+    fun dismissTrack() {
+        tracker.dismiss()
     }
 
     // ── Verdicts via the public API (works without cookies / Cloudflare) ─────
@@ -267,62 +312,6 @@ class ProblemDetailViewModel @Inject constructor(
                 _state.value = _state.value.copy(isSubmissionsLoading = false)
             }
         }
-    }
-
-    private suspend fun trackSubmission(submissionId: Long?) {
-        val detail = _state.value.detail ?: return
-        val handle = currentHandle() ?: run {
-            onSubmitFailed("Could not determine your handle.")
-            return
-        }
-        val now = System.currentTimeMillis() / 1000
-        repeat(60) {
-            delay(3000)
-            try {
-                val resp = api.getUserStatus(handle, 1, 30)
-                val subs = resp.takeIf { it.status == "OK" }?.result.orEmpty()
-                val match = when {
-                    submissionId != null -> {
-                        val byId = subs.firstOrNull { it.id == submissionId }
-                        // If the id points at an old submission (page hadn't updated),
-                        // fall back to the most recent matching one.
-                        if (byId != null && now - byId.creationTimeSeconds < 180) byId
-                        else newestRecent(subs, detail, now)
-                    }
-                    else -> newestRecent(subs, detail, now)
-                }
-                if (match != null) {
-                    _state.value = _state.value.copy(trackedSubmission = match.toView())
-                    val verdict = match.verdict
-                    if (verdict != null && verdict != "TESTING" && verdict != "IN_QUEUE") {
-                        _state.value = _state.value.copy(
-                            submitResult = verdictLabel(verdict),
-                            submitVerdict = verdict,
-                            isSubmitting = false
-                        )
-                        refreshSubmissions()
-                        return
-                    }
-                }
-            } catch (_: Exception) {
-                // Transient network error; keep polling.
-            }
-        }
-        _state.value = _state.value.copy(isSubmitting = false)
-    }
-
-    private fun newestRecent(
-        subs: List<SubmissionDto>,
-        detail: ProblemDetail,
-        now: Long
-    ): SubmissionDto? {
-        return subs
-            .filter {
-                it.contestId?.toString() == detail.contestId &&
-                    it.problem.index == detail.index &&
-                    now - it.creationTimeSeconds < 600
-            }
-            .maxByOrNull { it.creationTimeSeconds }
     }
 
     private suspend fun currentHandle(): String? {
@@ -418,34 +407,3 @@ class ProblemDetailViewModel @Inject constructor(
         return pre.wholeText().replace("\u00a0", " ").trim()
     }
 }
-
-/** Display label for a Codeforces API verdict. */
-fun verdictLabel(verdict: String?): String = when (verdict) {
-    null, "", "IN_QUEUE" -> "In queue"
-    "TESTING" -> "Testing…"
-    "OK" -> "Accepted"
-    "WRONG_ANSWER" -> "Wrong answer"
-    "TIME_LIMIT_EXCEEDED" -> "Time limit exceeded"
-    "MEMORY_LIMIT_EXCEEDED" -> "Memory limit exceeded"
-    "RUNTIME_ERROR" -> "Runtime error"
-    "COMPILATION_ERROR" -> "Compilation error"
-    "IDLENESS_LIMIT_EXCEEDED" -> "Idleness limit exceeded"
-    "PRESENTATION_ERROR" -> "Presentation error"
-    "SECURITY_VIOLATED" -> "Security violated"
-    "CHALLENGED" -> "Hacked"
-    "SKIPPED" -> "Skipped"
-    "PARTIAL" -> "Partial"
-    "CRASHED" -> "Crashed"
-    "REJECTED" -> "Rejected"
-    else -> verdict ?: "In queue"
-}
-
-private fun SubmissionDto.toView(): SubmissionView = SubmissionView(
-    id = id,
-    verdict = verdict,
-    passedTestCount = passedTestCount,
-    timeMillis = timeConsumedMillis,
-    memoryBytes = memoryConsumedBytes,
-    language = programmingLanguage,
-    creationTimeSeconds = creationTimeSeconds
-)

@@ -27,6 +27,10 @@ sealed class Screen(val route: String) {
     object Submissions : Screen("submissions/{handle}") {
         fun createRoute(handle: String) = "submissions/$handle"
     }
+    object SubmissionDetail : Screen("submission_detail/{contestId}/{submissionId}/{handle}") {
+        fun createRoute(contestId: String, submissionId: Long, handle: String) =
+            "submission_detail/$contestId/$submissionId/${Uri.encode(handle)}"
+    }
     object Search : Screen("search")
     object Leaderboard : Screen("leaderboard")
     object Blog : Screen("blog/{handle}") {

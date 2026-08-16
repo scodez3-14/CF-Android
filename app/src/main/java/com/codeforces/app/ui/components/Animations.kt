@@ -50,6 +50,7 @@ import com.codeforces.app.ui.theme.CfCardSurface
 import com.codeforces.app.ui.theme.CfTextPrimary
 import com.codeforces.app.ui.theme.CfTextSecondary
 import com.codeforces.app.ui.theme.CodeforcesAccent
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -168,8 +169,12 @@ fun RevealItem(
     LaunchedEffect(visible) {
         if (visible && !hasRevealed) {
             if (delayMillis > 0) delay(delayMillis.toLong())
-            launch { alpha.animateTo(1f, tween(300, easing = FastOutSlowInEasing)) }
-            launch { slide.animateTo(0f, tween(300, easing = FastOutSlowInEasing)) }
+            // Wait for both animations to finish before taking the fast path,
+            // otherwise the next frame swaps in the un-animated Box.
+            coroutineScope {
+                launch { alpha.animateTo(1f, tween(300, easing = FastOutSlowInEasing)) }
+                launch { slide.animateTo(0f, tween(300, easing = FastOutSlowInEasing)) }
+            }
             hasRevealed = true
         }
     }

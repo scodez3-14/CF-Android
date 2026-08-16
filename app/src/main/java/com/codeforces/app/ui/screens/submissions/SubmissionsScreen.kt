@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.codeforces.app.ui.components.ShimmerList
+import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.SubmissionRow
 import com.codeforces.app.ui.theme.*
 
@@ -25,6 +27,7 @@ import com.codeforces.app.ui.theme.*
 @Composable
 fun SubmissionsScreen(
     handle: String,
+    navController: NavController,
     onBack: () -> Unit,
     viewModel: SubmissionsViewModel = hiltViewModel()
 ) {
@@ -76,6 +79,16 @@ fun SubmissionsScreen(
                         verdict = sub.verdict ?: "IN_QUEUE",
                         language = sub.programmingLanguage,
                         timeMs = sub.timeConsumedMillis,
+                        isRunning = sub.verdict == null ||
+                            sub.verdict == "TESTING" ||
+                            sub.verdict == "IN_QUEUE",
+                        onClick = {
+                            sub.problem.contestId?.let { cid ->
+                                navController.navigate(
+                                    Screen.SubmissionDetail.createRoute(cid.toString(), sub.id, handle)
+                                )
+                            }
+                        },
                         modifier = Modifier.animateItemPlacement()
                     )
                 }
