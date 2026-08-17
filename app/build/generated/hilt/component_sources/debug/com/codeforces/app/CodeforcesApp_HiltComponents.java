@@ -13,10 +13,10 @@ import com.codeforces.app.ui.screens.onboarding.OnboardingViewModel_HiltModules;
 import com.codeforces.app.ui.screens.problems.ProblemDetailViewModel_HiltModules;
 import com.codeforces.app.ui.screens.problems.ProblemsViewModel_HiltModules;
 import com.codeforces.app.ui.screens.profile.ProfileViewModel_HiltModules;
-import com.codeforces.app.ui.screens.recommendations.RecommendationsViewModel_HiltModules;
 import com.codeforces.app.ui.screens.search.SearchViewModel_HiltModules;
 import com.codeforces.app.ui.screens.settings.SettingsViewModel_HiltModules;
 import com.codeforces.app.ui.screens.standings.StandingsViewModel_HiltModules;
+import com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel_HiltModules;
 import com.codeforces.app.ui.screens.submissions.SubmissionsViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
@@ -185,10 +185,10 @@ public final class CodeforcesApp_HiltComponents {
           ProblemDetailViewModel_HiltModules.KeyModule.class,
           ProblemsViewModel_HiltModules.KeyModule.class,
           ProfileViewModel_HiltModules.KeyModule.class,
-          RecommendationsViewModel_HiltModules.KeyModule.class,
           SearchViewModel_HiltModules.KeyModule.class,
           SettingsViewModel_HiltModules.KeyModule.class,
           StandingsViewModel_HiltModules.KeyModule.class,
+          SubmissionDetailViewModel_HiltModules.KeyModule.class,
           SubmissionsViewModel_HiltModules.KeyModule.class,
           WebLoginViewModel_HiltModules.KeyModule.class
       }
@@ -237,10 +237,10 @@ public final class CodeforcesApp_HiltComponents {
           ProblemDetailViewModel_HiltModules.BindsModule.class,
           ProblemsViewModel_HiltModules.BindsModule.class,
           ProfileViewModel_HiltModules.BindsModule.class,
-          RecommendationsViewModel_HiltModules.BindsModule.class,
           SearchViewModel_HiltModules.BindsModule.class,
           SettingsViewModel_HiltModules.BindsModule.class,
           StandingsViewModel_HiltModules.BindsModule.class,
+          SubmissionDetailViewModel_HiltModules.BindsModule.class,
           SubmissionsViewModel_HiltModules.BindsModule.class,
           WebLoginViewModel_HiltModules.BindsModule.class
       }

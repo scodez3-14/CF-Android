@@ -25,9 +25,9 @@ data class SubmissionDetailUiState(
     val sourceLoading: Boolean = true,
     /** UA the browser login used — the hidden WebView must present it too. */
     val loginUa: String? = null,
-    /** Cloudflare is challenging the WebView — offer the manual check. */
+    /** Cloudflare is challenging — the web session needs renewal via login. */
     val needsCheck: Boolean = false,
-    /** User dismissed the manual check without solving it. */
+    /** User chose not to renew — show the unavailable state. */
     val webViewGiveUp: Boolean = false
 )
 
@@ -41,31 +41,29 @@ class SubmissionDetailViewModel @Inject constructor(
     private val _state = MutableStateFlow(SubmissionDetailUiState())
     val state: StateFlow<SubmissionDetailUiState> = _state.asStateFlow()
 
+    /** null = still checking; false = signed out. */
+    private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
+    val isLoggedIn: StateFlow<Boolean?> = _isLoggedIn.asStateFlow()
+
+    private var contestId: String = ""
+    private var submissionId: Long = 0L
+
     init {
         viewModelScope.launch {
             _state.update { it.copy(loginUa = prefs.loginUserAgent()) }
         }
     }
 
-    /** Source delivered by the Cloudflare-safe WebView; null = challenged. */
-    fun onWebViewSource(code: String?) {
-        if (!code.isNullOrBlank()) {
-            _state.update {
-                it.copy(source = code, sourceLoading = false, needsCheck = false)
-            }
-        } else {
-            _state.update { it.copy(needsCheck = true) }
-        }
-    }
-
-    /** User closed the full-screen security check without completing it. */
-    fun onCheckDismissed() {
-        _state.update { it.copy(webViewGiveUp = true) }
-    }
-
     fun load(contestId: String, submissionId: Long, handleArg: String) {
+        this.contestId = contestId
+        this.submissionId = submissionId
         viewModelScope.launch {
-            // Metadata from the public API (falls back to the saved handle).
+            // Gate behind login — source code requires an active CF session.
+            _isLoggedIn.value = null
+            val loggedIn = withContext(Dispatchers.IO) { submitter.isLoggedIn() }
+                || withContext(Dispatchers.IO) { prefs.isSessionActive() }
+            _isLoggedIn.value = loggedIn
+
             launch {
                 try {
                     val handle = handleArg.ifBlank {
@@ -81,36 +79,81 @@ class SubmissionDetailViewModel @Inject constructor(
                 }
                 _state.update { it.copy(isLoading = false) }
             }
-            // Source code needs the authenticated web session. cf_clearance is
-            // bound to the User-Agent the session was minted under, and that
-            // can be either the saved browser-login UA or the device default
-            // (password login) — try both, re-authenticating if needed.
-            launch {
-                val src = withContext(Dispatchers.IO) {
-                    var result: String? = null
+            if (loggedIn) fetchSource()
+        }
+    }
 
-                    val savedUa = prefs.loginUserAgent()
-                    if (!savedUa.isNullOrBlank()) {
-                        submitter.setUserAgent(savedUa)
-                        result = submitter.fetchSubmissionSource(contestId, submissionId)
-                    }
+    /** Re-run the source fetch (e.g. after renewing the web session). */
+    fun retrySource() {
+        if (_state.value.source != null || contestId.isBlank()) return
+        fetchSource()
+    }
 
-                    if (result == null) {
-                        submitter.resetUserAgent()
-                        if (!submitter.isLoggedIn()) {
-                            val savedHandle = prefs.savedLoginHandle()
-                            val savedPassword = prefs.savedLoginPassword()
-                            if (!savedHandle.isNullOrBlank() && savedPassword != null) {
-                                submitter.login(savedHandle, savedPassword)
-                            }
-                        }
-                        result = submitter.fetchSubmissionSource(contestId, submissionId)
-                    }
-
-                    result
-                }
-                _state.update { it.copy(source = src, sourceLoading = false) }
+    /** Source delivered by the Cloudflare-safe WebView; null = challenged. */
+    fun onWebViewSource(code: String?) {
+        if (!code.isNullOrBlank()) {
+            _state.update {
+                it.copy(source = code, sourceLoading = false, needsCheck = false)
             }
+            // The WebView has a valid session — sync its cookies into OkHttp
+            // so the *next* source fetch can succeed without the WebView.
+            viewModelScope.launch(Dispatchers.IO) {
+                submitter.syncCookiesFromSystem()
+            }
+        } else {
+            _state.update { it.copy(needsCheck = true) }
+        }
+    }
+
+    /** User declined to renew the session. */
+    fun onRenewalDismissed() {
+        _state.update { it.copy(webViewGiveUp = true) }
+    }
+
+    private fun fetchSource() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(sourceLoading = true, source = null, needsCheck = false, webViewGiveUp = false)
+            }
+            val src = withContext(Dispatchers.IO) {
+                // ① Always pull the latest cookies from the system WebView
+                //    session into OkHttp's PersistentCookieJar.  This is the
+                //    key fix: the WebView login (or hidden WebView) may have
+                //    refreshed cf_clearance / JSESSIONID since the last time
+                //    OkHttp touched them.
+                submitter.syncCookiesFromSystem()
+
+                var result: String? = null
+
+                // ② Try with the saved WebView UA (cf_clearance is UA-bound)
+                val savedUa = prefs.loginUserAgent()
+                if (!savedUa.isNullOrBlank()) {
+                    submitter.setUserAgent(savedUa)
+                    result = submitter.fetchSubmissionSource(contestId, submissionId)
+                }
+
+                // ③ Fallback: try with the default UA
+                if (result == null) {
+                    submitter.resetUserAgent()
+                    result = submitter.fetchSubmissionSource(contestId, submissionId)
+                }
+
+                // ④ If still null, attempt a re-login with saved credentials
+                //    then retry once more.
+                if (result == null) {
+                    val savedHandle = prefs.savedLoginHandle()
+                    val savedPassword = prefs.savedLoginPassword()
+                    if (!savedHandle.isNullOrBlank() && savedPassword != null) {
+                        submitter.login(savedHandle, savedPassword)
+                        // Re-sync cookies after login (login sets new ones)
+                        submitter.syncCookiesFromSystem()
+                        result = submitter.fetchSubmissionSource(contestId, submissionId)
+                    }
+                }
+
+                result
+            }
+            _state.update { it.copy(source = src, sourceLoading = false) }
         }
     }
 }

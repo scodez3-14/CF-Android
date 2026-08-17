@@ -1,10 +1,7 @@
 package com.codeforces.app
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,9 +13,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.*
@@ -28,20 +22,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlin.math.absoluteValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.codeforces.app.data.update.ReleaseInfo
 import com.codeforces.app.ui.navigation.AppNavGraph
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.contests.ContestListScreen
@@ -54,10 +43,12 @@ import com.codeforces.app.ui.theme.CodeforcesAccent
 import com.codeforces.app.ui.theme.CodeforcesTheme
 import com.codeforces.app.ui.theme.CfSurface
 import com.codeforces.app.ui.theme.CfDivider
-import com.codeforces.app.ui.theme.CfCardSurface
 import com.codeforces.app.ui.theme.CfTextPrimary
 import com.codeforces.app.ui.theme.CfTextSecondary
+import com.codeforces.app.ui.theme.ThemeRevealOverlay
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 data class BottomNavItem(
@@ -77,9 +68,21 @@ val bottomNavItems = listOf(
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var prefs: com.codeforces.app.data.repository.UserPreferencesRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        // Hilt injects during super.onCreate — sync the saved theme BEFORE
+        // the first frame (setContent below) so the palette and the Material
+        // color scheme start consistent. No dark flash, no toggle races.
+        // darkProgress must match too, or the blend animation would run on
+        // every cold start in light mode.
+        val savedDark = kotlinx.coroutines.runBlocking { prefs.darkTheme.first() }
+        com.codeforces.app.ui.theme.CfThemeState.isDark = savedDark
+        com.codeforces.app.ui.theme.CfThemeState.darkProgress = if (savedDark) 1f else 0f
 
         // Force maximum refresh rate (e.g., 144Hz) on supported devices
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -93,7 +96,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CodeforcesTheme {
-                MainAppContent()
+                Box(Modifier.fillMaxSize()) {
+                    MainAppContent()
+                    // Topmost layer during a theme toggle; kept OUTSIDE the
+                    // key(isDark) rebuild inside MainAppContent so disposing
+                    // that subtree can't cancel the reveal mid-animation.
+                    ThemeRevealOverlay()
+                }
             }
         }
     }
@@ -116,17 +125,8 @@ fun MainAppContent() {
     val mainViewModel: MainViewModel = hiltViewModel()
     val handle by mainViewModel.handle.collectAsStateWithLifecycle(initialValue = null)
     val isLoading by mainViewModel.isLoading.collectAsStateWithLifecycle()
-    val updateInfo by mainViewModel.updateInfo.collectAsStateWithLifecycle()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
-    // Show update dialog whenever a new release is detected
-    updateInfo?.let { release ->
-        UpdateAvailableDialog(
-            release = release,
-            onDismiss = { mainViewModel.dismissUpdate() }
-        )
-    }
 
     when {
         isLoading -> Unit
@@ -144,6 +144,11 @@ fun MainAppContent() {
 
             val showBottomBar = currentRoute == Screen.TabHost.route
 
+            // key() on the theme forces this whole UI (bottom bar included)
+            // to rebuild on every theme toggle. A bare state read gets
+            // dead-code-eliminated by R8 in release builds, which left the
+            // bottom bar stuck on stale colors after mid-session toggles.
+            androidx.compose.runtime.key(com.codeforces.app.ui.theme.CfThemeState.isDark) {
             Scaffold(
                 bottomBar = {
                     if (showBottomBar) {
@@ -179,7 +184,9 @@ fun MainAppContent() {
                                         colors = NavigationBarItemDefaults.colors(
                                             selectedIconColor = CodeforcesAccent,
                                             selectedTextColor = CodeforcesAccent,
-                                            indicatorColor = CodeforcesAccent.copy(alpha = 0.15f)
+                                            indicatorColor = CodeforcesAccent.copy(alpha = 0.15f),
+                                            unselectedIconColor = CfTextSecondary,
+                                            unselectedTextColor = CfTextSecondary
                                         )
                                     )
                                 }
@@ -236,94 +243,7 @@ fun MainAppContent() {
                     )
                 }
             }
+            }
         }
     }
-}
-
-// ── GitHub Update Dialog ────────────────────────────────────────────────────
-
-@Composable
-fun UpdateAvailableDialog(release: ReleaseInfo, onDismiss: () -> Unit) {
-    val context = LocalContext.current
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = CfCardSurface,
-        shape = RoundedCornerShape(20.dp),
-        icon = {
-            Icon(
-                Icons.Rounded.SystemUpdate,
-                contentDescription = null,
-                tint = CodeforcesAccent,
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        title = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    "Update Available 🎉",
-                    color = CfTextPrimary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    release.tagName,
-                    color = CodeforcesAccent,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-        },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    "A new version of the app is available on GitHub.",
-                    color = CfTextSecondary,
-                    fontSize = 14.sp
-                )
-                if (release.body.isNotBlank()) {
-                    HorizontalDivider(color = CfDivider)
-                    Text(
-                        "What's new:",
-                        color = CfTextPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 13.sp
-                    )
-                    // Show first 400 chars of the changelog
-                    Text(
-                        release.body.take(400).let { if (release.body.length > 400) "$it…" else it },
-                        color = CfTextSecondary,
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(release.htmlUrl))
-                    )
-                    onDismiss()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent),
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Icon(Icons.Rounded.Download, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(Modifier.width(6.dp))
-                Text("Download Update")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Later", color = CfTextSecondary)
-            }
-        }
-    )
 }

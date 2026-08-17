@@ -1,5 +1,11 @@
 package com.codeforces.app.ui.screens.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,7 +17,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +63,44 @@ fun HomeScreen(
                     }
                 },
                 actions = {
+                    // Reads snapshot state, so the icon swaps live on toggle
+                    val isDark = CfThemeState.isDark
+                    val view = LocalView.current
+                    var iconCenter by remember { mutableStateOf(Offset.Zero) }
+                    IconButton(
+                        onClick = {
+                            // Capture the old-theme screen BEFORE flipping so the
+                            // circular reveal overlay has the "before" pixels.
+                            // PixelCopy is async — flip the theme in the callback
+                            // so recomposition can't race the capture.
+                            val center = iconCenter
+                            captureWindowBitmap(view) { captured ->
+                                ThemeRevealState.center = center
+                                ThemeRevealState.snapshot = captured
+                                viewModel.toggleTheme()
+                            }
+                        },
+                        modifier = Modifier.onGloballyPositioned {
+                            iconCenter = it.positionInWindow() +
+                                Offset(it.size.width / 2f, it.size.height / 2f)
+                        }
+                    ) {
+                        AnimatedContent(
+                            targetState = isDark,
+                            transitionSpec = {
+                                (fadeIn(animationSpec = tween(200)) +
+                                    scaleIn(initialScale = 0.4f, animationSpec = tween(200)))
+                                    .togetherWith(fadeOut(animationSpec = tween(150)))
+                            },
+                            label = "themeToggleIcon"
+                        ) { dark ->
+                            Icon(
+                                imageVector = if (dark) Icons.Rounded.LightMode else Icons.Rounded.DarkMode,
+                                contentDescription = if (dark) "Switch to light theme" else "Switch to dark theme",
+                                tint = CfTextSecondary
+                            )
+                        }
+                    }
                     IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
                         Icon(Icons.Rounded.Settings, contentDescription = "Settings")
                     }
@@ -263,7 +311,11 @@ fun SectionHeader(title: String, onSeeAll: (() -> Unit)?) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = CfTextPrimary
+        )
         onSeeAll?.let {
             TextButton(onClick = it) {
                 Text("See all", color = CfAccentLight, style = MaterialTheme.typography.labelMedium)

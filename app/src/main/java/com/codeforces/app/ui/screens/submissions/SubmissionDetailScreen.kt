@@ -66,9 +66,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codeforces.app.ui.components.SkeletonBox
+import com.codeforces.app.ui.components.SignInRequired
 import com.codeforces.app.ui.components.rememberShimmerBrush
 import com.codeforces.app.ui.components.verdictColor
 import com.codeforces.app.ui.components.verdictLabel
@@ -90,20 +93,25 @@ fun SubmissionDetailScreen(
     handle: String,
     navController: NavController,
     onBack: () -> Unit,
+    onLogin: () -> Unit = {},
     viewModel: SubmissionDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
     val meta = state.meta
-    var webViewExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(contestId, submissionId) {
         viewModel.load(contestId, submissionId, handle)
     }
 
-    Box(Modifier.fillMaxSize()) {
-        Scaffold(
+    // After returning from the web login (session renewed), retry the fetch.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        if (state.needsCheck) viewModel.retrySource()
+    }
+
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Submission", fontWeight = FontWeight.Bold) },
@@ -117,6 +125,15 @@ fun SubmissionDetailScreen(
         },
         containerColor = CfBackground
     ) { padding ->
+        if (isLoggedIn == false) {
+            SignInRequired(
+                message = "Source code is tied to your Codeforces account. Sign in to view it.",
+                onLogin = onLogin,
+                modifier = Modifier.padding(padding)
+            )
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -332,8 +349,8 @@ fun SubmissionDetailScreen(
                 Text("Open on Codeforces", color = CfTextPrimary)
             }
 
-            // Cloudflare challenge card — manual verification renews the
-            // session (same one-tap check the login screen uses).
+            // Cloudflare challenge card — renew via the proven web login flow
+            // (it refreshes the session cookies submit also depends on).
             if (state.needsCheck && state.source == null && !state.webViewGiveUp) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = CodeforcesAccent.copy(alpha = 0.12f)),
@@ -351,7 +368,7 @@ fun SubmissionDetailScreen(
                                 modifier = Modifier.size(22.dp)
                             )
                             Text(
-                                "Codeforces security check",
+                                "Web session needs renewal",
                                 color = CfTextPrimary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
@@ -359,17 +376,22 @@ fun SubmissionDetailScreen(
                         }
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            "The web session needs re-verification. Completing the check once also keeps code submission working.",
+                            "Codeforces wants re-verification. Sign in through the browser once — it renews everything, including code submission. This screen reloads automatically when you return.",
                             color = CfTextSecondary,
                             fontSize = 12.sp,
                             lineHeight = 17.sp
                         )
                         Spacer(Modifier.height(10.dp))
-                        Button(
-                            onClick = { webViewExpanded = true },
-                            colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)
-                        ) {
-                            Text("Complete check")
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(
+                                onClick = { navController.navigate(Screen.WebLogin.route) },
+                                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent)
+                            ) {
+                                Text("Renew session")
+                            }
+                            OutlinedButton(onClick = { viewModel.onRenewalDismissed() }) {
+                                Text("Not now", color = CfTextSecondary)
+                            }
                         }
                     }
                 }
@@ -377,48 +399,16 @@ fun SubmissionDetailScreen(
         }
     }
 
-    // Cloudflare-safe source fetch: a WebView with the real browser
-    // fingerprint and the system cookie session. Polls patiently (silent
-    // challenges auto-solve); expands full-screen for the manual check.
-    if (state.source == null && !state.sourceLoading && !state.webViewGiveUp) {
-        Column(
-            modifier = if (webViewExpanded) Modifier.fillMaxSize() else Modifier
-        ) {
-            if (webViewExpanded) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(CfSurface)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    IconButton(onClick = {
-                        webViewExpanded = false
-                        viewModel.onCheckDismissed()
-                    }) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Close check", tint = CfTextPrimary)
-                    }
-                    Text(
-                        "Complete the check, then come back",
-                        color = CfTextPrimary,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
-            SourceWebView(
-                contestId = contestId,
-                submissionId = submissionId,
-                userAgent = state.loginUa ?: WebSettings.getDefaultUserAgent(context),
-                onSource = viewModel::onWebViewSource,
-                modifier = if (webViewExpanded) {
-                    Modifier.fillMaxWidth().weight(1f)
-                } else {
-                    Modifier.fillMaxWidth().height(1.dp).alpha(0f)
-                }
-            )
-        }
-    }
+    // Cloudflare-safe source fetch: hidden WebView with the real browser
+    // fingerprint + system cookie session. Polls patiently — silent
+    // challenges auto-solve.
+    if (isLoggedIn != false && state.source == null && !state.sourceLoading && !state.webViewGiveUp) {
+        SourceWebView(
+            contestId = contestId,
+            submissionId = submissionId,
+            userAgent = state.loginUa ?: WebSettings.getDefaultUserAgent(context),
+            onSource = viewModel::onWebViewSource
+        )
     }
 }
 
@@ -448,8 +438,7 @@ private fun SourceWebView(
     contestId: String,
     submissionId: Long,
     userAgent: String?,
-    onSource: (String?) -> Unit,
-    modifier: Modifier = Modifier
+    onSource: (String?) -> Unit
 ) {
     AndroidView(
         factory = { ctx ->
@@ -461,21 +450,36 @@ private fun SourceWebView(
                 CookieManager.getInstance().setAcceptCookie(true)
 
                 webViewClient = object : WebViewClient() {
+                    private var redirectedOnce = false
+
                     override fun onPageFinished(view: WebView, url: String?) {
                         super.onPageFinished(view, url)
-                        // Reload the target page if we got parked on a
-                        // challenge or bounced to the login page.
+                        // If we got bounced to the login page, the user isn't
+                        // logged in on the WebView side either — surface the
+                        // renewal card immediately rather than waiting 45 s.
                         if (url != null && url.contains("codeforces.com") &&
+                            (url.contains("/enter") || url.contains("/login"))
+                        ) {
+                            onSource(null)
+                            return
+                        }
+                        // If we got bounced off the target page (Cloudflare
+                        // redirect etc.), go back exactly once — and give any
+                        // in-flight challenge plenty of time to clear itself.
+                        if (!redirectedOnce && url != null && url.contains("codeforces.com") &&
                             !url.contains("/submission/")
                         ) {
-                            view.postDelayed({ view.loadUrl(sourceUrl(contestId, submissionId)) }, 2500)
+                            redirectedOnce = true
+                            view.postDelayed({ view.loadUrl(sourceUrl(contestId, submissionId)) }, 10_000)
                         }
                     }
                 }
 
                 loadUrl(sourceUrl(contestId, submissionId))
 
-                // Patient poller: every 2.5s, up to ~5 minutes on screen.
+                // Patient poller: reads the DOM every 2.5s via JS — no page
+                // reloads. Silent Cloudflare checks auto-solve undisturbed,
+                // exactly like the hidden submit WebView.
                 val handler = Handler(Looper.getMainLooper())
                 var ticks = 0
                 var nullStreak = 0
@@ -489,15 +493,12 @@ private fun SourceWebView(
                                 onSource(code)
                             } else {
                                 nullStreak++
-                                // ~30s of nothing = likely an interactive
-                                // challenge; surface it (polling continues).
-                                if (nullStreak >= 12 && !reportedChallenge) {
+                                // ~45s of nothing = likely an interactive
+                                // challenge; surface the renewal card.
+                                // Polling continues in case it still clears.
+                                if (nullStreak >= 18 && !reportedChallenge) {
                                     reportedChallenge = true
                                     onSource(null)
-                                }
-                                // Challenge page may need a nudge to re-run.
-                                if (nullStreak % 8 == 0) {
-                                    loadUrl(sourceUrl(contestId, submissionId))
                                 }
                             }
                         }
@@ -507,7 +508,10 @@ private fun SourceWebView(
                 handler.postDelayed(poller, 2000)
             }
         },
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .alpha(0f)
     )
 }
 

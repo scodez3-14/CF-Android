@@ -111,7 +111,7 @@ fun ProblemsScreen(
                                     Text(
                                         "$activeFilterCount",
                                         fontSize = 10.sp,
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
@@ -355,8 +355,8 @@ private fun QuickRatingFilters(
                 },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = CodeforcesAccent,
-                    selectedLabelColor = Color(0xFF00231C),
-                    selectedLeadingIconColor = Color(0xFF00231C),
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = CfCardSurface,
                     labelColor = CfTextSecondary
                 ),
@@ -380,8 +380,8 @@ private fun QuickRatingFilters(
                 } else null,
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = CodeforcesAccent,
-                    selectedLabelColor = Color(0xFF00231C),
-                    selectedLeadingIconColor = Color(0xFF00231C),
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = CfCardSurface,
                     labelColor = CfTextSecondary
                 ),
@@ -560,7 +560,7 @@ private fun FilterSheetContent(
                         label = { Text(tag, fontSize = 12.sp, maxLines = 1) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = CodeforcesAccent,
-                            selectedLabelColor = Color(0xFF00231C),
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                             containerColor = CfCardSurface,
                             labelColor = CfTextSecondary
                         ),

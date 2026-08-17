@@ -16,9 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codeforces.app.ui.components.ShimmerList
+import com.codeforces.app.ui.components.SignInRequired
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.SubmissionRow
 import com.codeforces.app.ui.theme.*
@@ -29,13 +32,19 @@ fun SubmissionsScreen(
     handle: String,
     navController: NavController,
     onBack: () -> Unit,
+    onLogin: () -> Unit = {},
     viewModel: SubmissionsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     val verdictOptions = listOf(null, "OK", "WRONG_ANSWER", "TIME_LIMIT_EXCEEDED", "RUNTIME_ERROR", "COMPILATION_ERROR")
     val verdictLabels = listOf("All", "AC", "WA", "TLE", "RTE", "CE")
 
     LaunchedEffect(handle) { viewModel.load(handle) }
+
+    // Re-check the session when coming back (e.g. after signing in/out
+    // elsewhere) so the gate state and the list stay in sync.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refreshLogin() }
 
     Scaffold(
         topBar = {
@@ -46,6 +55,14 @@ fun SubmissionsScreen(
             )
         }
     ) { padding ->
+        if (isLoggedIn == false) {
+            SignInRequired(
+                message = "Your submissions are tied to your Codeforces account. Sign in to view them.",
+                onLogin = onLogin,
+                modifier = Modifier.padding(padding)
+            )
+            return@Scaffold
+        }
         Column(Modifier.fillMaxSize().padding(padding)) {
             // Verdict filter row
             Row(

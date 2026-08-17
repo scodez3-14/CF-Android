@@ -123,7 +123,8 @@ fun AppNavGraph(
             SubmissionsScreen(
                 handle = backStackEntry.arguments?.getString("handle") ?: "",
                 navController = navController,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onLogin = { navController.navigate(Screen.Login.route) }
             )
         }
         composable(
@@ -139,7 +140,8 @@ fun AppNavGraph(
                 submissionId = backStackEntry.arguments?.getLong("submissionId") ?: 0L,
                 handle = Uri.decode(backStackEntry.arguments?.getString("handle") ?: ""),
                 navController = navController,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onLogin = { navController.navigate(Screen.Login.route) }
             )
         }
         composable(Screen.Leaderboard.route) {

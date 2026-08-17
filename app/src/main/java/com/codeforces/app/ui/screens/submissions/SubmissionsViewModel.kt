@@ -5,12 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.codeforces.app.data.api.SubmissionDto
 import com.codeforces.app.data.repository.CodeforcesRepository
 import com.codeforces.app.data.repository.Resource
+import com.codeforces.app.data.repository.UserPreferencesRepository
+import com.codeforces.app.data.scraper.CfSubmitter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class SubmissionsUiState(
@@ -22,14 +26,56 @@ data class SubmissionsUiState(
 )
 
 @HiltViewModel
-class SubmissionsViewModel @Inject constructor(private val repo: CodeforcesRepository) : ViewModel() {
+class SubmissionsViewModel @Inject constructor(
+    private val repo: CodeforcesRepository,
+    private val submitter: CfSubmitter,
+    private val prefs: UserPreferencesRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(SubmissionsUiState())
     val state: StateFlow<SubmissionsUiState> = _state.asStateFlow()
 
+    /** null = still checking; false = signed out (list stays hidden). */
+    private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
+    val isLoggedIn: StateFlow<Boolean?> = _isLoggedIn.asStateFlow()
+
+    private var currentHandle: String? = null
     private var livePollJob: Job? = null
 
     fun load(handle: String) {
+        currentHandle = handle
+        refreshLogin()
+    }
+
+    /**
+     * Submissions of the account are login-gated. Re-checks the session on
+     * ON_RESUME (e.g. after returning from the login screen) and loads the
+     * list only while signed in; signing out clears everything shown.
+     */
+    fun refreshLogin() {
+        val handle = currentHandle ?: return
+        viewModelScope.launch {
+            _isLoggedIn.value = null
+            val loggedIn = withContext(Dispatchers.IO) { submitter.isLoggedIn() }
+                || withContext(Dispatchers.IO) { prefs.isSessionActive() }
+            _isLoggedIn.value = loggedIn
+            if (loggedIn) {
+                if (_state.value.submissions.isEmpty()) fetchSubmissions(handle)
+            } else {
+                livePollJob?.cancel()
+                _state.update {
+                    it.copy(
+                        submissions = emptyList(),
+                        filtered = emptyList(),
+                        isLoading = false,
+                        error = null
+                    )
+                }
+            }
+        }
+    }
+
+    private fun fetchSubmissions(handle: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             val result = repo.getUserStatus(handle, 1, 200)

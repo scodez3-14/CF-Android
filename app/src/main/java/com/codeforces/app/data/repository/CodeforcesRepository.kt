@@ -3,8 +3,11 @@ package com.codeforces.app.data.repository
 import com.codeforces.app.data.api.*
 import com.codeforces.app.data.db.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,6 +42,25 @@ class CodeforcesRepository @Inject constructor(
     @Volatile
     private var ratedListCache: RatedListCache? = null
 
+    // ── API Rate Limiter ────────────────────────────────────────────────────
+    // Codeforces enforces ~1 request per 2 s from the same IP.  A Mutex
+    // serialises calls and the timestamp check inserts the minimum gap.
+    private val apiMutex = Mutex()
+    @Volatile private var lastApiCallMs = 0L
+    private val API_MIN_INTERVAL_MS = 2_100L  // slightly over 2 s
+
+    private suspend fun <T> rateLimited(block: suspend () -> T): T = apiMutex.withLock {
+        val elapsed = System.currentTimeMillis() - lastApiCallMs
+        if (elapsed < API_MIN_INTERVAL_MS) delay(API_MIN_INTERVAL_MS - elapsed)
+        try { block() } finally { lastApiCallMs = System.currentTimeMillis() }
+    }
+
+    // ── Recent submissions cache (avoids redundant API calls) ────────────
+    private data class StatusCache(val handle: String, val from: Int, val count: Int,
+                                   val timestamp: Long, val data: List<SubmissionDto>)
+    @Volatile private var statusCache: StatusCache? = null
+    private val STATUS_TTL_MS = 15_000L  // 15 seconds
+
     private fun isFresh(timestamp: Long, ttlMs: Long): Boolean =
         System.currentTimeMillis() - timestamp < ttlMs
 
@@ -55,7 +77,7 @@ class CodeforcesRepository @Inject constructor(
         // Stale cache: show it immediately, refresh in the background.
         if (cached != null) emit(Resource.Success(cached.toDto()))
         try {
-            val response = api.getUserInfo(handle)
+            val response = rateLimited { api.getUserInfo(handle) }
             if (response.status == "OK" && response.result != null) {
                 val user = response.result.first()
                 userDao.insertUser(user.toEntity())
@@ -69,19 +91,39 @@ class CodeforcesRepository @Inject constructor(
     }
 
     suspend fun getUserRating(handle: String): Resource<List<RatingChangeDto>> = try {
-        val response = api.getUserRating(handle)
-        if (response.status == "OK") Resource.Success(response.result ?: emptyList())
-        else Resource.Error(response.comment ?: "Error")
+        rateLimited {
+            val response = api.getUserRating(handle)
+            if (response.status == "OK") Resource.Success(response.result ?: emptyList())
+            else Resource.Error(response.comment ?: "Error")
+        }
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
 
-    suspend fun getUserStatus(handle: String, from: Int = 1, count: Int = 100): Resource<List<SubmissionDto>> = try {
-        val response = api.getUserStatus(handle, from, count)
-        if (response.status == "OK") Resource.Success(response.result ?: emptyList())
-        else Resource.Error(response.comment ?: "Error")
-    } catch (e: Exception) {
-        Resource.Error(e.localizedMessage ?: "Network error")
+    suspend fun getUserStatus(handle: String, from: Int = 1, count: Int = 100): Resource<List<SubmissionDto>> {
+        // Serve a fresh cache hit without touching the network.
+        statusCache?.let { c ->
+            if (c.handle == handle && c.from == from && c.count == count && isFresh(c.timestamp, STATUS_TTL_MS)) {
+                return Resource.Success(c.data)
+            }
+        }
+        return try {
+            rateLimited {
+                val response = api.getUserStatus(handle, from, count)
+                if (response.status == "OK") {
+                    val data = response.result ?: emptyList()
+                    statusCache = StatusCache(handle, from, count, System.currentTimeMillis(), data)
+                    Resource.Success(data)
+                } else Resource.Error(response.comment ?: "Error")
+            }
+        } catch (e: Exception) {
+            // On network error, return the stale cache if we have one for
+            // this handle so the user at least sees *something*.
+            statusCache?.takeIf { it.handle == handle }?.let {
+                return Resource.Success(it.data)
+            }
+            Resource.Error(e.localizedMessage ?: "Network error")
+        }
     }
 
     fun getRatedList(activeOnly: Boolean = true): Flow<Resource<List<UserDto>>> = flow {
@@ -95,7 +137,7 @@ class CodeforcesRepository @Inject constructor(
             }
         }
         try {
-            val response = api.getRatedList(activeOnly)
+            val response = rateLimited { api.getRatedList(activeOnly) }
             if (response.status == "OK") {
                 val users = response.result ?: emptyList()
                 ratedListCache = RatedListCache(activeOnly, System.currentTimeMillis(), users)
@@ -109,9 +151,11 @@ class CodeforcesRepository @Inject constructor(
     }
 
     suspend fun getUserBlogEntries(handle: String): Resource<List<BlogEntryDto>> = try {
-        val response = api.getUserBlogEntries(handle)
-        if (response.status == "OK") Resource.Success(response.result ?: emptyList())
-        else Resource.Error(response.comment ?: "Error")
+        rateLimited {
+            val response = api.getUserBlogEntries(handle)
+            if (response.status == "OK") Resource.Success(response.result ?: emptyList())
+            else Resource.Error(response.comment ?: "Error")
+        }
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
@@ -134,7 +178,7 @@ class CodeforcesRepository @Inject constructor(
             }
         }
         try {
-            val response = api.getProblems(tags)
+            val response = rateLimited { api.getProblems(tags) }
             if (response.status == "OK" && response.result != null) {
                 // Cache problems
                 if (tags == null) {
@@ -170,7 +214,7 @@ class CodeforcesRepository @Inject constructor(
         }
         if (cached.isNotEmpty()) emit(Resource.Success(cached.toContestList()))
         try {
-            val response = api.getContestList()
+            val response = rateLimited { api.getContestList() }
             if (response.status == "OK" && response.result != null) {
                 contestDao.insertContests(response.result.map { it.toEntity() })
                 emit(Resource.Success(response.result))
@@ -183,10 +227,12 @@ class CodeforcesRepository @Inject constructor(
     }
 
     suspend fun getContestStandings(contestId: Int): Resource<StandingsDto> = try {
-        val response = api.getContestStandings(contestId)
-        val result = response.result
-        if (response.status == "OK" && result != null) Resource.Success(result)
-        else Resource.Error(response.comment ?: "Error")
+        rateLimited {
+            val response = api.getContestStandings(contestId)
+            val result = response.result
+            if (response.status == "OK" && result != null) Resource.Success(result)
+            else Resource.Error(response.comment ?: "Error")
+        }
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
@@ -199,7 +245,7 @@ class CodeforcesRepository @Inject constructor(
             return problemDao.getProblemAtOffset(offset)?.toDto()
         }
         try {
-            val response = api.getProblems(null)
+            val response = rateLimited { api.getProblems(null) }
             if (response.status == "OK" && response.result != null) {
                 val solvedCounts = response.result.problemStatistics.associateBy({ it.cacheKey() }, { it.solvedCount })
                 val entities = response.result.problems.map { it.toEntity(solvedCounts) }
@@ -213,9 +259,11 @@ class CodeforcesRepository @Inject constructor(
         return null
     }
     suspend fun getContestRatingChanges(contestId: Int): Resource<List<RatingChangeDto>> = try {
-        val response = api.getContestRatingChanges(contestId)
-        if (response.status == "OK") Resource.Success(response.result ?: emptyList())
-        else Resource.Error(response.comment ?: "Error")
+        rateLimited {
+            val response = api.getContestRatingChanges(contestId)
+            if (response.status == "OK") Resource.Success(response.result ?: emptyList())
+            else Resource.Error(response.comment ?: "Error")
+        }
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
@@ -223,10 +271,12 @@ class CodeforcesRepository @Inject constructor(
     // ── Blog / Recent ──────────────────────────────────────────────────────────
 
     suspend fun getBlogEntry(blogEntryId: Int): Resource<BlogEntryDto> = try {
-        val response = api.getBlogEntry(blogEntryId)
-        val result = response.result
-        if (response.status == "OK" && result != null) Resource.Success(result)
-        else Resource.Error(response.comment ?: "Error")
+        rateLimited {
+            val response = api.getBlogEntry(blogEntryId)
+            val result = response.result
+            if (response.status == "OK" && result != null) Resource.Success(result)
+            else Resource.Error(response.comment ?: "Error")
+        }
     } catch (e: Exception) {
         Resource.Error(e.localizedMessage ?: "Network error")
     }
@@ -234,7 +284,7 @@ class CodeforcesRepository @Inject constructor(
     fun getRecentActions(maxCount: Int = 30): Flow<Resource<List<RecentActionDto>>> = flow {
         emit(Resource.Loading())
         try {
-            val response = api.getRecentActions(maxCount)
+            val response = rateLimited { api.getRecentActions(maxCount) }
             if (response.status == "OK") emit(Resource.Success(response.result ?: emptyList()))
             else emit(Resource.Error(response.comment ?: "Error"))
         } catch (e: Exception) {

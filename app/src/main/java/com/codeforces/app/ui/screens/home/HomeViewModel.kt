@@ -51,6 +51,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /** Flip the global theme state instantly (whole app restyles live) + persist. */
+    fun toggleTheme() {
+        val dark = !com.codeforces.app.ui.theme.CfThemeState.isDark
+        com.codeforces.app.ui.theme.CfThemeState.isDark = dark
+        viewModelScope.launch { prefs.setDarkTheme(dark) }
+    }
+
     private fun loadAll(handle: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }

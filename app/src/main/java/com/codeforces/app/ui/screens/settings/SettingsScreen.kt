@@ -1,6 +1,8 @@
 package com.codeforces.app.ui.screens.settings
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,12 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codeforces.app.ui.navigation.Screen
+import com.codeforces.app.BuildConfig
+import com.codeforces.app.data.update.ReleaseInfo
 import com.codeforces.app.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +43,9 @@ fun SettingsScreen(
     val reminders by viewModel.remindersEnabled.collectAsStateWithLifecycle(initialValue = false)
     val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle(initialValue = null)
     val loggedInHandle by viewModel.loggedInHandle.collectAsStateWithLifecycle(initialValue = null)
+    val isCheckingUpdate by viewModel.isCheckingUpdate.collectAsStateWithLifecycle()
+    val updateInfo by viewModel.updateInfo.collectAsStateWithLifecycle()
+    val upToDate by viewModel.upToDate.collectAsStateWithLifecycle()
     var editingHandle by remember { mutableStateOf(false) }
     var tempHandle by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -184,13 +191,59 @@ fun SettingsScreen(
             HorizontalDivider(color = CfDivider)
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("App", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text("Version", style = MaterialTheme.typography.bodyMedium, color = CfTextPrimary)
+                        Text(
+                            "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = CfTextSecondary
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = { viewModel.checkForUpdates() },
+                        enabled = !isCheckingUpdate
+                    ) {
+                        if (isCheckingUpdate) {
+                            CircularProgressIndicator(
+                                color = CodeforcesAccent,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text("Checking…")
+                        } else {
+                            Icon(Icons.Rounded.SystemUpdate, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text("Check for updates")
+                        }
+                    }
+                }
+                if (upToDate && !isCheckingUpdate) {
+                    Text(
+                        "✓ You're on the latest version",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = VerdictOK
+                    )
+                }
+            }
+
+            HorizontalDivider(color = CfDivider)
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("App Data", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = CodeforcesAccent)
                 Button(
                     onClick = {
+                        // Clearing the saved handle flips MainAppContent to the
+                        // OnboardingScreen reactively — there is no "onboarding"
+                        // nav destination, and navigating to it crashes
+                        // (IllegalArgumentException from the nav graph).
                         viewModel.logout()
-                        navController.navigate(Screen.Onboarding.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = CfSurface, contentColor = VerdictWA),
                     modifier = Modifier.fillMaxWidth()
@@ -202,4 +255,100 @@ fun SettingsScreen(
             }
         }
     }
+
+    // Result of a manual update check
+    updateInfo?.let { release ->
+        UpdateAvailableDialog(
+            release = release,
+            onDismiss = { viewModel.dismissUpdate() }
+        )
+    }
+}
+
+// ── GitHub Update Dialog (shown after a manual check in Settings) ───────────
+
+@Composable
+private fun UpdateAvailableDialog(release: ReleaseInfo, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = CfCardSurface,
+        shape = RoundedCornerShape(20.dp),
+        icon = {
+            Icon(
+                Icons.Rounded.SystemUpdate,
+                contentDescription = null,
+                tint = CodeforcesAccent,
+                modifier = Modifier.size(32.dp)
+            )
+        },
+        title = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    "Update Available 🎉",
+                    color = CfTextPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    release.tagName,
+                    color = CodeforcesAccent,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    "A new version of the app is available on GitHub.",
+                    color = CfTextSecondary,
+                    fontSize = 14.sp
+                )
+                if (release.body.isNotBlank()) {
+                    HorizontalDivider(color = CfDivider)
+                    Text(
+                        "What's new:",
+                        color = CfTextPrimary,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 13.sp
+                    )
+                    // Show first 400 chars of the changelog
+                    Text(
+                        release.body.take(400).let { if (release.body.length > 400) "$it…" else it },
+                        color = CfTextSecondary,
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(release.htmlUrl))
+                    )
+                    onDismiss()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = CodeforcesAccent),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Icon(Icons.Rounded.Download, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text("Download Update")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Later", color = CfTextSecondary)
+            }
+        }
+    )
 }

@@ -1,13 +1,21 @@
 package com.codeforces.app.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-val AppTypography = Typography(
+/**
+ * Built per-composition (called from CodeforcesTheme) so the style colors
+ * re-read CfThemeState on every theme flip. A top-level val would freeze
+ * the startup theme's colors into the TextStyle objects forever — leaving
+ * typography-styled Texts unreadable after a mid-session toggle.
+ */
+@Composable
+fun cfTypography(): Typography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 57.sp,

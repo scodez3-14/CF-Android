@@ -39,6 +39,8 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.compose.component.lineComponent
+import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.text.SimpleDateFormat
 import java.util.*
@@ -215,15 +217,32 @@ fun ProfileScreen(
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Text("Rating History", style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    "Rating History",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = CfTextPrimary
+                                )
                                 Spacer(Modifier.height(12.dp))
                                 val ratingEntries = state.ratingHistory.map { it.newRating.toFloat() }
                                 val model = entryModelOf(*ratingEntries.toTypedArray())
+                                // Explicit palette colors — chart axes don't
+                                // follow the app theme on their own.
                                 Chart(
                                     chart = lineChart(),
                                     model = model,
-                                    startAxis = rememberStartAxis(),
-                                    bottomAxis = rememberBottomAxis(),
+                                    startAxis = rememberStartAxis(
+                                        label = textComponent(color = CfTextSecondary),
+                                        axis = lineComponent(color = CfDivider, thickness = 1.dp),
+                                        guideline = lineComponent(
+                                            color = CfDivider.copy(alpha = 0.4f),
+                                            thickness = 1.dp
+                                        )
+                                    ),
+                                    bottomAxis = rememberBottomAxis(
+                                        label = textComponent(color = CfTextSecondary),
+                                        axis = lineComponent(color = CfDivider, thickness = 1.dp),
+                                        guideline = null
+                                    ),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(180.dp)

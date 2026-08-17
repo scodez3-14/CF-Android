@@ -32,6 +32,7 @@ class UserPreferencesRepository @Inject constructor(
         val LOGIN_PASSWORD_ENC_KEY = stringPreferencesKey("cf_login_password_enc")
         val SESSION_ACTIVE_KEY = booleanPreferencesKey("cf_session_active")
         val LOGIN_USER_AGENT_KEY = stringPreferencesKey("cf_login_user_agent")
+        val DARK_THEME_KEY = booleanPreferencesKey("dark_theme")
     }
 
     val handle: Flow<String?> = context.dataStore.data.map { it[HANDLE_KEY] }
@@ -40,6 +41,12 @@ class UserPreferencesRepository @Inject constructor(
     val sessionActive: Flow<Boolean> = context.dataStore.data.map { it[SESSION_ACTIVE_KEY] ?: false }
     val remindersEnabled: Flow<Boolean> = context.dataStore.data.map { it[REMINDERS_KEY] ?: false }
     val bookmarks: Flow<Set<String>> = context.dataStore.data.map { it[BOOKMARKS_KEY] ?: emptySet() }
+    /** Dark theme is the default; false = white theme. */
+    val darkTheme: Flow<Boolean> = context.dataStore.data.map { it[DARK_THEME_KEY] ?: true }
+
+    suspend fun setDarkTheme(dark: Boolean) {
+        context.dataStore.edit { it[DARK_THEME_KEY] = dark }
+    }
 
     suspend fun saveHandle(handle: String) {
         context.dataStore.edit { it[HANDLE_KEY] = handle }

@@ -192,7 +192,7 @@ fun ProblemDetailScreen(
                                     ) {
                                         Text(
                                             "New",
-                                            color = Color.White,
+                                            color = MaterialTheme.colorScheme.onPrimary,
                                             fontSize = 8.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -535,7 +535,7 @@ private fun SubmitForm(
             modifier = Modifier.fillMaxWidth()
         ) {
             if (state.isSubmitting) {
-                CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
                 Text("Submitting…")
             } else {

@@ -78,7 +78,7 @@ fun LoginScreen(
                 Icon(
                     imageVector = Icons.Rounded.Lock,
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(36.dp)
                 )
             }
@@ -263,7 +263,7 @@ private fun SignInForm(
             if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(22.dp),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     strokeWidth = 2.dp
                 )
             } else {

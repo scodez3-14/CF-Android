@@ -1,5 +1,6 @@
 package com.codeforces.app.data.scraper
 
+import android.webkit.CookieManager
 import okhttp3.CookieJar
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -235,6 +236,24 @@ class CfSubmitter(
      */
     fun importCookies(cookieHeader: String) {
         (cookieJar as? PersistentCookieJar)?.importCookieHeader(cookieHeader)
+    }
+
+    /**
+     * Pull the latest cookies from the system [CookieManager] (shared by all
+     * WebViews) into this client's [PersistentCookieJar].  Call this before any
+     * OkHttp fetch that requires a logged-in session — the browser may have
+     * refreshed `cf_clearance` / JSESSIONID since the last explicit login.
+     */
+    fun syncCookiesFromSystem() {
+        try {
+            val header = CookieManager.getInstance().getCookie("https://codeforces.com")
+            if (!header.isNullOrBlank()) {
+                Log.d("CFLOGIN", "syncCookiesFromSystem len=${header.length}")
+                (cookieJar as? PersistentCookieJar)?.importCookieHeader(header)
+            }
+        } catch (e: Exception) {
+            Log.d("CFLOGIN", "syncCookiesFromSystem failed: ${e.message}")
+        }
     }
 
     /**

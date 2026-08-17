@@ -13,16 +13,42 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
-// ─── CSS for WebView (dark, matching the app theme) ──────────────────────────
+// ─── CSS for WebView (theme-aware, matching the app theme) ──────────────────
 
-private val CF_CSS = """
-<style>
-  :root {
+private fun cfCss(isDark: Boolean): String {
+    // Light values are chosen for ≥4.5:1 contrast on white. CF formula
+    // images are black-on-transparent, so they only invert in dark mode.
+    val themeVars = if (isDark) """
     --bg: #151515;
     --surface: #1E1E1E;
     --border: #333333;
     --text: #E0E0E0;
     --muted: #9E9E9E;
+    --title: #FFFFFF;
+    --code-bg: #101010;
+    --code-text: #E0E0E0;
+    --inline-code-bg: rgba(255, 255, 255, 0.08);
+    --zebra: rgba(255, 255, 255, 0.03);
+    --link: #4FC3F7;
+    --formula-filter: var(--formula-filter);
+""" else """
+    --bg: #FFFFFF;
+    --surface: #F2F4F3;
+    --border: #E0E0E0;
+    --text: #1F2422;
+    --muted: #5F6C69;
+    --title: #14181A;
+    --code-bg: #F6F8F7;
+    --code-text: #24302C;
+    --inline-code-bg: rgba(0, 0, 0, 0.06);
+    --zebra: rgba(0, 0, 0, 0.03);
+    --link: #0277BD;
+    --formula-filter: none;
+"""
+    return """
+<style>
+  :root {
+    $themeVars
     --mono: 'Roboto Mono', 'Courier New', monospace;
   }
 
@@ -67,7 +93,7 @@ private val CF_CSS = """
   .problem-statement > .header .title {
     font-size: 17px;
     font-weight: 600;
-    color: #FFFFFF;
+    color: var(--title);
     margin-bottom: 4px;
   }
   .problem-statement > .header .time-limit,
@@ -86,7 +112,7 @@ private val CF_CSS = """
   .section-title {
     font-size: 14.5px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--title);
     margin: 14px 0 4px;
   }
 
@@ -125,7 +151,7 @@ private val CF_CSS = """
      glyphs on a transparent background — invisible on dark. Invert them so
      the math reads as light text. They are pure grayscale, so invert is safe. */
   img.tex-formula {
-    filter: invert(1) brightness(0.9);
+    filter: var(--formula-filter);
     display: inline !important;
     vertical-align: middle;
   }
@@ -157,7 +183,7 @@ private val CF_CSS = """
     margin-bottom: 6px;
   }
   .sample-tests .sample-test {
-    border: 1px solid #2B2B2B;
+    border: 1px solid var(--border);
     border-radius: 6px;
     overflow: hidden;
     margin-bottom: 8px;
@@ -167,19 +193,19 @@ private val CF_CSS = """
     display: block;
   }
   .sample-tests .output {
-    border-top: 1px solid #2B2B2B;
+    border-top: 1px solid var(--border);
   }
   .sample-tests .input > .title,
   .sample-tests .output > .title {
     font-size: 12.5px;
     font-weight: 600;
-    color: #A0A0A0;
-    background: #1E1E1E;
+    color: var(--muted);
+    background: var(--surface);
     padding: 5px 12px;
     font-family: var(--mono);
   }
   .sample-tests pre {
-    background: #121212;
+    background: var(--code-bg);
     margin: 0;
     padding: 0;
     font-family: var(--mono);
@@ -187,7 +213,7 @@ private val CF_CSS = """
     line-height: 1.45;
     overflow-x: auto;
     white-space: pre;
-    color: #CCCCCC;
+    color: var(--code-text);
   }
 
   /* ── Tutorial source code ── */
@@ -200,12 +226,12 @@ private val CF_CSS = """
     word-break: normal !important;
     overflow-wrap: normal !important;
     -webkit-overflow-scrolling: touch;
-    background: #101010;
-    border: 1px solid #303030;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
     border-radius: 8px;
     margin: 10px 0;
     padding: 12px;
-    color: #E0E0E0;
+    color: var(--code-text);
     font-family: var(--mono);
     font-size: 12.5px;
     line-height: 1.5;
@@ -225,17 +251,17 @@ private val CF_CSS = """
     min-height: 18px;
   }
   .sample-tests pre > div:nth-child(even) {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--zebra);
   }
 
   /* ── Inline code / <tt> ── */
   tt, code {
     font-family: var(--mono);
-    background: rgba(255,255,255,0.08);
+    background: var(--inline-code-bg);
     border-radius: 4px;
     padding: 1px 4px;
     font-size: 0.9em;
-    color: #E0E0E0;
+    color: var(--code-text);
   }
 
   /* ── Lists ── */
@@ -254,14 +280,14 @@ private val CF_CSS = """
   }
 
   /* ── Links ── */
-  a { color: #4FC3F7; }
+  a { color: var(--link); }
 
   /* ── Spoilers (editorial) ── */
   .spoiler { margin: 8px 0; }
   .spoiler-title {
     display: block;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--title);
     margin: 12px 0 6px;
     font-size: 15px;
   }
@@ -270,7 +296,7 @@ private val CF_CSS = """
   .problemTutorial > h3 {
     font-size: 15px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--title);
     margin: 10px 0 6px;
   }
 
@@ -280,6 +306,7 @@ private val CF_CSS = """
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 </style>
 """
+}
 
 // Codeforces's own MathJax v2 config — uses $$$ for inline math natively
 private const val MATHJAX_SCRIPT = """
@@ -308,7 +335,7 @@ fun buildProblemHtml(statementHtml: String): String {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
-  $CF_CSS
+  ${cfCss(com.codeforces.app.ui.theme.CfThemeState.isDark)}
   $MATHJAX_SCRIPT
 </head>
 <body>
@@ -325,7 +352,7 @@ fun buildEditorialHtml(editorialHtml: String): String {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
-  $CF_CSS
+  ${cfCss(com.codeforces.app.ui.theme.CfThemeState.isDark)}
   $MATHJAX_SCRIPT
 </head>
 <body>
@@ -352,7 +379,7 @@ fun CfWebView(html: String, modifier: Modifier = Modifier) {
                 settings.displayZoomControls = false
                 settings.allowFileAccess = false
                 isHorizontalScrollBarEnabled = true
-                setBackgroundColor(android.graphics.Color.parseColor("#151515"))
+                setBackgroundColor(android.graphics.Color.parseColor(if (com.codeforces.app.ui.theme.CfThemeState.isDark) "#151515" else "#FFFFFF"))
 
                 webViewClient = object : WebViewClient() {
                     override fun shouldOverrideUrlLoading(

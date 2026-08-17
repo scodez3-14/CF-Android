@@ -413,6 +413,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     @Override
     public void injectMainActivity(MainActivity mainActivity) {
+      injectMainActivity2(mainActivity);
     }
 
     @Override
@@ -440,69 +441,66 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       return new ViewCBuilder(singletonCImpl, activityRetainedCImpl, activityCImpl);
     }
 
+    @CanIgnoreReturnValue
+    private MainActivity injectMainActivity2(MainActivity instance) {
+      MainActivity_MembersInjector.injectPrefs(instance, singletonCImpl.userPreferencesRepositoryProvider.get());
+      return instance;
+    }
+
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
+      static String com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel";
 
       static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
 
+      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+
+      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
+
       static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
 
-      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
+      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
 
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
-
-      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
-
-      static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
-
-      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
-
-      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+      static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
 
       static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
 
       static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
 
-      static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
+      static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
 
-      static String com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel";
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
 
-      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
+      static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
+
+      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
 
       static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
 
-      @KeepFieldType
-      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
+      static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
+
+      static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
 
       @KeepFieldType
-      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
+      SubmissionDetailViewModel com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel2;
 
       @KeepFieldType
       ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
 
       @KeepFieldType
+      MainViewModel com_codeforces_app_MainViewModel2;
+
+      @KeepFieldType
+      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+
+      @KeepFieldType
       HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
 
       @KeepFieldType
-      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
+      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
 
       @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
-
-      @KeepFieldType
-      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
-
-      @KeepFieldType
-      OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
-
-      @KeepFieldType
-      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
-
-      @KeepFieldType
-      MainViewModel com_codeforces_app_MainViewModel2;
+      ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
 
       @KeepFieldType
       WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
@@ -511,16 +509,25 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
 
       @KeepFieldType
-      SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
+      ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
 
       @KeepFieldType
-      SubmissionDetailViewModel com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel2;
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
 
       @KeepFieldType
-      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
+      OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
+
+      @KeepFieldType
+      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
 
       @KeepFieldType
       LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
+
+      @KeepFieldType
+      SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
+
+      @KeepFieldType
+      SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
     }
   }
 
@@ -608,41 +615,44 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_codeforces_app_ui_screens_home_HomeViewModel = "com.codeforces.app.ui.screens.home.HomeViewModel";
 
-      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
+
+      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
 
       static String com_codeforces_app_ui_screens_submissions_SubmissionsViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionsViewModel";
 
       static String com_codeforces_app_ui_screens_settings_SettingsViewModel = "com.codeforces.app.ui.screens.settings.SettingsViewModel";
 
-      static String com_codeforces_app_ui_screens_login_LoginViewModel = "com.codeforces.app.ui.screens.login.LoginViewModel";
-
-      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
-
-      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
-
-      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
-
-      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
-
-      static String com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel";
-
       static String com_codeforces_app_ui_screens_problems_ProblemsViewModel = "com.codeforces.app.ui.screens.problems.ProblemsViewModel";
 
       static String com_codeforces_app_ui_screens_search_SearchViewModel = "com.codeforces.app.ui.screens.search.SearchViewModel";
 
-      static String com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel = "com.codeforces.app.ui.screens.leaderboard.LeaderboardViewModel";
+      static String com_codeforces_app_ui_screens_standings_StandingsViewModel = "com.codeforces.app.ui.screens.standings.StandingsViewModel";
 
       static String com_codeforces_app_ui_screens_contests_ContestViewModel = "com.codeforces.app.ui.screens.contests.ContestViewModel";
 
+      static String com_codeforces_app_MainViewModel = "com.codeforces.app.MainViewModel";
+
+      static String com_codeforces_app_ui_screens_login_WebLoginViewModel = "com.codeforces.app.ui.screens.login.WebLoginViewModel";
+
+      static String com_codeforces_app_ui_screens_blog_BlogViewModel = "com.codeforces.app.ui.screens.blog.BlogViewModel";
+
       static String com_codeforces_app_ui_screens_onboarding_OnboardingViewModel = "com.codeforces.app.ui.screens.onboarding.OnboardingViewModel";
 
+      static String com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel = "com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel";
+
       static String com_codeforces_app_ui_screens_problems_ProblemDetailViewModel = "com.codeforces.app.ui.screens.problems.ProblemDetailViewModel";
+
+      static String com_codeforces_app_ui_screens_profile_ProfileViewModel = "com.codeforces.app.ui.screens.profile.ProfileViewModel";
 
       @KeepFieldType
       HomeViewModel com_codeforces_app_ui_screens_home_HomeViewModel2;
 
       @KeepFieldType
-      MainViewModel com_codeforces_app_MainViewModel2;
+      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
+
+      @KeepFieldType
+      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
 
       @KeepFieldType
       SubmissionsViewModel com_codeforces_app_ui_screens_submissions_SubmissionsViewModel2;
@@ -651,40 +661,37 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       SettingsViewModel com_codeforces_app_ui_screens_settings_SettingsViewModel2;
 
       @KeepFieldType
-      LoginViewModel com_codeforces_app_ui_screens_login_LoginViewModel2;
-
-      @KeepFieldType
-      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
-
-      @KeepFieldType
-      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
-
-      @KeepFieldType
-      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
-
-      @KeepFieldType
-      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
-
-      @KeepFieldType
-      SubmissionDetailViewModel com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel2;
-
-      @KeepFieldType
       ProblemsViewModel com_codeforces_app_ui_screens_problems_ProblemsViewModel2;
 
       @KeepFieldType
       SearchViewModel com_codeforces_app_ui_screens_search_SearchViewModel2;
 
       @KeepFieldType
-      LeaderboardViewModel com_codeforces_app_ui_screens_leaderboard_LeaderboardViewModel2;
+      StandingsViewModel com_codeforces_app_ui_screens_standings_StandingsViewModel2;
 
       @KeepFieldType
       ContestViewModel com_codeforces_app_ui_screens_contests_ContestViewModel2;
 
       @KeepFieldType
+      MainViewModel com_codeforces_app_MainViewModel2;
+
+      @KeepFieldType
+      WebLoginViewModel com_codeforces_app_ui_screens_login_WebLoginViewModel2;
+
+      @KeepFieldType
+      BlogViewModel com_codeforces_app_ui_screens_blog_BlogViewModel2;
+
+      @KeepFieldType
       OnboardingViewModel com_codeforces_app_ui_screens_onboarding_OnboardingViewModel2;
 
       @KeepFieldType
+      SubmissionDetailViewModel com_codeforces_app_ui_screens_submissions_SubmissionDetailViewModel2;
+
+      @KeepFieldType
       ProblemDetailViewModel com_codeforces_app_ui_screens_problems_ProblemDetailViewModel2;
+
+      @KeepFieldType
+      ProfileViewModel com_codeforces_app_ui_screens_profile_ProfileViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -724,7 +731,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           return (T) new LoginViewModel(singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
           case 5: // com.codeforces.app.MainViewModel 
-          return (T) new MainViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.contestReminderManagerProvider.get(), singletonCImpl.updateCheckerProvider.get());
+          return (T) new MainViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.contestReminderManagerProvider.get());
 
           case 6: // com.codeforces.app.ui.screens.onboarding.OnboardingViewModel 
           return (T) new OnboardingViewModel(singletonCImpl.userPreferencesRepositoryProvider.get());
@@ -742,7 +749,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           return (T) new SearchViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
 
           case 11: // com.codeforces.app.ui.screens.settings.SettingsViewModel 
-          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.provideCfSubmitterProvider.get());
+          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.updateCheckerProvider.get());
 
           case 12: // com.codeforces.app.ui.screens.standings.StandingsViewModel 
           return (T) new StandingsViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
@@ -751,7 +758,7 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           return (T) new SubmissionDetailViewModel(singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
           case 14: // com.codeforces.app.ui.screens.submissions.SubmissionsViewModel 
-          return (T) new SubmissionsViewModel(singletonCImpl.codeforcesRepositoryProvider.get());
+          return (T) new SubmissionsViewModel(singletonCImpl.codeforcesRepositoryProvider.get(), singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
 
           case 15: // com.codeforces.app.ui.screens.login.WebLoginViewModel 
           return (T) new WebLoginViewModel(singletonCImpl.provideCfSubmitterProvider.get(), singletonCImpl.userPreferencesRepositoryProvider.get());
@@ -854,9 +861,9 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
 
     private Provider<CfSubmitter> provideCfSubmitterProvider;
 
-    private Provider<UpdateChecker> updateCheckerProvider;
-
     private Provider<SubmissionTracker> submissionTrackerProvider;
+
+    private Provider<UpdateChecker> updateCheckerProvider;
 
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
@@ -887,8 +894,8 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
       this.contestReminderManagerProvider = DoubleCheck.provider(new SwitchingProvider<ContestReminderManager>(singletonCImpl, 0));
       this.providePersistentCookieJarProvider = DoubleCheck.provider(new SwitchingProvider<PersistentCookieJar>(singletonCImpl, 8));
       this.provideCfSubmitterProvider = DoubleCheck.provider(new SwitchingProvider<CfSubmitter>(singletonCImpl, 7));
-      this.updateCheckerProvider = DoubleCheck.provider(new SwitchingProvider<UpdateChecker>(singletonCImpl, 9));
-      this.submissionTrackerProvider = DoubleCheck.provider(new SwitchingProvider<SubmissionTracker>(singletonCImpl, 10));
+      this.submissionTrackerProvider = DoubleCheck.provider(new SwitchingProvider<SubmissionTracker>(singletonCImpl, 9));
+      this.updateCheckerProvider = DoubleCheck.provider(new SwitchingProvider<UpdateChecker>(singletonCImpl, 10));
     }
 
     @Override
@@ -964,11 +971,11 @@ public final class DaggerCodeforcesApp_HiltComponents_SingletonC {
           case 8: // com.codeforces.app.data.scraper.PersistentCookieJar 
           return (T) NetworkModule_ProvidePersistentCookieJarFactory.providePersistentCookieJar(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 9: // com.codeforces.app.data.update.UpdateChecker 
-          return (T) new UpdateChecker();
-
-          case 10: // com.codeforces.app.data.tracker.SubmissionTracker 
+          case 9: // com.codeforces.app.data.tracker.SubmissionTracker 
           return (T) new SubmissionTracker(singletonCImpl.provideApiServiceProvider.get(), ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 10: // com.codeforces.app.data.update.UpdateChecker 
+          return (T) new UpdateChecker();
 
           default: throw new AssertionError(id);
         }
