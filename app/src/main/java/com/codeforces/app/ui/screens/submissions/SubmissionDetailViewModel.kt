@@ -58,19 +58,14 @@ class SubmissionDetailViewModel @Inject constructor(
         this.contestId = contestId
         this.submissionId = submissionId
         viewModelScope.launch {
-            // Gate behind login — source code requires an active CF session.
-            _isLoggedIn.value = null
-            val loggedIn = withContext(Dispatchers.IO) { submitter.isLoggedIn() }
-                || withContext(Dispatchers.IO) { prefs.isSessionActive() }
-            _isLoggedIn.value = loggedIn
-
+            // Fetch submission metadata concurrently — doesn't need the login gate.
             launch {
                 try {
                     val handle = handleArg.ifBlank {
                         prefs.savedLoginHandle() ?: prefs.handle.first().orEmpty()
                     }
                     if (handle.isNotBlank()) {
-                        val res = repo.getUserStatus(handle, 1, 2000)
+                        val res = repo.getUserStatus(handle, 1, 200)
                         val match = (res as? Resource.Success)?.data
                             ?.firstOrNull { it.id == submissionId }
                         _state.update { it.copy(meta = match) }
@@ -79,6 +74,13 @@ class SubmissionDetailViewModel @Inject constructor(
                 }
                 _state.update { it.copy(isLoading = false) }
             }
+
+            // Gate source code behind login — check local session flag first
+            // (instant) to avoid the expensive network scrape of codeforces.com.
+            _isLoggedIn.value = null
+            val loggedIn = withContext(Dispatchers.IO) { prefs.isSessionActive() }
+                || withContext(Dispatchers.IO) { submitter.isLoggedIn() }
+            _isLoggedIn.value = loggedIn
             if (loggedIn) fetchSource()
         }
     }

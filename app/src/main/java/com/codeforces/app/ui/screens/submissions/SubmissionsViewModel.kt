@@ -56,8 +56,11 @@ class SubmissionsViewModel @Inject constructor(
         val handle = currentHandle ?: return
         viewModelScope.launch {
             _isLoggedIn.value = null
-            val loggedIn = withContext(Dispatchers.IO) { submitter.isLoggedIn() }
-                || withContext(Dispatchers.IO) { prefs.isSessionActive() }
+            // Check local session flag first (instant) — only fall back to the
+            // expensive network scrape of codeforces.com when the local flag
+            // says we're not logged in.
+            val loggedIn = withContext(Dispatchers.IO) { prefs.isSessionActive() }
+                || withContext(Dispatchers.IO) { submitter.isLoggedIn() }
             _isLoggedIn.value = loggedIn
             if (loggedIn) {
                 if (_state.value.submissions.isEmpty()) fetchSubmissions(handle)

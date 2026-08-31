@@ -66800,9 +66800,9 @@ com.codeforces.app.ui.screens.problems.ProblemDetailViewModel$loadEditorial$1$ed
 com.codeforces.app.ui.screens.problems.ProblemDetailViewModel$loadEditorial$1:
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.problems.ProblemDetailViewModel$refreshLoginState$1$loggedIn$1:
-    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.problems.ProblemDetailViewModel$refreshLoginState$1$loggedIn$2:
+    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.problems.ProblemDetailViewModel$refreshLoginState$1:
     public final java.lang.Object invoke$3()
@@ -67337,9 +67337,9 @@ com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$fetchSource$
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$load$1$1:
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$load$1$loggedIn$1:
-    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$load$1$loggedIn$2:
+    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$load$1:
     public final java.lang.Object invoke$3()
@@ -67397,9 +67397,9 @@ com.codeforces.app.ui.screens.submissions.SubmissionsUiState:
 com.codeforces.app.ui.screens.submissions.SubmissionsViewModel$fetchSubmissions$1:
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionsViewModel$refreshLogin$1$loggedIn$1:
-    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionsViewModel$refreshLogin$1$loggedIn$2:
+    public int label
     public final java.lang.Object invoke$3()
 com.codeforces.app.ui.screens.submissions.SubmissionsViewModel$refreshLogin$1:
     public final java.lang.Object invoke$3()

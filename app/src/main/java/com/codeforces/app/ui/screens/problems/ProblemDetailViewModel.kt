@@ -149,8 +149,10 @@ class ProblemDetailViewModel @Inject constructor(
         if (_state.value.isAutoLoggingIn) return
         viewModelScope.launch {
             _state.value = _state.value.copy(isAutoLoggingIn = true)
-            val loggedIn = withContext(Dispatchers.IO) { submitter.isLoggedIn() }
-                || withContext(Dispatchers.IO) { prefs.isSessionActive() }
+            // Check local session flag first (instant) — only fall back to the
+            // expensive network scrape of codeforces.com when needed.
+            val loggedIn = withContext(Dispatchers.IO) { prefs.isSessionActive() }
+                || withContext(Dispatchers.IO) { submitter.isLoggedIn() }
             val state = if (loggedIn) {
                 val handle = prefs.savedLoginHandle() ?: prefs.handle.first()
                 _state.value.copy(loginState = LoginState.LoggedIn(handle))
