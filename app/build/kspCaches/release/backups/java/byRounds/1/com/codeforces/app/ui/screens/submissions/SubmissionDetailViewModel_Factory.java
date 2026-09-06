@@ -1,6 +1,6 @@
 package com.codeforces.app.ui.screens.submissions;
 
-import com.codeforces.app.data.repository.CodeforcesRepository;
+import com.codeforces.app.data.api.CodeforcesApiService;
 import com.codeforces.app.data.repository.UserPreferencesRepository;
 import com.codeforces.app.data.scraper.CfSubmitter;
 import dagger.internal.DaggerGenerated;
@@ -27,31 +27,31 @@ import javax.inject.Provider;
 public final class SubmissionDetailViewModel_Factory implements Factory<SubmissionDetailViewModel> {
   private final Provider<CfSubmitter> submitterProvider;
 
-  private final Provider<CodeforcesRepository> repoProvider;
+  private final Provider<CodeforcesApiService> apiProvider;
 
   private final Provider<UserPreferencesRepository> prefsProvider;
 
   public SubmissionDetailViewModel_Factory(Provider<CfSubmitter> submitterProvider,
-      Provider<CodeforcesRepository> repoProvider,
+      Provider<CodeforcesApiService> apiProvider,
       Provider<UserPreferencesRepository> prefsProvider) {
     this.submitterProvider = submitterProvider;
-    this.repoProvider = repoProvider;
+    this.apiProvider = apiProvider;
     this.prefsProvider = prefsProvider;
   }
 
   @Override
   public SubmissionDetailViewModel get() {
-    return newInstance(submitterProvider.get(), repoProvider.get(), prefsProvider.get());
+    return newInstance(submitterProvider.get(), apiProvider.get(), prefsProvider.get());
   }
 
   public static SubmissionDetailViewModel_Factory create(Provider<CfSubmitter> submitterProvider,
-      Provider<CodeforcesRepository> repoProvider,
+      Provider<CodeforcesApiService> apiProvider,
       Provider<UserPreferencesRepository> prefsProvider) {
-    return new SubmissionDetailViewModel_Factory(submitterProvider, repoProvider, prefsProvider);
+    return new SubmissionDetailViewModel_Factory(submitterProvider, apiProvider, prefsProvider);
   }
 
   public static SubmissionDetailViewModel newInstance(CfSubmitter submitter,
-      CodeforcesRepository repo, UserPreferencesRepository prefs) {
-    return new SubmissionDetailViewModel(submitter, repo, prefs);
+      CodeforcesApiService api, UserPreferencesRepository prefs) {
+    return new SubmissionDetailViewModel(submitter, api, prefs);
   }
 }

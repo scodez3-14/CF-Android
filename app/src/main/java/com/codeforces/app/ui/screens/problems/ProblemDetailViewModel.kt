@@ -70,6 +70,8 @@ data class ProblemDetailUiState(
     val submitRequest: SubmitRequest? = null,
     // Submission tab
     val submissions: List<SubmissionView> = emptyList(),
+    /** Handle used to load [submissions], needed when opening a submission detail. */
+    val submissionsHandle: String? = null,
     val isSubmissionsLoading: Boolean = false
 )
 
@@ -298,8 +300,11 @@ class ProblemDetailViewModel @Inject constructor(
         _state.value = _state.value.copy(isSubmissionsLoading = true)
         viewModelScope.launch {
             try {
-                val handle = currentHandle() ?: run {
-                    _state.value = _state.value.copy(isSubmissionsLoading = false)
+                val handle = currentHandle()?.takeIf { it.isNotBlank() } ?: run {
+                    _state.value = _state.value.copy(
+                        isSubmissionsLoading = false,
+                        submissionsHandle = null
+                    )
                     return@launch
                 }
                 val resp = api.getUserStatus(handle, 1, 100)
@@ -309,7 +314,11 @@ class ProblemDetailViewModel @Inject constructor(
                     .sortedByDescending { it.creationTimeSeconds }
                     .take(10)
                     .map { it.toView() }
-                _state.value = _state.value.copy(isSubmissionsLoading = false, submissions = subs)
+                _state.value = _state.value.copy(
+                    isSubmissionsLoading = false,
+                    submissions = subs,
+                    submissionsHandle = handle
+                )
             } catch (_: Exception) {
                 _state.value = _state.value.copy(isSubmissionsLoading = false)
             }

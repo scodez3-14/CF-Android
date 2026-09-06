@@ -35,6 +35,7 @@ import com.codeforces.app.ui.components.RevealItem
 import com.codeforces.app.ui.components.ShimmerCardRow
 import com.codeforces.app.ui.components.ShimmerHeroCard
 import com.codeforces.app.ui.components.SkeletonBox
+import com.codeforces.app.ui.components.profileImageUrl
 import com.codeforces.app.ui.components.rememberShimmerBrush
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.SubmissionRow
@@ -163,7 +164,7 @@ fun HomeScreen(
                                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
                                     AsyncImage(
-                                        model = user.titlePhoto ?: user.avatar,
+                                        model = user.profileImageUrl(),
                                         contentDescription = "Avatar",
                                         modifier = Modifier.size(60.dp).clip(CircleShape).background(CfSurface)
                                     )

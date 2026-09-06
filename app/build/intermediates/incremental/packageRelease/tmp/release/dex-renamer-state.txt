@@ -1,4 +1,4 @@
-#Mon Aug 31 17:38:54 IST 2026
+#Sun Sep 06 19:12:03 IST 2026
 base.0=/home/santu/A2Z/Projects /coden/CodeforcesApp/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

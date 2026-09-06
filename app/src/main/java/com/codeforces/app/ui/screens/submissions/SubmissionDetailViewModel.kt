@@ -2,9 +2,8 @@ package com.codeforces.app.ui.screens.submissions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codeforces.app.data.api.CodeforcesApiService
 import com.codeforces.app.data.api.SubmissionDto
-import com.codeforces.app.data.repository.CodeforcesRepository
-import com.codeforces.app.data.repository.Resource
 import com.codeforces.app.data.repository.UserPreferencesRepository
 import com.codeforces.app.data.scraper.CfSubmitter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +33,7 @@ data class SubmissionDetailUiState(
 @HiltViewModel
 class SubmissionDetailViewModel @Inject constructor(
     private val submitter: CfSubmitter,
-    private val repo: CodeforcesRepository,
+    private val api: CodeforcesApiService,
     private val prefs: UserPreferencesRepository
 ) : ViewModel() {
 
@@ -58,15 +57,17 @@ class SubmissionDetailViewModel @Inject constructor(
         this.contestId = contestId
         this.submissionId = submissionId
         viewModelScope.launch {
-            // Fetch submission metadata concurrently — doesn't need the login gate.
+            // Fetch submission metadata concurrently — call the API directly
+            // (bypass the repository rate limiter) so meta arrives as fast as
+            // the source code WebView does.
             launch {
                 try {
                     val handle = handleArg.ifBlank {
                         prefs.savedLoginHandle() ?: prefs.handle.first().orEmpty()
                     }
                     if (handle.isNotBlank()) {
-                        val res = repo.getUserStatus(handle, 1, 200)
-                        val match = (res as? Resource.Success)?.data
+                        val resp = api.getUserStatus(handle, 1, 50)
+                        val match = resp.takeIf { it.status == "OK" }?.result
                             ?.firstOrNull { it.id == submissionId }
                         _state.update { it.copy(meta = match) }
                     }

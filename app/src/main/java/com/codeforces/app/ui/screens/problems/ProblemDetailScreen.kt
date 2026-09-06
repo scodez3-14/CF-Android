@@ -969,8 +969,8 @@ private fun SubmissionsTab(
                 onClick = {
                     val problemContestId = state.detail?.contestId
                     if (problemContestId != null) {
-                        val submissionHandle = (state.loginState as? LoginState.LoggedIn)?.handle ?: ""
-                        if (onOpenSubmission != null) {
+                        val submissionHandle = state.submissionsHandle
+                        if (onOpenSubmission != null && !submissionHandle.isNullOrBlank()) {
                             onOpenSubmission(problemContestId, sub.id, submissionHandle)
                         } else {
                             context.startActivity(

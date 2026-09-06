@@ -35699,6 +35699,10 @@ com.codeforces.app.ui.components.AnimationsKt:
     private static final int ShimmerDurationMillis
 com.codeforces.app.ui.components.CfHtmlViewKt:
     private static final java.lang.String MATHJAX_SCRIPT
+com.codeforces.app.ui.components.CodeforcesProfileImageKt:
+    private static final java.lang.String CODEFORCES_USERPIC_PROXY_PREFIX
+    private static final java.lang.String DIRECT_USERPIC_PREFIX
+    private static final java.lang.String INSECURE_DIRECT_USERPIC_PREFIX
 com.codeforces.app.ui.components.ConfettiKt:
     private static final int ConfettiDurationMillis
 com.codeforces.app.ui.components.VerdictKt:
@@ -35890,7 +35894,8 @@ com.codeforces.app.ui.screens.problems.ProblemDetailUiState:
     public final java.lang.String component12()
     public final com.codeforces.app.ui.screens.problems.SubmitRequest component13()
     public final java.util.List component14()
-    public final boolean component15()
+    public final java.lang.String component15()
+    public final boolean component16()
     public final boolean component2()
     public final boolean component3()
     public final boolean component4()
@@ -36028,7 +36033,6 @@ com.codeforces.app.ui.screens.submissions.SubmissionDetailUiState:
     public final java.lang.String component5()
     public final boolean component6()
     public final boolean component7()
-    public final boolean isLoading()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel_Factory
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel_HiltModules$BindsModule
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel_HiltModules$KeyModule:
@@ -66768,6 +66772,7 @@ com.codeforces.app.ui.screens.problems.ProblemDetailUiState:
     public static int getLanguagesReloadTrigger()
     public static com.codeforces.app.ui.screens.problems.LoginState getLoginState()
     public static java.util.List getSubmissions()
+    public static java.lang.String getSubmissionsHandle()
     public static java.lang.String getSubmitError()
     public static com.codeforces.app.ui.screens.problems.SubmitRequest getSubmitRequest()
     public static java.lang.String getSubmitUserAgent()
@@ -67303,11 +67308,13 @@ com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDet
     public final void invoke$39()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$3:
     public final void invoke$39()
-com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$4$1$3:
-    public final void invoke$2()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$4:
     public final void invoke$39()
-com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$6:
+com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$5$1$3:
+    public final void invoke$2()
+com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$5:
+    public final void invoke$39()
+com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5$1$7:
     public final void invoke$39()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailScreenKt$SubmissionDetailScreen$5:
     public final void invoke(androidx.compose.foundation.layout.PaddingValues,androidx.compose.runtime.Composer,int)
@@ -67326,6 +67333,7 @@ com.codeforces.app.ui.screens.submissions.SubmissionDetailUiState:
     public static java.lang.String getSource()
     public static boolean getSourceLoading()
     public static boolean getWebViewGiveUp()
+    public static boolean isLoading()
 com.codeforces.app.ui.screens.submissions.SubmissionDetailViewModel$1:
     public int I$0
     public int I$1

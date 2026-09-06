@@ -223,6 +223,26 @@ fun SubmissionDetailScreen(
                         Text("Open", color = CodeforcesAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
+            } else if (state.isLoading) {
+                // Shimmer skeleton while the API call is in flight
+                val brush = rememberShimmerBrush()
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = CfCardSurface),
+                    shape = RoundedCornerShape(14.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        SkeletonBox(brush, Modifier.size(22.dp), cornerRadius = 4.dp)
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            SkeletonBox(brush, Modifier.fillMaxWidth(0.6f).height(14.dp), cornerRadius = 4.dp)
+                            SkeletonBox(brush, Modifier.fillMaxWidth(0.35f).height(12.dp), cornerRadius = 4.dp)
+                        }
+                        SkeletonBox(brush, Modifier.width(32.dp).height(14.dp), cornerRadius = 4.dp)
+                    }
+                }
             }
 
             // ── Source code ──

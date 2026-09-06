@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.codeforces.app.ui.components.RevealItem
+import com.codeforces.app.ui.components.profileImageUrl
 import com.codeforces.app.ui.navigation.Screen
 import com.codeforces.app.ui.screens.profile.rankColor
 import com.codeforces.app.ui.theme.*
@@ -93,7 +94,7 @@ fun SearchScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             AsyncImage(
-                                model = user.titlePhoto ?: user.avatar,
+                                model = user.profileImageUrl(),
                                 contentDescription = "Avatar",
                                 modifier = Modifier.size(64.dp).clip(CircleShape).background(CfSurface)
                             )
